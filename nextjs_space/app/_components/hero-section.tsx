@@ -66,7 +66,7 @@ export function HeroSection() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#7bc860]/30 bg-[#7bc860]/5 mb-6"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#7bc860]/30 bg-[#7bc860]/5 mb-2"
         >
           <Sparkles className="h-3.5 w-3.5 text-[#7bc860]" />
           <span className="text-xs sm:text-sm font-mono text-primary font-medium">
@@ -79,7 +79,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="relative w-full max-w-[517px] aspect-[1830/1279] mb-6 ml-8"
+          className="relative w-full max-w-[517px] aspect-[1830/1279] mb-6 ml-8 -mt-2"
         >
           <Image
             src="/assets/frame_111.png"
