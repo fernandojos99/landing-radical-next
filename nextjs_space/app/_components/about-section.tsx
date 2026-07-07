@@ -38,7 +38,7 @@ export function AboutSection() {
             </h2>
           </FadeIn>
           <FadeIn delay={0.2}>
-            <p className="text-muted-foreground text-base sm:text-lg leading-relaxed">
+            <p className="text-white text-base sm:text-lg leading-relaxed">
               {t?.about?.description ?? ''}
             </p>
           </FadeIn>
@@ -50,11 +50,11 @@ export function AboutSection() {
             return (
               <SlideIn key={i} from="bottom" delay={0.1 + i * 0.1} className="h-full">
                 <div className="h-full rounded-xl bg-card/50 border border-border/50 p-6 text-center glow-border-hover transition-all duration-300 flex flex-col items-center justify-center">
-                  {Icon && <Icon className="h-5 w-5 text-primary mx-auto mb-3" />}
-                  <div className="font-display text-xs sm:text-sm font-bold tracking-tight gradient-text mb-1">
+                  {Icon && <Icon className="h-5 w-5 text-[#7bc860] mx-auto mb-3" />}
+                  <div className="font-display text-xs sm:text-sm font-bold tracking-tight text-white mb-1">
                     <CountUp value={stat?.value ?? ''} />
                   </div>
-                  <p className="text-xs sm:text-sm text-muted-foreground">{stat?.label ?? ''}</p>
+                  <p className="text-xs sm:text-sm text-white">{stat?.label ?? ''}</p>
                 </div>
               </SlideIn>
             );

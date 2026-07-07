@@ -46,7 +46,7 @@ export function Navbar() {
                 <a
                   key={link?.href}
                   href={link?.href}
-                  className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-accent/50"
+                  className="px-3 py-2 text-sm text-primary hover:text-primary/80 transition-colors rounded-md hover:bg-accent/50"
                 >
                   {link?.label}
                 </a>
@@ -60,7 +60,7 @@ export function Navbar() {
                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border border-border/50 bg-accent/30 hover:bg-accent/60 transition-all text-muted-foreground hover:text-foreground"
                 aria-label="Toggle language"
               >
-                <Globe className="h-3.5 w-3.5" />
+                <Globe className="h-3.5 w-3.5 text-[#7bc860]" />
                 {locale === 'es' ? 'EN' : 'ES'}
               </button>
 
@@ -75,7 +75,7 @@ export function Navbar() {
                 className="lg:hidden p-2 text-muted-foreground hover:text-foreground"
                 aria-label="Open menu"
               >
-                <Menu className="h-5 w-5" />
+                <Menu className="h-5 w-5 text-[#7bc860]" />
               </button>
             </div>
           </div>
@@ -97,7 +97,7 @@ export function Navbar() {
                 className="p-2 text-muted-foreground hover:text-foreground"
                 aria-label="Close menu"
               >
-                <X className="h-6 w-6" />
+                <X className="h-6 w-6 text-[#7bc860]" />
               </button>
             </div>
             <div className="flex flex-col items-center gap-6 pt-10">

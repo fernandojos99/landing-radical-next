@@ -12,7 +12,7 @@ export function Footer() {
       <Container size="lg">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <p className="text-xs text-muted-foreground">{t?.footer?.organized ?? ''}</p>
+            <p className="text-xs text-white">{t?.footer?.organized ?? ''}</p>
             <div className="flex items-center gap-4">
               <div className="relative h-8 w-8">
                 <Image
@@ -32,7 +32,7 @@ export function Footer() {
               </div>
             </div>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-white">
             {t?.footer?.rights ?? ''}
           </p>
         </div>

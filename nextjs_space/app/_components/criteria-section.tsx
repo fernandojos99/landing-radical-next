@@ -28,7 +28,7 @@ export function CriteriaSection() {
             {t?.criteria?.title ?? ''}{' '}
             <span className="gradient-text">{t?.criteria?.titleAccent ?? ''}</span>
           </h2>
-          <p className="text-sm font-mono text-primary/80 mb-12 whitespace-pre-line">
+          <p className="text-sm font-mono text-white mb-12 whitespace-pre-line">
             {t?.criteria?.formula ?? ''}
           </p>
         </FadeIn>
@@ -41,14 +41,14 @@ export function CriteriaSection() {
                 <StaggerItem key={i}>
                   <div className="group rounded-2xl border border-border/50 bg-card p-6 text-center transition-all duration-300 hover:bg-card/80 hover:border-primary/20 glow-border-hover h-full">
                     {Icon && (
-                      <div className="inline-flex rounded-xl bg-primary/10 p-3 mb-4">
-                        <Icon className="h-5 w-5 text-primary" />
+                      <div className="inline-flex rounded-xl bg-[#7bc860]/10 p-3 mb-4">
+                        <Icon className="h-5 w-5 text-[#7bc860]" />
                       </div>
                     )}
-                    <h3 className="font-display text-base font-bold tracking-tight mb-2 text-primary">
+                    <h3 className="font-display text-base font-bold tracking-tight mb-2 text-white">
                       {c?.name ?? ''}
                     </h3>
-                    <p className="text-xs sm:text-sm text-foreground/70 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-white leading-relaxed">
                       {c?.desc ?? ''}
                     </p>
                   </div>

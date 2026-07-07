@@ -64,14 +64,14 @@ export function IncentivesSection() {
                   >
                     {Icon && (
                       <div className="rounded-xl bg-background/50 p-3 inline-flex mb-5">
-                        <Icon className="h-6 w-6 text-primary" />
+                        <Icon className="h-6 w-6 text-[#7bc860]" />
                       </div>
                     )}
-                    <h3 className="font-display text-lg font-bold tracking-tight text-primary">
+                    <h3 className="font-display text-lg font-bold tracking-tight text-white">
                       {inc?.title ?? ''}
                     </h3>
                     {inc?.desc && (
-                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mt-3">
+                      <p className="text-sm sm:text-base text-white leading-relaxed mt-3">
                         {inc?.desc}
                       </p>
                     )}
@@ -83,7 +83,7 @@ export function IncentivesSection() {
         </Stagger>
 
         <FadeIn delay={0.3}>
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mt-8 max-w-2xl">
+          <p className="text-sm sm:text-base text-white leading-relaxed mt-8 max-w-2xl">
             {t?.incentives?.closing ?? ''}
           </p>
         </FadeIn>

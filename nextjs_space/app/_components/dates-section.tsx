@@ -63,7 +63,7 @@ export function DatesSection() {
                   <div
                     className={`relative group rounded-2xl border p-6 transition-all duration-300 h-full ${
                       d?.active
-                        ? 'border-primary/40 bg-primary/5 glow-border'
+                        ? 'border-[#7bc860]/40 bg-[#7bc860]/5 glow-border'
                         : 'border-border/50 bg-card/30 glow-border-hover'
                     } hover:scale-[1.02]`}
                   >
@@ -75,16 +75,16 @@ export function DatesSection() {
                       </div>
                     )}
                     {Icon && (
-                      <div className="rounded-xl bg-primary/10 p-3 inline-flex mb-4">
-                        <Icon className="h-5 w-5 text-primary" />
+                      <div className="rounded-xl bg-[#7bc860]/10 p-3 inline-flex mb-4">
+                        <Icon className="h-5 w-5 text-[#7bc860]" />
                       </div>
                     )}
-                    <h3 className="font-display text-lg font-bold tracking-tight text-primary mb-1">
+                    <h3 className="font-display text-lg font-bold tracking-tight text-white mb-1">
                       {d?.title ?? ''}
                     </h3>
-                    <p className="font-mono text-sm text-primary/80">{d?.date ?? ''}</p>
+                    <p className="font-mono text-sm text-white">{d?.date ?? ''}</p>
                     {d?.desc && (
-                      <p className="text-sm text-muted-foreground leading-relaxed mt-3">{d?.desc}</p>
+                      <p className="text-sm text-white leading-relaxed mt-3">{d?.desc}</p>
                     )}
                   </div>
                 </StaggerItem>

@@ -27,10 +27,10 @@ export function RequirementsSection() {
             {t?.requirements?.title ?? ''}{' '}
             <span className="gradient-text">{t?.requirements?.titleAccent ?? ''}</span>
           </h2>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mb-4">
+          <p className="text-base sm:text-lg text-white max-w-2xl mb-4">
             {t?.requirements?.description ?? ''}
           </p>
-          <p className="text-sm sm:text-base font-semibold text-foreground mb-12">
+          <p className="text-sm sm:text-base font-semibold text-white mb-12">
             {t?.requirements?.subtitle ?? ''}
           </p>
         </FadeIn>
@@ -40,10 +40,10 @@ export function RequirementsSection() {
             {reqs?.map?.((req: any, i: number) => (
               <SlideIn key={i} from="left" delay={i * 0.1}>
                 <div className="flex items-start gap-4 rounded-xl border border-border/50 bg-card/30 p-5 transition-all hover:bg-card/60 hover:border-primary/20">
-                  <div className="flex-shrink-0 rounded-lg bg-primary/10 p-2">
-                    <Check className="h-5 w-5 text-primary" />
+                  <div className="flex-shrink-0 rounded-lg bg-[#7bc860]/10 p-2">
+                    <Check className="h-5 w-5 text-[#7bc860]" />
                   </div>
-                  <p className="text-sm sm:text-base text-foreground/90 leading-relaxed">{req ?? ''}</p>
+                  <p className="text-sm sm:text-base text-white leading-relaxed">{req ?? ''}</p>
                 </div>
               </SlideIn>
             )) ?? []}
@@ -52,12 +52,12 @@ export function RequirementsSection() {
           <SlideIn from="right" delay={0.2}>
             <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-orange-500/5 p-8 h-full flex flex-col justify-center">
               <div className="flex items-center gap-3 mb-4">
-                <AlertTriangle className="h-5 w-5 text-amber-400" />
-                <span className="font-display text-lg font-bold text-foreground tracking-tight">
+                <AlertTriangle className="h-5 w-5 text-[#7bc860]" />
+                <span className="font-display text-lg font-bold text-white tracking-tight">
                   {t?.requirements?.sectionTag ?? ''}
                 </span>
               </div>
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+              <p className="text-sm sm:text-base text-white leading-relaxed">
                 {t?.requirements?.note ?? ''}
               </p>
             </div>
@@ -65,7 +65,7 @@ export function RequirementsSection() {
         </div>
 
         <FadeIn delay={0.3}>
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mt-8 max-w-2xl">
+          <p className="text-sm sm:text-base text-white leading-relaxed mt-8 max-w-2xl">
             {t?.requirements?.closing ?? ''}
           </p>
         </FadeIn>

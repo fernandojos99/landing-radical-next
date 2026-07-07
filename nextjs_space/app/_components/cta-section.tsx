@@ -30,7 +30,7 @@ export function CtaSection() {
             {t?.cta?.title ?? ''}{' '}
             <span className="gradient-text">{t?.cta?.titleAccent ?? ''}</span>
           </motion.h2>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto mb-10 whitespace-pre-line">
+          <p className="text-base sm:text-lg text-white max-w-xl mx-auto mb-10 whitespace-pre-line">
             {t?.cta?.subtitle ?? ''}
           </p>
           <Link href="/register">

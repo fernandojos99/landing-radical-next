@@ -17,7 +17,7 @@ export function ProfilesSection() {
       desc: t?.profiles?.card1Desc ?? '',
       gradient: 'from-primary/10 to-primary/5',
       borderColor: 'border-primary/20',
-      iconColor: 'text-primary',
+      iconColor: 'text-[#7bc860]',
     },
     {
       icon: Network,
@@ -26,7 +26,7 @@ export function ProfilesSection() {
       desc: t?.profiles?.card2Desc ?? '',
       gradient: 'from-primary/10 to-primary/5',
       borderColor: 'border-primary/20',
-      iconColor: 'text-primary',
+      iconColor: 'text-[#7bc860]',
     },
     {
       icon: Palette,
@@ -35,7 +35,7 @@ export function ProfilesSection() {
       desc: t?.profiles?.card3Desc ?? '',
       gradient: 'from-primary/10 to-primary/5',
       borderColor: 'border-primary/20',
-      iconColor: 'text-primary',
+      iconColor: 'text-[#7bc860]',
     },
     {
       icon: FlaskConical,
@@ -44,7 +44,7 @@ export function ProfilesSection() {
       desc: t?.profiles?.card4Desc ?? '',
       gradient: 'from-primary/10 to-primary/5',
       borderColor: 'border-primary/20',
-      iconColor: 'text-primary',
+      iconColor: 'text-[#7bc860]',
     },
     {
       icon: Flame,
@@ -53,7 +53,7 @@ export function ProfilesSection() {
       desc: t?.profiles?.card5Desc ?? '',
       gradient: 'from-primary/10 to-primary/5',
       borderColor: 'border-primary/20',
-      iconColor: 'text-primary',
+      iconColor: 'text-[#7bc860]',
     },
   ];
 
@@ -69,7 +69,7 @@ export function ProfilesSection() {
             {t?.profiles?.title ?? ''}{' '}
             <span className="gradient-text">{t?.profiles?.titleAccent ?? ''}</span>
           </h2>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mb-12">
+          <p className="text-base sm:text-lg text-white max-w-2xl mb-12">
             {t?.profiles?.description ?? ''}
           </p>
         </FadeIn>
@@ -86,13 +86,13 @@ export function ProfilesSection() {
                     <div className={`inline-flex items-center justify-center rounded-xl bg-background/50 p-3 mb-5 ${p?.iconColor ?? ''}`}>
                       {Icon && <Icon className="h-6 w-6" />}
                     </div>
-                    <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight mb-2 text-primary">
+                    <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight mb-2 text-white">
                       {p?.title ?? ''}
                     </h3>
-                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-3">
+                    <p className="text-sm sm:text-base text-white leading-relaxed mb-3">
                       {p?.subtitle ?? ''}
                     </p>
-                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed whitespace-pre-line">
+                    <p className="text-sm sm:text-base text-white leading-relaxed whitespace-pre-line">
                       {p?.desc ?? ''}
                     </p>
                   </div>

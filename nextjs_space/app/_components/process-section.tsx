@@ -33,7 +33,7 @@ export function ProcessSection() {
 
         <div className="relative">
           {/* Vertical timeline line */}
-          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-primary/50 via-secondary/50 to-primary/50 hidden sm:block" />
+          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#7bc860]/50 via-secondary/50 to-[#7bc860]/50 hidden sm:block" />
 
           <div className="space-y-8 sm:space-y-12">
             {steps?.map?.((step: any, i: number) => {
@@ -46,22 +46,22 @@ export function ProcessSection() {
                       <div className="group rounded-2xl border border-border/50 bg-card/50 p-6 max-w-md w-full transition-all duration-300 hover:bg-card hover:border-primary/20 glow-border-hover">
                         <div className="flex items-center gap-3 mb-3">
                           {Icon && (
-                            <div className="rounded-lg bg-primary/10 p-2">
-                              <Icon className="h-5 w-5 text-primary" />
+                            <div className="rounded-lg bg-[#7bc860]/10 p-2">
+                              <Icon className="h-5 w-5 text-[#7bc860]" />
                             </div>
                           )}
-                          <h3 className="font-display text-lg font-bold tracking-tight text-foreground">
+                          <h3 className="font-display text-lg font-bold tracking-tight text-white">
                             {step?.title ?? ''}
                           </h3>
                         </div>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{step?.desc ?? ''}</p>
+                        <p className="text-sm text-white leading-relaxed">{step?.desc ?? ''}</p>
                       </div>
                     </div>
 
                     {/* Timeline dot */}
                     <div className="relative z-10 flex-shrink-0 sm:absolute sm:left-1/2 sm:-translate-x-1/2">
-                      <div className="h-12 w-12 rounded-full bg-background border-2 border-primary/50 flex items-center justify-center">
-                        <span className="font-mono text-xs font-bold text-primary">{step?.num ?? ''}</span>
+                      <div className="h-12 w-12 rounded-full bg-background border-2 border-[#7bc860]/50 flex items-center justify-center">
+                        <span className="font-mono text-xs font-bold text-[#7bc860]">{step?.num ?? ''}</span>
                       </div>
                     </div>
 
@@ -69,10 +69,10 @@ export function ProcessSection() {
                     <div className="sm:hidden flex-1">
                       <div className="rounded-2xl border border-border/50 bg-card/50 p-5">
                         <div className="flex items-center gap-3 mb-2">
-                          {Icon && <Icon className="h-4 w-4 text-primary" />}
-                          <h3 className="font-display text-base font-bold tracking-tight">{step?.title ?? ''}</h3>
+                          {Icon && <Icon className="h-4 w-4 text-[#7bc860]" />}
+                          <h3 className="font-display text-base font-bold tracking-tight text-white">{step?.title ?? ''}</h3>
                         </div>
-                        <p className="text-sm text-muted-foreground">{step?.desc ?? ''}</p>
+                        <p className="text-sm text-white">{step?.desc ?? ''}</p>
                       </div>
                     </div>
 

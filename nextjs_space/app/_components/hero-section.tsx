@@ -50,30 +50,10 @@ export function HeroSection() {
           transition={{ duration: 0.6 }}
           className="flex items-center justify-start gap-6 sm:gap-8 mb-8"
         >
-          <div className="relative h-12 w-12 sm:h-16 sm:w-16">
+          <div className="relative h-18 sm:h-24 w-auto aspect-[4/1]">
             <Image
-              src="/assets/iris-logo.png"
-              alt="IRIS StartUp Lab"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
-          <div className="h-8 w-px bg-border/50" />
-          <div className="relative h-12 w-28 sm:h-16 sm:w-36">
-            <Image
-              src="/assets/ul-logo.png"
-              alt="Universidad de la Libertad"
-              fill
-              className="object-contain brightness-0 invert"
-              priority
-            />
-          </div>
-          <div className="h-8 w-px bg-border/50" />
-          <div className="relative h-[41px] w-[109px] sm:h-[54px] sm:w-[150px]">
-            <Image
-              src="/assets/logo-centro-rbsp.png"
-              alt="Centro RBSP"
+              src="/assets/Logosjuntos_2x.png"
+              alt="Logos"
               fill
               className="object-contain"
               priority
@@ -81,32 +61,25 @@ export function HeroSection() {
           </div>
         </motion.div>
 
-        {/* Tagline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-xs sm:text-sm font-mono tracking-widest text-muted-foreground uppercase"
+        {/* Date badge */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#7bc860]/30 bg-[#7bc860]/5 mb-6"
         >
-          {t?.hero?.tagline ?? ''}
-        </motion.p>
-
-        {/* Location */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="text-xs sm:text-sm font-mono tracking-widest text-muted-foreground uppercase mb-6"
-        >
-          {t?.hero?.location ?? ''}
-        </motion.p>
+          <Sparkles className="h-3.5 w-3.5 text-[#7bc860]" />
+          <span className="text-xs sm:text-sm font-mono text-primary font-medium">
+            {t?.hero?.date ?? '10 Sep 2026'}
+          </span>
+        </motion.div>
 
         {/* Title */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="relative w-full max-w-[450px] aspect-[1830/1279] mb-6 ml-6"
+          className="relative w-full max-w-[517px] aspect-[1830/1279] mb-6 ml-8"
         >
           <Image
             src="/assets/frame_111.png"
@@ -124,25 +97,12 @@ export function HeroSection() {
           />
         </motion.div>
 
-        {/* Date badge */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.35 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-6"
-        >
-          <Sparkles className="h-3.5 w-3.5 text-primary" />
-          <span className="text-xs sm:text-sm font-mono text-primary font-medium">
-            {t?.hero?.date ?? '10 Sep 2026'}
-          </span>
-        </motion.div>
-
         {/* Subtitle */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="max-w-2xl mx-0 text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed mb-10 whitespace-pre-line"
+          className="max-w-2xl mx-0 text-base sm:text-lg md:text-xl text-white leading-relaxed mb-10 whitespace-pre-line first-line:font-bold first-line:text-lg sm:first-line:text-xl md:first-line:text-2xl"
         >
           {t?.hero?.subtitle ?? ''}
         </motion.p>
