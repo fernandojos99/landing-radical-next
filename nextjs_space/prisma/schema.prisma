@@ -1,0 +1,57 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Registration {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Section 1 - Identification
+  projectName       String
+  country           String
+  projectType       String   // startup | artist | research
+  founders          String
+
+  // Section 2 - Radical Idea
+  northStar         String   @db.Text
+  statusQuoChallenge String  @db.Text
+
+  // Section 3 - Solution
+  whatBuilding      String   @db.Text
+  whatMakesRadical  String   @db.Text
+
+  // Section 4 - Evidence
+  hasMvp            Boolean  @default(false)
+  hasUsers          Boolean  @default(false)
+  hasPilot          Boolean  @default(false)
+  hasRevenue        Boolean  @default(false)
+  hasCommunity      Boolean  @default(false)
+  hasResearch       Boolean  @default(false)
+  keyMetric         String   @db.Text
+  demoLink          String
+
+  // Section 5 - Frontier Thinking
+  frontierQuestion  String   @db.Text
+
+  // Section 6 - Fit
+  eventFit          String   @db.Text
+
+  // Contact
+  contactEmail      String
+
+  // File upload
+  fileCloudStoragePath String?  @map("file_cloud_storage_path")
+  fileIsPublic         Boolean  @default(false) @map("file_is_public")
+  fileName             String?
+
+  @@index([createdAt])
+  @@index([projectType])
+  @@index([country])
+}
