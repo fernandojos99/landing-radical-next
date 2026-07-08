@@ -43,7 +43,7 @@ export function ProcessSection() {
                 <SlideIn key={i} from={isLeft ? 'left' : 'right'} delay={i * 0.1}>
                   <div className={`flex items-start gap-6 sm:gap-0 ${isLeft ? 'sm:flex-row' : 'sm:flex-row-reverse'}`}>
                     <div className={`hidden sm:flex sm:w-1/2 ${isLeft ? 'sm:justify-end sm:pr-12' : 'sm:justify-start sm:pl-12'}`}>
-                      <div className="group rounded-2xl border border-border/50 bg-card/50 p-6 max-w-md w-full transition-all duration-300 hover:bg-card hover:border-primary/20 glow-border-hover">
+                      <div className="group rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-6 max-w-md w-full transition-all duration-500 hover:scale-[1.02] glow-border-hover">
                         <div className="flex items-center gap-3 mb-3">
                           {Icon && (
                             <div className="rounded-lg bg-[#7bc860]/10 p-2">
@@ -67,7 +67,7 @@ export function ProcessSection() {
 
                     {/* Mobile card */}
                     <div className="sm:hidden flex-1">
-                      <div className="rounded-2xl border border-border/50 bg-card/50 p-5">
+                      <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-5 transition-all duration-500 hover:scale-[1.02] glow-border-hover">
                         <div className="flex items-center gap-3 mb-2">
                           {Icon && <Icon className="h-4 w-4 text-[#7bc860]" />}
                           <h3 className="font-display text-base font-bold tracking-tight text-white">{step?.title ?? ''}</h3>

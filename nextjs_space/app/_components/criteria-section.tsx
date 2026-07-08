@@ -39,7 +39,7 @@ export function CriteriaSection() {
               const Icon = c?.icon;
               return (
                 <StaggerItem key={i}>
-                  <div className="group rounded-2xl border border-border/50 bg-card p-6 text-center transition-all duration-300 hover:bg-card/80 hover:border-primary/20 glow-border-hover h-full">
+                  <div className="group rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-6 text-center transition-all duration-500 hover:scale-[1.02] glow-border-hover h-full">
                     {Icon && (
                       <div className="inline-flex rounded-xl bg-[#7bc860]/10 p-3 mb-4">
                         <Icon className="h-5 w-5 text-[#7bc860]" />

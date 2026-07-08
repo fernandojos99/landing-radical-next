@@ -39,7 +39,7 @@ export function RequirementsSection() {
           <div className="space-y-4">
             {reqs?.map?.((req: any, i: number) => (
               <SlideIn key={i} from="left" delay={i * 0.1}>
-                <div className="flex items-start gap-4 rounded-xl border border-border/50 bg-card/30 p-5 transition-all hover:bg-card/60 hover:border-primary/20">
+                <div className="flex items-start gap-4 rounded-xl border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-5 transition-all duration-500 hover:scale-[1.02] glow-border-hover">
                   <div className="flex-shrink-0 rounded-lg bg-[#7bc860]/10 p-2">
                     <Check className="h-5 w-5 text-[#7bc860]" />
                   </div>

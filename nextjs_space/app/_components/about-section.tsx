@@ -57,7 +57,7 @@ export function AboutSection() {
             const Icon = stat?.icon;
             return (
               <SlideIn key={i} from="bottom" delay={0.1 + i * 0.1} className="h-full">
-                <div className="h-full rounded-xl bg-card/50 border border-border/50 p-6 text-center glow-border-hover transition-all duration-300 flex flex-col items-center justify-center">
+                <div className="h-full rounded-xl border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-6 text-center glow-border-hover transition-all duration-500 hover:scale-[1.02] flex flex-col items-center justify-center">
                   {Icon && <Icon className="h-5 w-5 text-[#7bc860] mx-auto mb-3" />}
                   <div className="font-display text-xs sm:text-sm font-bold tracking-tight text-white mb-1">
                     <CountUp value={stat?.value ?? ''} />

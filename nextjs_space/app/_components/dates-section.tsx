@@ -61,11 +61,11 @@ export function DatesSection() {
               return (
                 <StaggerItem key={i}>
                   <div
-                    className={`relative group rounded-2xl border p-6 transition-all duration-300 h-full ${
+                    className={`relative group rounded-2xl border p-6 transition-all duration-500 h-full hover:scale-[1.02] ${
                       d?.active
                         ? 'border-[#7bc860]/40 bg-[#7bc860]/5 glow-border'
-                        : 'border-border/50 bg-card/30 glow-border-hover'
-                    } hover:scale-[1.02]`}
+                        : 'border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 glow-border-hover'
+                    }`}
                   >
                     {d?.active && (
                       <div className="absolute -top-2.5 left-6">
