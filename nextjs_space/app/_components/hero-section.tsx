@@ -9,6 +9,8 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 
 export function HeroSection() {
   const { t } = useLocale();
+  const subtitle = t?.hero?.subtitle ?? '';
+  const [subtitleLead, ...subtitleRest] = subtitle.split('\n\n');
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
@@ -79,7 +81,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] aspect-[1830/1279] mb-6 ml-4 sm:ml-8 -mt-2"
+          className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] aspect-[1830/1279] mb-6 mx-auto sm:mx-0 sm:ml-8 -mt-2"
         >
           <Image
             src="/assets/frame_111.png"
@@ -102,9 +104,10 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="max-w-2xl mx-0 text-base sm:text-lg md:text-xl text-white leading-relaxed mb-10 whitespace-pre-line first-line:font-bold first-line:text-lg sm:first-line:text-xl md:first-line:text-2xl"
+          className="max-w-2xl mx-0 text-base sm:text-lg md:text-xl text-white leading-relaxed mb-10 whitespace-pre-line"
         >
-          {t?.hero?.subtitle ?? ''}
+          <span className="font-bold text-lg sm:text-xl md:text-2xl">{subtitleLead}</span>
+          {subtitleRest.length > 0 && '\n\n' + subtitleRest.join('\n\n')}
         </motion.p>
 
         {/* CTAs */}

@@ -1,4 +1,5 @@
 import localFont from 'next/font/local';
+import Script from 'next/script';
 import './globals.css';
 import { Providers } from './providers';
 import { Toaster } from '@/components/ui/sonner';
@@ -52,6 +53,31 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <head>
         <script src="https://apps.abacus.ai/chatllm/appllm-lib.js"></script>
+
+        {/* Microsoft Clarity */}
+        <Script id="clarity-analytics" strategy="afterInteractive">
+          {`
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "xjbbcabpbh");
+          `}
+        </Script>
+
+        {/* Google tag (gtag.js) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-RWGCL77HD2"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-RWGCL77HD2');
+          `}
+        </Script>
       </head>
       <body
         className={`${helveticaNeue.variable} font-sans`}
