@@ -3,7 +3,7 @@ export type Locale = 'es' | 'en';
 export const translations = {
   es: {
     nav: {
-      about: 'Eventos',
+      about: 'Evento',
       incentives: 'Incentivos',
       profiles: 'Perfiles',
       requirements: 'Requisitos',
@@ -23,7 +23,7 @@ export const translations = {
       callout: 'Convocamos a quienes dejaron de esperar y decidieron construir el futuro.',
     },
     about: {
-      sectionTag: 'Eventos ',
+      sectionTag: 'Evento ',
       title: 'No buscamos startups,',
       titleAccent: 'buscamos creadores.',
       summitIntro: 'Radical Innovation Summit no es una competencia de pitch. Es una plataforma para personas que están construyendo nuevas posibilidades y necesitan acceso a quienes pueden acelerar su crecimiento.\nDurante un día, fundadores, investigadores, tecnólogos, inversionistas y líderes de negocio se reúnen para explorar proyectos que desafían las reglas actuales de sus industrias.',
@@ -45,10 +45,10 @@ export const translations = {
       sectionTag: 'PERFILES OBJETIVO',
       title: '¿Quién debería',
       titleAccent: 'aplicar?',
-      description: 'No buscamos empresas de tecnología. Buscamos personas que están construyendo nuevas formas de crear valor. Personas que decidieron dejar de aceptar que las cosas debían seguir funcionando igual: Fundadores, investigadores, inventores, diseñadores, ingenieros, artistas y científicos.',
+      description: 'No buscamos empresas de tecnología. Buscamos personas que están construyendo nuevas formas de crear valor. Personas que decidieron dejar de aceptar que las cosas debían seguir funcionando igual: fundadores, investigadores, inventores, diseñadores, ingenieros, artistas y científicos.',
       card1Title: 'Visionarios Tecnológicos',
       card1Desc: 'Personas utilizando tecnología para expandir lo que hoy es posible.\n\nInteligencia Artificial, Agentes Autónomos, Blockchain, Robótica, Computación Cuántica, Biotecnología, Neurotecnología, Space Tech, Energy Tech y otras tecnologías emergentes.',
-      card2Title: 'Arquitectos de Nuevos Sistemas Descentralizados',
+      card2Title: 'Arquitectos de Sistemas Descentralizados',
       card2Desc: 'Personas replanteando cómo funcionan los mercados, las instituciones, las comunidades y los modelos económicos.\n\nBlockchain, Crypto, Web3, Decentralized Finance, Digital Identity, Tokenized Economies.',
       card3Title: 'Constructores de la Experiencia Humana',
       card3Desc: 'Creadores que combinan tecnología, diseño, cultura y creatividad para transformar la forma en que vivimos, trabajamos, aprendemos y nos expresamos.\n\nMedia, Gaming, XR, Spatial Computing, Creator Economy, Education, Culture Tech, Immersive Experiences.',
@@ -194,7 +194,7 @@ export const translations = {
   },
   en: {
     nav: {
-      about: 'Events',
+      about: 'Event',
       incentives: 'Incentives',
       profiles: 'Profiles',
       requirements: 'Requirements',
@@ -214,7 +214,7 @@ export const translations = {
       callout: 'We call on those who stopped waiting and decided to build the future.',
     },
     about: {
-      sectionTag: 'Events ',
+      sectionTag: 'Event ',
       title: "We don't look for startups,",
       titleAccent: 'we look for creators.',
       summitIntro: "Radical Innovation Summit is not a pitch competition. It's a platform for people who are building new possibilities and need access to those who can accelerate their growth.\nOver the course of one day, founders, researchers, technologists, investors, and business leaders come together to explore projects that challenge the current rules of their industries.",
