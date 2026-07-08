@@ -141,9 +141,9 @@ export const translations = {
       closing: 'El objetivo es generar oportunidades reales. La visibilidad es consecuencia.',
     },
     cta: {
-      title: 'La historia cambia',
-      titleAccent: 'cuando alguien decide construir.',
-      subtitle: 'Si has pasado más tiempo creando que hablando sobre crear, queremos conocerte.\nLa convocatoria cierra el 21 de agosto.',
+      title: 'En una era de espectadores,',
+      titleAccent: 'elige construir.',
+      subtitle: 'BUILDING IS REBELLION\nLa convocatoria cierra el 21 de agosto.',
       button: 'Aplica ahora',
     },
     footer: {
@@ -355,9 +355,9 @@ export const translations = {
       closing: 'The goal is to generate real opportunities. Visibility is a consequence.',
     },
     cta: {
-      title: 'History changes',
-      titleAccent: 'when someone decides to build.',
-      subtitle: "If you've spent more time creating than talking about creating, we want to meet you.\nApplications close August 21.",
+      title: 'In an age of spectators,',
+      titleAccent: 'choose to build.',
+      subtitle: 'BUILDING IS REBELLION\nApplications close August 21.',
       button: 'Apply now',
     },
     footer: {
