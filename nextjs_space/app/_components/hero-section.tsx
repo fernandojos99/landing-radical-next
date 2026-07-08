@@ -85,14 +85,14 @@ export function HeroSection() {
             src="/assets/frame_111.png"
             alt="Radical Innovation Summit 2026"
             fill
-            className="object-contain z-0 sm:scale-[0.6]"
+            className="object-contain z-0 scale-[0.6]"
             priority
           />
           <Image
             src="/assets/RIS-blanco.png"
             alt="RIS"
             fill
-            className="object-contain z-10 sm:scale-[1.125]"
+            className="object-contain z-10 scale-[1.125]"
             priority
           />
         </motion.div>
