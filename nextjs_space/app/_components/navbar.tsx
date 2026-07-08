@@ -20,10 +20,10 @@ export function Navbar() {
   }, []);
 
   const navLinks = [
-    { href: '#about', label: t?.nav?.about ?? 'About' },
+    { href: '#about', label: t?.nav?.about ?? 'Events' },
+    { href: '#incentives', label: t?.nav?.incentives ?? 'Incentives' },
     { href: '#profiles', label: t?.nav?.profiles ?? 'Profiles' },
     { href: '#requirements', label: t?.nav?.requirements ?? 'Requirements' },
-    { href: '#process', label: t?.nav?.process ?? 'Process' },
     { href: '#criteria', label: t?.nav?.criteria ?? 'Criteria' },
     { href: '#dates', label: t?.nav?.dates ?? 'Dates' },
   ];

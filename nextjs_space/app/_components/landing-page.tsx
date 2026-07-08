@@ -8,7 +8,6 @@ import { RequirementsSection } from './requirements-section';
 // import { ProcessSection } from './process-section';
 import { CriteriaSection } from './criteria-section';
 import { DatesSection } from './dates-section';
-import { IncentivesSection } from './incentives-section';
 import { CtaSection } from './cta-section';
 import { Footer } from './footer';
 
@@ -22,7 +21,6 @@ export function LandingPage() {
       <RequirementsSection />
       {/* <ProcessSection /> */}
       <CriteriaSection />
-      <IncentivesSection />
       <DatesSection />
       <CtaSection />
       <Footer />

@@ -4,6 +4,7 @@ import './globals.css';
 import { Providers } from './providers';
 import { Toaster } from '@/components/ui/sonner';
 import { ChunkLoadErrorHandler } from '@/components/chunk-load-error-handler';
+import { BackgroundSpirals } from './_components/background-spirals';
 
 export const dynamic = 'force-dynamic';
 
@@ -87,6 +88,7 @@ export default function RootLayout({
           href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
         />
         <Providers>
+          <BackgroundSpirals />
           {children}
           <Toaster />
           <ChunkLoadErrorHandler />

@@ -63,12 +63,6 @@ export function RequirementsSection() {
             </div>
           </SlideIn>
         </div>
-
-        <FadeIn delay={0.3}>
-          <p className="text-sm sm:text-base text-white leading-relaxed mt-8 max-w-2xl">
-            {t?.requirements?.closing ?? ''}
-          </p>
-        </FadeIn>
       </Container>
     </Section>
   );
