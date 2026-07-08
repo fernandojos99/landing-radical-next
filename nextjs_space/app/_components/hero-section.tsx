@@ -50,7 +50,7 @@ export function HeroSection() {
           transition={{ duration: 0.6 }}
           className="flex items-center justify-start gap-6 sm:gap-8 mb-8"
         >
-          <div className="relative h-18 sm:h-24 w-auto aspect-[4/1]">
+          <div className="relative h-[4.5rem] sm:h-24 w-auto aspect-[4/1]">
             <Image
               src="/assets/Logosjuntos_2x.png"
               alt="Logos"
@@ -79,20 +79,20 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="relative w-full max-w-[517px] aspect-[1830/1279] mb-6 ml-8 -mt-2"
+          className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] aspect-[1830/1279] mb-6 ml-4 sm:ml-8 -mt-2"
         >
           <Image
             src="/assets/frame_111.png"
             alt="Radical Innovation Summit 2026"
             fill
-            className="object-contain z-0 scale-[0.6]"
+            className="object-contain z-0 sm:scale-[0.6]"
             priority
           />
           <Image
             src="/assets/RIS-blanco.png"
             alt="RIS"
             fill
-            className="object-contain z-10 scale-[1.125]"
+            className="object-contain z-10 sm:scale-[1.125]"
             priority
           />
         </motion.div>
