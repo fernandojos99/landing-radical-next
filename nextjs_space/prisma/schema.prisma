@@ -16,7 +16,8 @@ model Registration {
   // Section 1 - Identification
   projectName       String
   country           String
-  projectType       String   // startup | artist | research
+  profiles          String[] @default([]) // founders | researchers | technologists | investors | businessLeaders
+  participationCategory String @default("") // visionaries | decentralizedArchitects | humanExperience | pioneerScientists | radicalChange
   founders          String
 
   // Section 2 - Radical Idea
@@ -52,6 +53,6 @@ model Registration {
   fileName             String?
 
   @@index([createdAt])
-  @@index([projectType])
+  @@index([participationCategory])
   @@index([country])
 }

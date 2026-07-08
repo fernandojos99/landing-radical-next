@@ -32,7 +32,8 @@ interface Registration {
   createdAt: string;
   projectName: string;
   country: string;
-  projectType: string;
+  profiles: string[];
+  participationCategory: string;
   founders: string;
   northStar: string;
   statusQuoChallenge: string;
@@ -133,11 +134,21 @@ export function AdminPage() {
     }
   };
 
+  const categoryLabels: Record<string, string> = {
+    visionaries: 'Visionarios tecnológicos',
+    decentralizedArchitects: 'Arquitectos de sistemas descentralizados',
+    humanExperience: 'Constructores de la experiencia humana',
+    pioneerScientists: 'Científicos pioneros',
+    radicalChange: 'Agentes de cambio radical',
+  };
+
   const typeBadgeColor = (type: string) => {
     switch (type) {
-      case 'startup': return 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20';
-      case 'artist': return 'bg-purple-500/10 text-purple-400 border-purple-500/20';
-      case 'research': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+      case 'visionaries': return 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20';
+      case 'decentralizedArchitects': return 'bg-purple-500/10 text-purple-400 border-purple-500/20';
+      case 'humanExperience': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+      case 'pioneerScientists': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+      case 'radicalChange': return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
       default: return 'bg-muted text-muted-foreground';
     }
   };
@@ -232,7 +243,7 @@ export function AdminPage() {
             />
           </div>
           <div className="flex gap-2">
-            {['all', 'startup', 'artist', 'research']?.map?.((tp: string) => (
+            {['all', 'visionaries', 'decentralizedArchitects', 'humanExperience', 'pioneerScientists', 'radicalChange']?.map?.((tp: string) => (
               <button
                 key={tp}
                 onClick={() => {
@@ -245,7 +256,7 @@ export function AdminPage() {
                     : 'border-border/50 bg-card/30 text-muted-foreground hover:text-foreground'
                 }`}
               >
-                {tp === 'all' ? 'Todos' : tp?.charAt?.(0)?.toUpperCase?.() + (tp?.slice?.(1) ?? '')}
+                {tp === 'all' ? 'Todos' : categoryLabels?.[tp] ?? tp}
               </button>
             )) ?? []}
           </div>
@@ -259,7 +270,8 @@ export function AdminPage() {
                 <TableRow className="bg-card/50">
                   <TableHead className="text-xs font-mono">Fecha</TableHead>
                   <TableHead className="text-xs font-mono">Proyecto</TableHead>
-                  <TableHead className="text-xs font-mono">Tipo</TableHead>
+                  <TableHead className="text-xs font-mono">Categoría</TableHead>
+                  <TableHead className="text-xs font-mono">Perfiles</TableHead>
                   <TableHead className="text-xs font-mono">País</TableHead>
                   <TableHead className="text-xs font-mono">Email</TableHead>
                   <TableHead className="text-xs font-mono">Evidencia</TableHead>
@@ -295,9 +307,18 @@ export function AdminPage() {
                           {reg?.projectName ?? ''}
                         </TableCell>
                         <TableCell>
-                          <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-medium border ${typeBadgeColor(reg?.projectType ?? '')}`}>
-                            {reg?.projectType ?? ''}
+                          <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-medium border ${typeBadgeColor(reg?.participationCategory ?? '')}`}>
+                            {categoryLabels?.[reg?.participationCategory ?? ''] ?? reg?.participationCategory ?? ''}
                           </span>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap gap-1">
+                            {(reg?.profiles ?? [])?.map?.((p: string) => (
+                              <span key={p} className="px-1.5 py-0.5 rounded bg-secondary/10 text-secondary-foreground text-[10px] font-medium">
+                                {p}
+                              </span>
+                            )) ?? []}
+                          </div>
                         </TableCell>
                         <TableCell className="text-sm">{reg?.country ?? ''}</TableCell>
                         <TableCell className="text-xs text-muted-foreground">{reg?.contactEmail ?? ''}</TableCell>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,16 +13,47 @@ export function HeroSection() {
   const subtitle = t?.hero?.subtitle ?? '';
   const [subtitleLead, ...subtitleRest] = subtitle.split('\n\n');
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const logosRef = useRef<HTMLDivElement>(null);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
+  const [videoTop, setVideoTop] = useState<number | null>(null);
+
+  useEffect(() => {
+    function updateVideoPosition() {
+      if (window.innerWidth >= 1024) {
+        setVideoTop(null);
+        return;
+      }
+      const sectionEl = sectionRef.current;
+      const logosEl = logosRef.current;
+      const videoEl = videoContainerRef.current;
+      if (!sectionEl || !logosEl || !videoEl) return;
+
+      const sectionRect = sectionEl.getBoundingClientRect();
+      const logosRect = logosEl.getBoundingClientRect();
+      const logosCenterY = logosRect.top + logosRect.height / 2 - sectionRect.top;
+      setVideoTop(logosCenterY - videoEl.offsetHeight / 2);
+    }
+
+    updateVideoPosition();
+    window.addEventListener('resize', updateVideoPosition);
+    return () => window.removeEventListener('resize', updateVideoPosition);
+  }, []);
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
       {/* Video background - right half */}
-      <div className="absolute inset-y-0 right-0 w-full lg:w-1/2 z-0">
+      <div
+        ref={videoContainerRef}
+        style={videoTop !== null ? { top: `${videoTop}px` } : undefined}
+        className="absolute right-0 top-0 w-[150%] aspect-video h-auto overflow-hidden lg:inset-y-0 lg:top-auto lg:h-full lg:aspect-auto lg:w-1/2 lg:overflow-visible z-0"
+      >
         <video
           autoPlay
           muted
           loop
           playsInline
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-contain translate-x-[20%] lg:translate-x-0 lg:object-cover"
         >
           <source src="/videos/VisualB_720p_blur.mp4" type="video/mp4" />
         </video>
@@ -78,6 +110,7 @@ export function HeroSection() {
 
         {/* Title */}
         <motion.div
+          ref={logosRef}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}

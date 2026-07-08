@@ -31,7 +31,8 @@ import Link from 'next/link';
 interface FormData {
   projectName: string;
   country: string;
-  projectType: string;
+  profiles: string[];
+  participationCategory: string;
   founders: string;
   northStar: string;
   statusQuoChallenge: string;
@@ -53,7 +54,8 @@ interface FormData {
 const initialFormData: FormData = {
   projectName: '',
   country: '',
-  projectType: '',
+  profiles: [],
+  participationCategory: '',
   founders: '',
   northStar: '',
   statusQuoChallenge: '',
@@ -92,6 +94,21 @@ export function RegisterPage() {
     });
   };
 
+  const toggleProfile = (profile: string) => {
+    setFormData((prev: FormData) => {
+      const current = prev?.profiles ?? [];
+      const next = current?.includes?.(profile)
+        ? current?.filter?.((p: string) => p !== profile)
+        : [...current, profile];
+      return { ...(prev ?? {}), profiles: next };
+    });
+    setErrors((prev: Record<string, string>) => {
+      const next = { ...(prev ?? {}) };
+      delete next.profiles;
+      return next;
+    });
+  };
+
   const validateStep = (stepIdx: number): boolean => {
     const newErrors: Record<string, string> = {};
     const req = t?.form?.required ?? 'Required';
@@ -100,7 +117,8 @@ export function RegisterPage() {
       case 0:
         if (!(formData?.projectName ?? '')?.trim?.()) newErrors.projectName = req;
         if (!(formData?.country ?? '')?.trim?.()) newErrors.country = req;
-        if (!(formData?.projectType ?? '')) newErrors.projectType = req;
+        if (!(formData?.profiles ?? [])?.length) newErrors.profiles = t?.form?.selectProfiles ?? 'Select at least one profile';
+        if (!(formData?.participationCategory ?? '')) newErrors.participationCategory = t?.form?.selectCategory ?? 'Select a category';
         if (!(formData?.founders ?? '')?.trim?.()) newErrors.founders = req;
         break;
       case 1:
@@ -329,19 +347,21 @@ export function RegisterPage() {
                     {errors?.country && <p className="text-xs text-red-400 mt-1">{errors.country}</p>}
                   </div>
                   <div>
-                    <Label>{t?.form?.projectType ?? 'Type'} *</Label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-1.5">
+                    <Label>{t?.form?.profiles ?? 'Profiles'} *</Label>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-1.5">
                       {[
-                        { value: 'startup', label: t?.form?.typeStartup ?? 'Startup' },
-                        { value: 'artist', label: t?.form?.typeArtist ?? 'Artist' },
-                        { value: 'research', label: t?.form?.typeResearch ?? 'Research' },
+                        { value: 'founders', label: t?.form?.profileFounders ?? 'Founders' },
+                        { value: 'researchers', label: t?.form?.profileResearchers ?? 'Researchers' },
+                        { value: 'technologists', label: t?.form?.profileTechnologists ?? 'Technologists' },
+                        { value: 'investors', label: t?.form?.profileInvestors ?? 'Investors' },
+                        { value: 'businessLeaders', label: t?.form?.profileBusinessLeaders ?? 'Business leaders' },
                       ]?.map?.((opt: any) => (
                         <button
                           key={opt?.value}
                           type="button"
-                          onClick={() => updateField('projectType', opt?.value ?? '')}
-                          className={`rounded-xl border p-4 text-left transition-all text-sm ${
-                            formData?.projectType === opt?.value
+                          onClick={() => toggleProfile(opt?.value ?? '')}
+                          className={`rounded-xl border p-3 text-left transition-all text-sm ${
+                            formData?.profiles?.includes?.(opt?.value)
                               ? 'border-primary bg-primary/5 text-foreground'
                               : 'border-border/50 bg-card/30 text-muted-foreground hover:border-primary/30'
                           }`}
@@ -350,7 +370,33 @@ export function RegisterPage() {
                         </button>
                       )) ?? []}
                     </div>
-                    {errors?.projectType && <p className="text-xs text-red-400 mt-1">{errors.projectType}</p>}
+                    {errors?.profiles && <p className="text-xs text-red-400 mt-1">{errors.profiles}</p>}
+                  </div>
+                  <div>
+                    <Label>{t?.form?.participationCategory ?? 'Participation category'} *</Label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1.5">
+                      {[
+                        { value: 'visionaries', label: t?.form?.categoryVisionaries ?? 'Technological visionaries' },
+                        { value: 'decentralizedArchitects', label: t?.form?.categoryDecentralizedArchitects ?? 'Architects of new decentralized systems' },
+                        { value: 'humanExperience', label: t?.form?.categoryHumanExperience ?? 'Builders of the human experience' },
+                        { value: 'pioneerScientists', label: t?.form?.categoryPioneerScientists ?? 'Pioneer scientists' },
+                        { value: 'radicalChange', label: t?.form?.categoryRadicalChange ?? 'Agents of radical change' },
+                      ]?.map?.((opt: any) => (
+                        <button
+                          key={opt?.value}
+                          type="button"
+                          onClick={() => updateField('participationCategory', opt?.value ?? '')}
+                          className={`rounded-xl border p-3 text-left transition-all text-sm ${
+                            formData?.participationCategory === opt?.value
+                              ? 'border-primary bg-primary/5 text-foreground'
+                              : 'border-border/50 bg-card/30 text-muted-foreground hover:border-primary/30'
+                          }`}
+                        >
+                          {opt?.label ?? ''}
+                        </button>
+                      )) ?? []}
+                    </div>
+                    {errors?.participationCategory && <p className="text-xs text-red-400 mt-1">{errors.participationCategory}</p>}
                   </div>
                   <div>
                     <Label htmlFor="founders">{t?.form?.founders ?? 'Founders'} *</Label>

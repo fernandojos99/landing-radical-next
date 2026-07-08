@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
     // Validate required fields
     const requiredFields = [
-      'projectName', 'country', 'projectType', 'founders',
+      'projectName', 'country', 'participationCategory', 'founders',
       'northStar', 'statusQuoChallenge', 'whatBuilding', 'whatMakesRadical',
       'keyMetric', 'demoLink', 'frontierQuestion', 'eventFit', 'contactEmail'
     ];
@@ -20,12 +20,17 @@ export async function POST(request: Request) {
       }
     }
 
+    if (!Array.isArray(body?.profiles) || body.profiles.length === 0) {
+      return NextResponse.json({ error: 'Missing field: profiles' }, { status: 400 });
+    }
+
     // Create registration
     const registration = await prisma.registration.create({
       data: {
         projectName: (body?.projectName ?? '')?.trim?.() ?? '',
         country: (body?.country ?? '')?.trim?.() ?? '',
-        projectType: body?.projectType ?? '',
+        profiles: Array.isArray(body?.profiles) ? body.profiles : [],
+        participationCategory: body?.participationCategory ?? '',
         founders: (body?.founders ?? '')?.trim?.() ?? '',
         northStar: (body?.northStar ?? '')?.trim?.() ?? '',
         statusQuoChallenge: (body?.statusQuoChallenge ?? '')?.trim?.() ?? '',
@@ -76,7 +81,7 @@ async function sendNotification(reg: any) {
         </h2>
         <div style="background: #111827; padding: 20px; border-radius: 8px; margin: 15px 0;">
           <p style="margin: 8px 0;"><strong style="color: #22d3ee;">Proyecto:</strong> ${reg?.projectName ?? ''}</p>
-          <p style="margin: 8px 0;"><strong style="color: #22d3ee;">Tipo:</strong> ${reg?.projectType ?? ''}</p>
+          <p style="margin: 8px 0;"><strong style="color: #22d3ee;">Categor\u00eda:</strong> ${reg?.participationCategory ?? ''}</p>
           <p style="margin: 8px 0;"><strong style="color: #22d3ee;">Pa\u00eds:</strong> ${reg?.country ?? ''}</p>
           <p style="margin: 8px 0;"><strong style="color: #22d3ee;">Email:</strong> <a href="mailto:${reg?.contactEmail ?? ''}" style="color: #a78bfa;">${reg?.contactEmail ?? ''}</a></p>
           <p style="margin: 8px 0;"><strong style="color: #22d3ee;">Fundadores:</strong> ${reg?.founders ?? ''}</p>
@@ -132,7 +137,7 @@ export async function GET(request: Request) {
 
     const where: any = {};
     if (type && type !== 'all') {
-      where.projectType = type;
+      where.participationCategory = type;
     }
     if (search) {
       where.OR = [
