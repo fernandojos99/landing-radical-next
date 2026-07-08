@@ -236,7 +236,7 @@ export function RegisterPage() {
 
   if (submitted) {
     return (
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen">
         <Navbar />
         <div className="pt-32 pb-24 flex items-center justify-center">
           <FadeIn>
@@ -275,7 +275,7 @@ export function RegisterPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen">
       <Navbar />
       <div className="pt-28 pb-24">
         <Container size="md">

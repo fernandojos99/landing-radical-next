@@ -13,7 +13,7 @@ import { Footer } from './footer';
 
 export function LandingPage() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen">
       <Navbar />
       <HeroSection />
       <AboutSection />

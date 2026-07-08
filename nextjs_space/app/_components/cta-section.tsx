@@ -12,7 +12,7 @@ export function CtaSection() {
   const { t } = useLocale();
 
   return (
-    <section className="relative py-24 sm:py-32 overflow-hidden">
+    <section className="relative py-8 sm:py-12 overflow-hidden">
       <div className="absolute inset-0 hero-gradient" />
       <div
         className="absolute inset-0 opacity-[0.02]"

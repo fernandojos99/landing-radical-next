@@ -6,7 +6,7 @@ export function Section({
   children: React.ReactNode; className?: string; id?: string
 }) {
   return (
-    <section id={id} className={cn('py-16 sm:py-24 scroll-mt-28', className)}>
+    <section id={id} className={cn('py-8 sm:py-12 scroll-mt-28', className)}>
       {children}
     </section>
   )

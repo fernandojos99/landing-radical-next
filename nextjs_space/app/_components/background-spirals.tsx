@@ -31,7 +31,7 @@ export function BackgroundSpirals() {
       left: `${Math.random() * 100}%`,
       size: 350 + Math.random() * 450,
       rotate: Math.random() * 360,
-      opacity: 0.12 + Math.random() * 0.18,
+      opacity: 0.5 + Math.random() * 0.4,
     })) ?? [];
     setInstances(generated);
   }, []);
@@ -51,6 +51,7 @@ export function BackgroundSpirals() {
             height: inst?.size,
             opacity: inst?.opacity,
             transform: `translate(-50%, -50%) rotate(${inst?.rotate ?? 0}deg)`,
+            filter: 'brightness(4) contrast(1.3) saturate(1.4)',
           }}
         >
           <Image src={inst?.src ?? ''} alt="" fill className="object-contain" />

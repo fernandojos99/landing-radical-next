@@ -166,7 +166,7 @@ export function AdminPage() {
 
   if (!authenticated) {
     return (
-      <main className="min-h-screen bg-background flex items-center justify-center">
+      <main className="min-h-screen flex items-center justify-center">
         <FadeIn>
           <div className="w-full max-w-sm mx-auto px-4">
             <div className="text-center mb-8">
@@ -206,7 +206,7 @@ export function AdminPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen">
       <div className="border-b border-border/50 bg-card/30">
         <Container size="xl">
           <div className="flex items-center justify-between py-4">
