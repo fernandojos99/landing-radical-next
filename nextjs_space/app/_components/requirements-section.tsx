@@ -50,7 +50,7 @@ export function RequirementsSection() {
           </div>
 
           <SlideIn from="right" delay={0.2}>
-            <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-orange-500/5 p-8 h-full flex flex-col justify-center">
+            <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-8 h-full flex flex-col justify-center glow-border-hover transition-all duration-500 hover:scale-[1.02]">
               <div className="flex items-center gap-3 mb-4">
                 <AlertTriangle className="h-5 w-5 text-[#7bc860]" />
                 <span className="font-display text-lg font-bold text-white tracking-tight">

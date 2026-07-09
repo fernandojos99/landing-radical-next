@@ -13,6 +13,7 @@ export function ProfilesSection() {
     {
       icon: Cpu,
       title: t?.profiles?.card1Title ?? '',
+      subtitle: t?.profiles?.card1Subtitle ?? '',
       desc: t?.profiles?.card1Desc ?? '',
       gradient: 'from-primary/10 to-primary/5',
       borderColor: 'border-primary/20',
@@ -21,6 +22,7 @@ export function ProfilesSection() {
     {
       icon: Network,
       title: t?.profiles?.card2Title ?? '',
+      subtitle: t?.profiles?.card2Subtitle ?? '',
       desc: t?.profiles?.card2Desc ?? '',
       gradient: 'from-primary/10 to-primary/5',
       borderColor: 'border-primary/20',
@@ -29,6 +31,7 @@ export function ProfilesSection() {
     {
       icon: Palette,
       title: t?.profiles?.card3Title ?? '',
+      subtitle: t?.profiles?.card3Subtitle ?? '',
       desc: t?.profiles?.card3Desc ?? '',
       gradient: 'from-primary/10 to-primary/5',
       borderColor: 'border-primary/20',
@@ -37,6 +40,7 @@ export function ProfilesSection() {
     {
       icon: FlaskConical,
       title: t?.profiles?.card4Title ?? '',
+      subtitle: t?.profiles?.card4Subtitle ?? '',
       desc: t?.profiles?.card4Desc ?? '',
       gradient: 'from-primary/10 to-primary/5',
       borderColor: 'border-primary/20',
@@ -45,6 +49,7 @@ export function ProfilesSection() {
     {
       icon: Flame,
       title: t?.profiles?.card5Title ?? '',
+      subtitle: t?.profiles?.card5Subtitle ?? '',
       desc: t?.profiles?.card5Desc ?? '',
       gradient: 'from-primary/10 to-primary/5',
       borderColor: 'border-primary/20',
@@ -84,6 +89,9 @@ export function ProfilesSection() {
                     <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight mb-2 text-white">
                       {p?.title ?? ''}
                     </h3>
+                    <p className="text-sm sm:text-base text-white leading-relaxed mb-3">
+                      {p?.subtitle ?? ''}
+                    </p>
                     <p className="text-sm sm:text-base text-white leading-relaxed whitespace-pre-line">
                       {p?.desc ?? ''}
                     </p>
