@@ -32,7 +32,6 @@ interface Registration {
   createdAt: string;
   projectName: string;
   country: string;
-  profiles: string[];
   participationCategory: string;
   founders: string;
   northStar: string;
@@ -271,7 +270,6 @@ export function AdminPage() {
                   <TableHead className="text-xs font-mono">Fecha</TableHead>
                   <TableHead className="text-xs font-mono">Proyecto</TableHead>
                   <TableHead className="text-xs font-mono">Categoría</TableHead>
-                  <TableHead className="text-xs font-mono">Perfiles</TableHead>
                   <TableHead className="text-xs font-mono">País</TableHead>
                   <TableHead className="text-xs font-mono">Email</TableHead>
                   <TableHead className="text-xs font-mono">Evidencia</TableHead>
@@ -310,15 +308,6 @@ export function AdminPage() {
                           <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-medium border ${typeBadgeColor(reg?.participationCategory ?? '')}`}>
                             {categoryLabels?.[reg?.participationCategory ?? ''] ?? reg?.participationCategory ?? ''}
                           </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-wrap gap-1">
-                            {(reg?.profiles ?? [])?.map?.((p: string) => (
-                              <span key={p} className="px-1.5 py-0.5 rounded bg-secondary/10 text-secondary-foreground text-[10px] font-medium">
-                                {p}
-                              </span>
-                            )) ?? []}
-                          </div>
                         </TableCell>
                         <TableCell className="text-sm">{reg?.country ?? ''}</TableCell>
                         <TableCell className="text-xs text-muted-foreground">{reg?.contactEmail ?? ''}</TableCell>

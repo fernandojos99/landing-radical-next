@@ -38,7 +38,7 @@ export function Navbar() {
             : 'bg-transparent'
         )}
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-end lg:justify-between">
             {/* Desktop Nav */}
             <div className="hidden lg:flex items-center gap-1">

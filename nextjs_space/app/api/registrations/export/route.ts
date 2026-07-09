@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     });
 
     const headers = [
-      'ID', 'Created At', 'Project Name', 'Country', 'Profiles', 'Participation Category', 'Founders',
+      'ID', 'Created At', 'Project Name', 'Country', 'Participation Category', 'Founders',
       'North Star', 'Status Quo Challenge', 'What Building', 'What Makes Radical',
       'Has MVP', 'Has Users', 'Has Pilot', 'Has Revenue', 'Has Community', 'Has Research',
       'Key Metric', 'Demo Link', 'Frontier Question', 'Event Fit', 'Contact Email', 'File Name'
@@ -36,7 +36,6 @@ export async function GET(request: Request) {
       r?.createdAt ? new Date(r.createdAt).toISOString() : '',
       r?.projectName ?? '',
       r?.country ?? '',
-      Array.isArray(r?.profiles) ? r.profiles.join('; ') : '',
       r?.participationCategory ?? '',
       r?.founders ?? '',
       r?.northStar ?? '',

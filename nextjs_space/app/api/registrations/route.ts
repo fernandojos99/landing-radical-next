@@ -20,16 +20,11 @@ export async function POST(request: Request) {
       }
     }
 
-    if (!Array.isArray(body?.profiles) || body.profiles.length === 0) {
-      return NextResponse.json({ error: 'Missing field: profiles' }, { status: 400 });
-    }
-
     // Create registration
     const registration = await prisma.registration.create({
       data: {
         projectName: (body?.projectName ?? '')?.trim?.() ?? '',
         country: (body?.country ?? '')?.trim?.() ?? '',
-        profiles: Array.isArray(body?.profiles) ? body.profiles : [],
         participationCategory: body?.participationCategory ?? '',
         founders: (body?.founders ?? '')?.trim?.() ?? '',
         northStar: (body?.northStar ?? '')?.trim?.() ?? '',

@@ -78,6 +78,8 @@ export function ProfilesSection() {
           <div className="grid md:grid-cols-3 gap-6">
             {profiles?.map?.((p: any, i: number) => {
               const Icon = p?.icon;
+              const [descIntro, ...descRest] = (p?.desc ?? '')?.split?.('\n\n') ?? [''];
+              const relatedLine = descRest?.join?.('\n\n') ?? '';
               return (
                 <StaggerItem key={i}>
                   <div
@@ -92,9 +94,14 @@ export function ProfilesSection() {
                     <p className="text-sm sm:text-base text-white leading-relaxed mb-3">
                       {p?.subtitle ?? ''}
                     </p>
-                    <p className="text-sm sm:text-base text-white leading-relaxed whitespace-pre-line">
-                      {p?.desc ?? ''}
+                    <p className="text-sm sm:text-base text-white leading-relaxed whitespace-pre-line mb-3">
+                      {descIntro}
                     </p>
+                    {relatedLine && (
+                      <p className="text-[0.8rem] leading-[1.4] text-white/80 whitespace-pre-line">
+                        {relatedLine}
+                      </p>
+                    )}
                   </div>
                 </StaggerItem>
               );

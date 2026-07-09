@@ -31,7 +31,6 @@ import Link from 'next/link';
 interface FormData {
   projectName: string;
   country: string;
-  profiles: string[];
   participationCategory: string;
   founders: string;
   northStar: string;
@@ -54,7 +53,6 @@ interface FormData {
 const initialFormData: FormData = {
   projectName: '',
   country: '',
-  profiles: [],
   participationCategory: '',
   founders: '',
   northStar: '',
@@ -94,21 +92,6 @@ export function RegisterPage() {
     });
   };
 
-  const toggleProfile = (profile: string) => {
-    setFormData((prev: FormData) => {
-      const current = prev?.profiles ?? [];
-      const next = current?.includes?.(profile)
-        ? current?.filter?.((p: string) => p !== profile)
-        : [...current, profile];
-      return { ...(prev ?? {}), profiles: next };
-    });
-    setErrors((prev: Record<string, string>) => {
-      const next = { ...(prev ?? {}) };
-      delete next.profiles;
-      return next;
-    });
-  };
-
   const validateStep = (stepIdx: number): boolean => {
     const newErrors: Record<string, string> = {};
     const req = t?.form?.required ?? 'Required';
@@ -117,7 +100,6 @@ export function RegisterPage() {
       case 0:
         if (!(formData?.projectName ?? '')?.trim?.()) newErrors.projectName = req;
         if (!(formData?.country ?? '')?.trim?.()) newErrors.country = req;
-        if (!(formData?.profiles ?? [])?.length) newErrors.profiles = t?.form?.selectProfiles ?? 'Select at least one profile';
         if (!(formData?.participationCategory ?? '')) newErrors.participationCategory = t?.form?.selectCategory ?? 'Select a category';
         if (!(formData?.founders ?? '')?.trim?.()) newErrors.founders = req;
         break;
@@ -345,32 +327,6 @@ export function RegisterPage() {
                       variant={errors?.country ? 'error' : 'default'}
                     />
                     {errors?.country && <p className="text-xs text-red-400 mt-1">{errors.country}</p>}
-                  </div>
-                  <div>
-                    <Label>{t?.form?.profiles ?? 'Profiles'} *</Label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-1.5">
-                      {[
-                        { value: 'founders', label: t?.form?.profileFounders ?? 'Founders' },
-                        { value: 'researchers', label: t?.form?.profileResearchers ?? 'Researchers' },
-                        { value: 'technologists', label: t?.form?.profileTechnologists ?? 'Technologists' },
-                        { value: 'investors', label: t?.form?.profileInvestors ?? 'Investors' },
-                        { value: 'businessLeaders', label: t?.form?.profileBusinessLeaders ?? 'Business leaders' },
-                      ]?.map?.((opt: any) => (
-                        <button
-                          key={opt?.value}
-                          type="button"
-                          onClick={() => toggleProfile(opt?.value ?? '')}
-                          className={`rounded-xl border p-3 text-left transition-all text-sm ${
-                            formData?.profiles?.includes?.(opt?.value)
-                              ? 'border-primary bg-primary/5 text-foreground'
-                              : 'border-border/50 bg-card/30 text-muted-foreground hover:border-primary/30'
-                          }`}
-                        >
-                          {opt?.label ?? ''}
-                        </button>
-                      )) ?? []}
-                    </div>
-                    {errors?.profiles && <p className="text-xs text-red-400 mt-1">{errors.profiles}</p>}
                   </div>
                   <div>
                     <Label>{t?.form?.participationCategory ?? 'Participation category'} *</Label>

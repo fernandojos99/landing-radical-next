@@ -32,6 +32,37 @@ export function Footer() {
               </div>
             </div>
           </div>
+
+          <div className="flex items-center gap-4">
+            <a
+              href="https://mx.linkedin.com/company/iris-startup-lab"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn de IRIS StartUp Lab"
+              className="relative h-5 w-5 opacity-80 hover:opacity-100 transition-opacity"
+            >
+              <Image src="/assets/social/linkedin.png" alt="LinkedIn" fill className="object-contain brightness-0 invert" />
+            </a>
+            <a
+              href="https://www.instagram.com/udelalibertad/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram de Universidad de la Libertad"
+              className="relative h-5 w-5 opacity-80 hover:opacity-100 transition-opacity"
+            >
+              <Image src="/assets/social/instagram.png" alt="Instagram" fill className="object-contain brightness-0 invert" />
+            </a>
+            <a
+              href="https://mx.linkedin.com/school/udelalibertad/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn de Universidad de la Libertad"
+              className="relative h-5 w-5 opacity-80 hover:opacity-100 transition-opacity"
+            >
+              <Image src="/assets/social/linkedin.png" alt="LinkedIn" fill className="object-contain brightness-0 invert" />
+            </a>
+          </div>
+
           <p className="text-xs text-white">
             {t?.footer?.rights ?? ''}
           </p>

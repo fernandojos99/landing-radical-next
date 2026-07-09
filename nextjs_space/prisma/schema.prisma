@@ -16,7 +16,6 @@ model Registration {
   // Section 1 - Identification
   projectName       String
   country           String
-  profiles          String[] @default([]) // founders | researchers | technologists | investors | businessLeaders
   participationCategory String @default("") // visionaries | decentralizedArchitects | humanExperience | pioneerScientists | radicalChange
   founders          String
 
