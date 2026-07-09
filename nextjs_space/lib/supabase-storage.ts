@@ -9,13 +9,22 @@ const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
 
 const BUCKET = process.env.SUPABASE_STORAGE_BUCKET || "uploads";
 
+// Supabase Storage rejects object keys containing accented letters or other
+// non-ASCII characters (400 InvalidKey). Strip accents and replace anything
+// outside a safe charset, while the original fileName is kept separately
+// (in the DB) for display purposes.
+function sanitizeForStorageKey(fileName: string): string {
+  const normalized = fileName?.normalize?.("NFD")?.replace?.(/[̀-ͯ]/g, "") ?? fileName;
+  return normalized.replace(/[^a-zA-Z0-9._-]/g, "_");
+}
+
 export async function generatePresignedUploadUrl(
   fileName: string,
   contentType: string,
   isPublic: boolean = false
 ): Promise<{ uploadUrl: string; cloudStoragePath: string }> {
   const prefix = isPublic ? "public" : "private";
-  const cloudStoragePath = `${prefix}/${Date.now()}-${fileName}`;
+  const cloudStoragePath = `${prefix}/${Date.now()}-${sanitizeForStorageKey(fileName)}`;
 
   const { data, error } = await supabase.storage
     .from(BUCKET)

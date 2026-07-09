@@ -47,7 +47,8 @@ model Registration {
   contactEmail      String
   contactPhone      String   @default("")
 
-  // File upload - array of up to 3 { cloudStoragePath, fileName, isPublic }
+  // File upload - array of { cloudStoragePath, fileName, isPublic, docType }
+  // docType: onePager | pitchDeck | traction
   evidenceFiles     Json     @default("[]")
 
   @@index([createdAt])

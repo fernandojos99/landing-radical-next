@@ -50,7 +50,7 @@ interface Registration {
   eventFit: string;
   contactEmail: string;
   contactPhone: string;
-  evidenceFiles: { cloudStoragePath: string; fileName: string; isPublic: boolean }[];
+  evidenceFiles: { cloudStoragePath: string; fileName: string; isPublic: boolean; docType?: string }[];
 }
 
 export function AdminPage() {
@@ -139,6 +139,12 @@ export function AdminPage() {
     humanExperience: 'Constructores de la experiencia humana',
     pioneerScientists: 'Científicos pioneros',
     radicalChange: 'Agentes de cambio radical',
+  };
+
+  const docTypeLabels: Record<string, string> = {
+    onePager: 'One pager',
+    pitchDeck: 'Pitch deck',
+    traction: 'Tracción/ventas',
   };
 
   const typeBadgeColor = (type: string) => {
@@ -344,7 +350,7 @@ export function AdminPage() {
                                 }}
                                 className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
                               >
-                                <FileText className="h-3 w-3" /> {f?.fileName ?? 'File'}
+                                <FileText className="h-3 w-3" /> {docTypeLabels?.[f?.docType ?? ''] ?? f?.fileName ?? 'File'}
                               </button>
                             )) ?? []}
                           </div>

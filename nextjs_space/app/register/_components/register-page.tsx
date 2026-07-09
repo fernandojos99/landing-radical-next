@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
 import { FadeIn, SlideIn } from '@/components/ui/animate';
 import { toast } from 'sonner';
 import {
@@ -93,7 +94,9 @@ export function RegisterPage() {
     ...initialFormData,
     ...(loadDraft()?.formData ?? {}),
   }));
-  const [files, setFiles] = useState<File[]>([]);
+  const [onePagerFile, setOnePagerFile] = useState<File | null>(null);
+  const [pitchDeckFile, setPitchDeckFile] = useState<File | null>(null);
+  const [tractionFile, setTractionFile] = useState<File | null>(null);
 
   // Persist form progress in sessionStorage so it survives navigating away
   // (e.g. clicking a navbar link) and back, for as long as the tab stays open.
@@ -132,7 +135,7 @@ export function RegisterPage() {
       case 4:
         return !!formData?.frontierQuestion?.trim?.();
       case 5:
-        return !!(formData?.eventFit?.trim?.() || formData?.contactEmail?.trim?.() || formData?.contactPhone?.trim?.());
+        return !!(formData?.eventFit?.trim?.() || formData?.contactEmail?.trim?.() || formData?.contactPhone?.trim?.() || onePagerFile || pitchDeckFile || tractionFile);
       default:
         return false;
     }
@@ -177,6 +180,8 @@ export function RegisterPage() {
           newErrors.contactEmail = t?.form?.invalidEmail ?? 'Invalid email';
         }
         if (!(formData?.contactPhone ?? '')?.trim?.()) newErrors.contactPhone = req;
+        if (!onePagerFile) newErrors.onePagerFile = req;
+        if (!pitchDeckFile) newErrors.pitchDeckFile = req;
         break;
     }
 
@@ -196,10 +201,9 @@ export function RegisterPage() {
     if (!validateStep(step)) return;
     setSubmitting(true);
     try {
-      const evidenceFiles: { cloudStoragePath: string; fileName: string; isPublic: boolean }[] = [];
+      const evidenceFiles: { cloudStoragePath: string; fileName: string; isPublic: boolean; docType: string }[] = [];
 
-      // Upload files if present (max 3)
-      for (const f of files ?? []) {
+      const uploadDoc = async (f: File, docType: string) => {
         const presignRes = await fetch('/api/upload/presigned', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -236,8 +240,13 @@ export function RegisterPage() {
           cloudStoragePath: presignData?.cloud_storage_path ?? '',
           fileName: f?.name ?? '',
           isPublic: false,
+          docType,
         });
-      }
+      };
+
+      if (onePagerFile) await uploadDoc(onePagerFile, 'onePager');
+      if (pitchDeckFile) await uploadDoc(pitchDeckFile, 'pitchDeck');
+      if (tractionFile) await uploadDoc(tractionFile, 'traction');
 
       // Submit registration
       const res = await fetch('/api/registrations', {
@@ -379,28 +388,37 @@ export function RegisterPage() {
                   </div>
                   <div>
                     <Label>{t?.form?.participationCategory ?? 'Participation category'} *</Label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1.5">
-                      {[
-                        { value: 'visionaries', label: t?.form?.categoryVisionaries ?? 'Technological visionaries' },
-                        { value: 'decentralizedArchitects', label: t?.form?.categoryDecentralizedArchitects ?? 'Architects of new decentralized systems' },
-                        { value: 'humanExperience', label: t?.form?.categoryHumanExperience ?? 'Builders of the human experience' },
-                        { value: 'pioneerScientists', label: t?.form?.categoryPioneerScientists ?? 'Pioneer scientists' },
-                        { value: 'radicalChange', label: t?.form?.categoryRadicalChange ?? 'Agents of radical change' },
-                      ]?.map?.((opt: any) => (
-                        <button
-                          key={opt?.value}
-                          type="button"
-                          onClick={() => updateField('participationCategory', opt?.value ?? '')}
-                          className={`rounded-xl border p-3 text-left transition-all text-sm ${
-                            formData?.participationCategory === opt?.value
-                              ? 'border-primary bg-primary/5 text-foreground'
-                              : 'border-border/50 bg-card/30 text-muted-foreground hover:border-primary/30'
-                          }`}
-                        >
-                          {opt?.label ?? ''}
-                        </button>
-                      )) ?? []}
-                    </div>
+                    <TooltipProvider delayDuration={150}>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1.5">
+                        {[
+                          { value: 'visionaries', label: t?.form?.categoryVisionaries ?? 'Technological visionaries', subtitle: t?.profiles?.card1Subtitle ?? '', desc: (t?.profiles?.card1Desc ?? '')?.split?.('\n\n')?.[0] ?? '' },
+                          { value: 'decentralizedArchitects', label: t?.form?.categoryDecentralizedArchitects ?? 'Architects of new decentralized systems', subtitle: t?.profiles?.card2Subtitle ?? '', desc: (t?.profiles?.card2Desc ?? '')?.split?.('\n\n')?.[0] ?? '' },
+                          { value: 'humanExperience', label: t?.form?.categoryHumanExperience ?? 'Builders of the human experience', subtitle: t?.profiles?.card3Subtitle ?? '', desc: (t?.profiles?.card3Desc ?? '')?.split?.('\n\n')?.[0] ?? '' },
+                          { value: 'pioneerScientists', label: t?.form?.categoryPioneerScientists ?? 'Pioneer scientists', subtitle: t?.profiles?.card4Subtitle ?? '', desc: (t?.profiles?.card4Desc ?? '')?.split?.('\n\n')?.[0] ?? '' },
+                          { value: 'radicalChange', label: t?.form?.categoryRadicalChange ?? 'Agents of radical change', subtitle: t?.profiles?.card5Subtitle ?? '', desc: (t?.profiles?.card5Desc ?? '')?.split?.('\n\n')?.[0] ?? '' },
+                        ]?.map?.((opt: any) => (
+                          <Tooltip key={opt?.value}>
+                            <TooltipTrigger asChild>
+                              <button
+                                type="button"
+                                onClick={() => updateField('participationCategory', opt?.value ?? '')}
+                                className={`rounded-xl border p-3 text-left transition-all text-sm ${
+                                  formData?.participationCategory === opt?.value
+                                    ? 'border-primary bg-primary/5 text-foreground'
+                                    : 'border-border/50 bg-card/30 text-muted-foreground hover:border-primary/30'
+                                }`}
+                              >
+                                {opt?.label ?? ''}
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="max-w-xs">
+                              {opt?.subtitle && <p className="font-semibold mb-1">{opt.subtitle}</p>}
+                              {opt?.desc && <p className="text-xs leading-relaxed opacity-90">{opt.desc}</p>}
+                            </TooltipContent>
+                          </Tooltip>
+                        )) ?? []}
+                      </div>
+                    </TooltipProvider>
                     {errors?.participationCategory && <p className="text-xs text-red-400 mt-1">{errors.participationCategory}</p>}
                   </div>
                   <div>
@@ -605,33 +623,24 @@ export function RegisterPage() {
                     {errors?.contactPhone && <p className="text-xs text-red-400 mt-1">{errors.contactPhone}</p>}
                   </div>
                   <div>
-                    <Label>{t?.form?.fileUpload ?? 'File upload'}</Label>
-                    <p className="text-xs text-muted-foreground mb-2">{t?.form?.fileUploadHint ?? ''}</p>
-                    <div className="space-y-2 mb-2">
-                      {files?.map?.((f: File, i: number) => (
-                        <div key={`${f?.name ?? 'file'}-${i}`} className="flex items-center gap-3 rounded-xl border border-border/50 bg-card/30 p-4">
-                          <Upload className="h-4 w-4 text-primary flex-shrink-0" />
-                          <span className="text-sm text-foreground truncate flex-1">{f?.name ?? 'File'}</span>
-                          <button
-                            type="button"
-                            onClick={() => setFiles((prev: File[]) => prev?.filter?.((_, idx: number) => idx !== i) ?? [])}
-                            className="text-muted-foreground hover:text-foreground"
-                          >
-                            <X className="h-4 w-4" />
-                          </button>
-                        </div>
-                      )) ?? []}
-                    </div>
-                    {(files?.length ?? 0) < 3 && (
-                      <label className="flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border/50 bg-card/20 p-8 cursor-pointer hover:border-primary/30 hover:bg-card/40 transition-all">
+                    <Label>{t?.form?.onePagerLabel ?? 'One pager'} *</Label>
+                    <p className="text-xs text-muted-foreground mb-2">{t?.form?.onePagerHint ?? ''}</p>
+                    {onePagerFile ? (
+                      <div className="flex items-center gap-3 rounded-xl border border-border/50 bg-card/30 p-4">
+                        <Upload className="h-4 w-4 text-primary flex-shrink-0" />
+                        <span className="text-sm text-foreground truncate flex-1">{onePagerFile?.name ?? 'File'}</span>
+                        <button type="button" onClick={() => setOnePagerFile(null)} className="text-muted-foreground hover:text-foreground">
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <label className={`flex items-center justify-center gap-2 rounded-xl border-2 border-dashed p-6 cursor-pointer transition-all ${errors?.onePagerFile ? 'border-red-400/60 bg-red-400/5' : 'border-border/50 bg-card/20 hover:border-primary/30 hover:bg-card/40'}`}>
                         <Upload className="h-5 w-5 text-muted-foreground" />
-                        <span className="text-sm text-muted-foreground">
-                          {t?.form?.fileUpload ?? 'Upload file'}
-                        </span>
+                        <span className="text-sm text-muted-foreground">{t?.form?.fileUpload ?? 'Upload file'}</span>
                         <input
                           type="file"
                           className="hidden"
-                          accept=".pdf,.png,.jpg,.jpeg,.gif,.mp4,.mov,.doc,.docx"
+                          accept=".doc,.docx,.pdf"
                           onChange={(e: any) => {
                             const f = e?.target?.files?.[0];
                             if (f) {
@@ -639,15 +648,93 @@ export function RegisterPage() {
                                 toast.error('File too large (max 50MB)');
                                 return;
                               }
-                              setFiles((prev: File[]) => (prev?.length ?? 0) >= 3 ? prev : [...(prev ?? []), f]);
+                              setOnePagerFile(f);
+                              setErrors((prev: Record<string, string>) => {
+                                const next = { ...(prev ?? {}) };
+                                delete next.onePagerFile;
+                                return next;
+                              });
                             }
                             e.target.value = '';
                           }}
                         />
                       </label>
                     )}
-                    {(files?.length ?? 0) >= 3 && (
-                      <p className="text-xs text-muted-foreground mt-1">{t?.form?.fileUploadMax ?? 'Maximum 3 documents.'}</p>
+                    {errors?.onePagerFile && <p className="text-xs text-red-400 mt-1">{errors.onePagerFile}</p>}
+                  </div>
+
+                  <div>
+                    <Label>{t?.form?.pitchDeckLabel ?? 'Pitch deck'} *</Label>
+                    <p className="text-xs text-muted-foreground mb-2">{t?.form?.pitchDeckHint ?? ''}</p>
+                    {pitchDeckFile ? (
+                      <div className="flex items-center gap-3 rounded-xl border border-border/50 bg-card/30 p-4">
+                        <Upload className="h-4 w-4 text-primary flex-shrink-0" />
+                        <span className="text-sm text-foreground truncate flex-1">{pitchDeckFile?.name ?? 'File'}</span>
+                        <button type="button" onClick={() => setPitchDeckFile(null)} className="text-muted-foreground hover:text-foreground">
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <label className={`flex items-center justify-center gap-2 rounded-xl border-2 border-dashed p-6 cursor-pointer transition-all ${errors?.pitchDeckFile ? 'border-red-400/60 bg-red-400/5' : 'border-border/50 bg-card/20 hover:border-primary/30 hover:bg-card/40'}`}>
+                        <Upload className="h-5 w-5 text-muted-foreground" />
+                        <span className="text-sm text-muted-foreground">{t?.form?.fileUpload ?? 'Upload file'}</span>
+                        <input
+                          type="file"
+                          className="hidden"
+                          accept=".ppt,.pptx"
+                          onChange={(e: any) => {
+                            const f = e?.target?.files?.[0];
+                            if (f) {
+                              if ((f?.size ?? 0) > 50 * 1024 * 1024) {
+                                toast.error('File too large (max 50MB)');
+                                return;
+                              }
+                              setPitchDeckFile(f);
+                              setErrors((prev: Record<string, string>) => {
+                                const next = { ...(prev ?? {}) };
+                                delete next.pitchDeckFile;
+                                return next;
+                              });
+                            }
+                            e.target.value = '';
+                          }}
+                        />
+                      </label>
+                    )}
+                    {errors?.pitchDeckFile && <p className="text-xs text-red-400 mt-1">{errors.pitchDeckFile}</p>}
+                  </div>
+
+                  <div>
+                    <Label>{t?.form?.tractionLabel ?? 'Traction / sales evidence'}</Label>
+                    <p className="text-xs text-muted-foreground mb-2">{t?.form?.tractionHint ?? ''}</p>
+                    {tractionFile ? (
+                      <div className="flex items-center gap-3 rounded-xl border border-border/50 bg-card/30 p-4">
+                        <Upload className="h-4 w-4 text-primary flex-shrink-0" />
+                        <span className="text-sm text-foreground truncate flex-1">{tractionFile?.name ?? 'File'}</span>
+                        <button type="button" onClick={() => setTractionFile(null)} className="text-muted-foreground hover:text-foreground">
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <label className="flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border/50 bg-card/20 p-6 cursor-pointer hover:border-primary/30 hover:bg-card/40 transition-all">
+                        <Upload className="h-5 w-5 text-muted-foreground" />
+                        <span className="text-sm text-muted-foreground">{t?.form?.fileUpload ?? 'Upload file'}</span>
+                        <input
+                          type="file"
+                          className="hidden"
+                          onChange={(e: any) => {
+                            const f = e?.target?.files?.[0];
+                            if (f) {
+                              if ((f?.size ?? 0) > 50 * 1024 * 1024) {
+                                toast.error('File too large (max 50MB)');
+                                return;
+                              }
+                              setTractionFile(f);
+                            }
+                            e.target.value = '';
+                          }}
+                        />
+                      </label>
                     )}
                   </div>
                 </div>

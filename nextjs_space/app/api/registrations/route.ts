@@ -22,6 +22,13 @@ export async function POST(request: Request) {
 
     const evidenceFiles = Array.isArray(body?.evidenceFiles) ? body.evidenceFiles.slice(0, 3) : [];
 
+    if (!evidenceFiles?.some?.((f: any) => f?.docType === 'onePager')) {
+      return NextResponse.json({ error: 'Missing field: onePagerFile' }, { status: 400 });
+    }
+    if (!evidenceFiles?.some?.((f: any) => f?.docType === 'pitchDeck')) {
+      return NextResponse.json({ error: 'Missing field: pitchDeckFile' }, { status: 400 });
+    }
+
     // Create registration
     const registration = await prisma.registration.create({
       data: {

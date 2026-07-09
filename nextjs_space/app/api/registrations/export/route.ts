@@ -54,7 +54,7 @@ export async function GET(request: Request) {
       r?.eventFit ?? '',
       r?.contactEmail ?? '',
       r?.contactPhone ?? '',
-      Array.isArray(r?.evidenceFiles) ? r.evidenceFiles.map((f: any) => f?.fileName ?? '').join('; ') : '',
+      Array.isArray(r?.evidenceFiles) ? r.evidenceFiles.map((f: any) => `${f?.docType ?? ''}: ${f?.fileName ?? ''}`).join('; ') : '',
     ]?.map?.(escapeCsv)?.join?.(',')) ?? [];
 
     const csv = [headers?.join?.(','), ...(rows ?? [])]?.join?.('\n');
