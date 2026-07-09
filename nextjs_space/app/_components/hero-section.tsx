@@ -120,7 +120,7 @@ export function HeroSection() {
             src="/assets/frame_111.png"
             alt="Radical Innovation Summit 2026"
             fill
-            className="object-contain z-0 scale-[0.6]"
+            className="object-contain z-0 scale-[1.125]"
             priority
           />
           <Image
