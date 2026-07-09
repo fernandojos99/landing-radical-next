@@ -12,6 +12,7 @@ export async function GET(
   try {
     const url = new URL(request?.url ?? 'http://localhost:3000');
     const password = url?.searchParams?.get?.('password') ?? '';
+    const index = parseInt(url?.searchParams?.get?.('index') ?? '0', 10) || 0;
 
     if (password !== 'RadicalAdmin2026') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -21,19 +22,22 @@ export async function GET(
       where: { id: params?.id ?? '' },
     });
 
-    if (!registration?.fileCloudStoragePath) {
+    const evidenceFiles = Array.isArray(registration?.evidenceFiles) ? registration?.evidenceFiles as any[] : [];
+    const target = evidenceFiles?.[index];
+
+    if (!target?.cloudStoragePath) {
       return NextResponse.json({ error: 'No file' }, { status: 404 });
     }
 
     let fileUrl: string;
-    const isPublic = registration?.fileIsPublic ?? false;
+    const isPublic = target?.isPublic ?? false;
 
     if (process.env.SUPABASE_URL) {
       fileUrl = isPublic
-        ? getPublicUrl(registration.fileCloudStoragePath)
-        : await createSignedUrl(registration.fileCloudStoragePath);
+        ? getPublicUrl(target.cloudStoragePath)
+        : await createSignedUrl(target.cloudStoragePath);
     } else {
-      fileUrl = await getFileUrl(registration.fileCloudStoragePath, isPublic);
+      fileUrl = await getFileUrl(target.cloudStoragePath, isPublic);
     }
 
     return NextResponse.json({ fileUrl });

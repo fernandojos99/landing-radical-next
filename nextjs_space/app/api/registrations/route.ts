@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     const requiredFields = [
       'projectName', 'country', 'participationCategory', 'founders',
       'northStar', 'statusQuoChallenge', 'whatBuilding', 'whatMakesRadical',
-      'keyMetric', 'demoLink', 'frontierQuestion', 'eventFit', 'contactEmail'
+      'keyMetric', 'demoLink', 'frontierQuestion', 'eventFit', 'contactEmail', 'contactPhone'
     ];
 
     for (const field of requiredFields) {
@@ -19,6 +19,8 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: `Missing field: ${field}` }, { status: 400 });
       }
     }
+
+    const evidenceFiles = Array.isArray(body?.evidenceFiles) ? body.evidenceFiles.slice(0, 3) : [];
 
     // Create registration
     const registration = await prisma.registration.create({
@@ -42,9 +44,8 @@ export async function POST(request: Request) {
         frontierQuestion: (body?.frontierQuestion ?? '')?.trim?.() ?? '',
         eventFit: (body?.eventFit ?? '')?.trim?.() ?? '',
         contactEmail: (body?.contactEmail ?? '')?.trim?.()?.toLowerCase?.() ?? '',
-        fileCloudStoragePath: body?.fileCloudStoragePath ?? null,
-        fileIsPublic: !!body?.fileIsPublic,
-        fileName: body?.fileName ?? null,
+        contactPhone: (body?.contactPhone ?? '')?.trim?.() ?? '',
+        evidenceFiles,
       },
     });
 
@@ -79,6 +80,7 @@ async function sendNotification(reg: any) {
           <p style="margin: 8px 0;"><strong style="color: #22d3ee;">Categor\u00eda:</strong> ${reg?.participationCategory ?? ''}</p>
           <p style="margin: 8px 0;"><strong style="color: #22d3ee;">Pa\u00eds:</strong> ${reg?.country ?? ''}</p>
           <p style="margin: 8px 0;"><strong style="color: #22d3ee;">Email:</strong> <a href="mailto:${reg?.contactEmail ?? ''}" style="color: #a78bfa;">${reg?.contactEmail ?? ''}</a></p>
+          <p style="margin: 8px 0;"><strong style="color: #22d3ee;">Teléfono:</strong> ${reg?.contactPhone ?? ''}</p>
           <p style="margin: 8px 0;"><strong style="color: #22d3ee;">Fundadores:</strong> ${reg?.founders ?? ''}</p>
           <p style="margin: 8px 0;"><strong style="color: #22d3ee;">Demo:</strong> <a href="${reg?.demoLink ?? '#'}" style="color: #a78bfa;">${reg?.demoLink ?? ''}</a></p>
         </div>

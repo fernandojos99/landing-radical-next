@@ -45,11 +45,10 @@ model Registration {
 
   // Contact
   contactEmail      String
+  contactPhone      String   @default("")
 
-  // File upload
-  fileCloudStoragePath String?  @map("file_cloud_storage_path")
-  fileIsPublic         Boolean  @default(false) @map("file_is_public")
-  fileName             String?
+  // File upload - array of up to 3 { cloudStoragePath, fileName, isPublic }
+  evidenceFiles     Json     @default("[]")
 
   @@index([createdAt])
   @@index([participationCategory])

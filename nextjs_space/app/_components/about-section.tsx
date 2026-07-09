@@ -3,8 +3,9 @@
 import { useLocale } from '@/lib/locale-context';
 import { Container } from '@/components/layouts/container';
 import { Section } from '@/components/layouts/section';
+import { Button } from '@/components/ui/button';
 import { FadeIn, SlideIn } from '@/components/ui/animate';
-import { Rocket, DollarSign, Handshake, Target, Trophy, Building2 } from 'lucide-react';
+import { Rocket, DollarSign, Handshake, Target, Trophy, Building2, FileText } from 'lucide-react';
 import { CountUp } from './count-up';
 
 export function AboutSection() {
@@ -68,6 +69,17 @@ export function AboutSection() {
             );
           }) ?? []}
         </div>
+
+        <FadeIn delay={0.3}>
+          <div className="flex justify-center mt-8">
+            <a href="/documents/Bases_RIS2026.pdf" target="_blank" rel="noopener noreferrer">
+              <Button size="lg" className="text-base font-semibold px-8 gap-2">
+                {t?.about?.viewBases ?? 'View contest rules'}
+                <FileText className="h-4 w-4" />
+              </Button>
+            </a>
+          </div>
+        </FadeIn>
       </Container>
     </Section>
   );

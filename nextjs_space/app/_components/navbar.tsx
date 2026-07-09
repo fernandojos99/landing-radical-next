@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { useLocale } from '@/lib/locale-context';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Globe } from 'lucide-react';
@@ -10,6 +11,7 @@ import { cn } from '@/lib/utils';
 
 export function Navbar() {
   const { t, locale, toggleLocale } = useLocale();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -19,6 +21,11 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handler);
   }, []);
 
+  // Section anchors only exist on the landing page ("/"). From any other
+  // route (e.g. /register), prefix with "/" so the browser navigates home
+  // and then scrolls to the anchor, instead of appending the hash to the
+  // current route (which doesn't have those sections).
+  const isHome = pathname === '/';
   const navLinks = [
     { href: '#about', label: t?.nav?.about ?? 'Events' },
     { href: '#incentives', label: t?.nav?.incentives ?? 'Incentives' },
@@ -26,7 +33,7 @@ export function Navbar() {
     { href: '#requirements', label: t?.nav?.requirements ?? 'Requirements' },
     { href: '#criteria', label: t?.nav?.criteria ?? 'Criteria' },
     { href: '#dates', label: t?.nav?.dates ?? 'Dates' },
-  ];
+  ]?.map?.((link) => ({ ...link, href: isHome ? link.href : `/${link.href}` })) ?? [];
 
   return (
     <>

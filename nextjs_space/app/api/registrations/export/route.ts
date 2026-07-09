@@ -20,7 +20,7 @@ export async function GET(request: Request) {
       'ID', 'Created At', 'Project Name', 'Country', 'Participation Category', 'Founders',
       'North Star', 'Status Quo Challenge', 'What Building', 'What Makes Radical',
       'Has MVP', 'Has Users', 'Has Pilot', 'Has Revenue', 'Has Community', 'Has Research',
-      'Key Metric', 'Demo Link', 'Frontier Question', 'Event Fit', 'Contact Email', 'File Name'
+      'Key Metric', 'Demo Link', 'Frontier Question', 'Event Fit', 'Contact Email', 'Contact Phone', 'File Names'
     ];
 
     const escapeCsv = (val: any): string => {
@@ -53,7 +53,8 @@ export async function GET(request: Request) {
       r?.frontierQuestion ?? '',
       r?.eventFit ?? '',
       r?.contactEmail ?? '',
-      r?.fileName ?? '',
+      r?.contactPhone ?? '',
+      Array.isArray(r?.evidenceFiles) ? r.evidenceFiles.map((f: any) => f?.fileName ?? '').join('; ') : '',
     ]?.map?.(escapeCsv)?.join?.(',')) ?? [];
 
     const csv = [headers?.join?.(','), ...(rows ?? [])]?.join?.('\n');

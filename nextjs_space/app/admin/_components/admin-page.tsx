@@ -49,8 +49,8 @@ interface Registration {
   frontierQuestion: string;
   eventFit: string;
   contactEmail: string;
-  fileName: string | null;
-  fileCloudStoragePath: string | null;
+  contactPhone: string;
+  evidenceFiles: { cloudStoragePath: string; fileName: string; isPublic: boolean }[];
 }
 
 export function AdminPage() {
@@ -115,9 +115,9 @@ export function AdminPage() {
     document.body.removeChild(a);
   };
 
-  const handleFileDownload = async (regId: string) => {
+  const handleFileDownload = async (regId: string, index: number = 0) => {
     try {
-      const res = await fetch(`/api/registrations/${regId}/file?password=RadicalAdmin2026`);
+      const res = await fetch(`/api/registrations/${regId}/file?password=RadicalAdmin2026&index=${index}`);
       const data = await res?.json?.();
       if (data?.fileUrl) {
         const a = document.createElement('a');
@@ -334,23 +334,30 @@ export function AdminPage() {
                           )}
                         </TableCell>
                         <TableCell>
-                          {reg?.fileCloudStoragePath && (
-                            <button
-                              onClick={(e: any) => {
-                                e?.stopPropagation?.();
-                                handleFileDownload(reg?.id ?? '');
-                              }}
-                              className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
-                            >
-                              <FileText className="h-3 w-3" /> {reg?.fileName ?? 'File'}
-                            </button>
-                          )}
+                          <div className="flex flex-col gap-1">
+                            {(reg?.evidenceFiles ?? [])?.map?.((f: any, idx: number) => (
+                              <button
+                                key={`${f?.fileName ?? 'file'}-${idx}`}
+                                onClick={(e: any) => {
+                                  e?.stopPropagation?.();
+                                  handleFileDownload(reg?.id ?? '', idx);
+                                }}
+                                className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                              >
+                                <FileText className="h-3 w-3" /> {f?.fileName ?? 'File'}
+                              </button>
+                            )) ?? []}
+                          </div>
                         </TableCell>
                       </TableRow>
                       {expandedId === reg?.id && (
                         <TableRow key={`${reg?.id ?? ''}-expanded`}>
                           <TableCell colSpan={8} className="bg-card/40 p-6">
                             <div className="grid md:grid-cols-2 gap-6 text-sm">
+                              <div>
+                                <h4 className="font-bold text-primary text-xs uppercase tracking-wider mb-2">Teléfono de contacto</h4>
+                                <p className="text-muted-foreground whitespace-pre-line">{reg?.contactPhone ?? ''}</p>
+                              </div>
                               <div>
                                 <h4 className="font-bold text-primary text-xs uppercase tracking-wider mb-2">Fundadores</h4>
                                 <p className="text-muted-foreground whitespace-pre-line">{reg?.founders ?? ''}</p>

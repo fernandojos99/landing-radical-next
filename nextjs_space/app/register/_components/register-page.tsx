@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocale } from '@/lib/locale-context';
 import { Navbar } from '@/app/_components/navbar';
 import { Footer } from '@/app/_components/footer';
@@ -48,6 +48,7 @@ interface FormData {
   frontierQuestion: string;
   eventFit: string;
   contactEmail: string;
+  contactPhone: string;
 }
 
 const initialFormData: FormData = {
@@ -70,13 +71,39 @@ const initialFormData: FormData = {
   frontierQuestion: '',
   eventFit: '',
   contactEmail: '',
+  contactPhone: '',
 };
+
+const DRAFT_KEY = 'radical-register-draft';
+
+function loadDraft(): { formData: Partial<FormData>; step: number } | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.sessionStorage.getItem(DRAFT_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
 
 export function RegisterPage() {
   const { t } = useLocale();
-  const [step, setStep] = useState(0);
-  const [formData, setFormData] = useState<FormData>(initialFormData);
-  const [file, setFile] = useState<File | null>(null);
+  const [step, setStep] = useState<number>(() => loadDraft()?.step ?? 0);
+  const [formData, setFormData] = useState<FormData>(() => ({
+    ...initialFormData,
+    ...(loadDraft()?.formData ?? {}),
+  }));
+  const [files, setFiles] = useState<File[]>([]);
+
+  // Persist form progress in sessionStorage so it survives navigating away
+  // (e.g. clicking a navbar link) and back, for as long as the tab stays open.
+  // Note: selected files can't be serialized, so they aren't restored.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      window.sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ formData, step }));
+    } catch {}
+  }, [formData, step]);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -90,6 +117,25 @@ export function RegisterPage() {
       delete next[field];
       return next;
     });
+  };
+
+  const stepHasData = (stepIdx: number): boolean => {
+    switch (stepIdx) {
+      case 0:
+        return !!(formData?.projectName?.trim?.() || formData?.country?.trim?.() || formData?.participationCategory || formData?.founders?.trim?.());
+      case 1:
+        return !!(formData?.northStar?.trim?.() || formData?.statusQuoChallenge?.trim?.());
+      case 2:
+        return !!(formData?.whatBuilding?.trim?.() || formData?.whatMakesRadical?.trim?.());
+      case 3:
+        return !!(formData?.hasMvp || formData?.hasUsers || formData?.hasPilot || formData?.hasRevenue || formData?.hasCommunity || formData?.hasResearch || formData?.keyMetric?.trim?.() || formData?.demoLink?.trim?.());
+      case 4:
+        return !!formData?.frontierQuestion?.trim?.();
+      case 5:
+        return !!(formData?.eventFit?.trim?.() || formData?.contactEmail?.trim?.() || formData?.contactPhone?.trim?.());
+      default:
+        return false;
+    }
   };
 
   const validateStep = (stepIdx: number): boolean => {
@@ -130,6 +176,7 @@ export function RegisterPage() {
         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData?.contactEmail ?? '')) {
           newErrors.contactEmail = t?.form?.invalidEmail ?? 'Invalid email';
         }
+        if (!(formData?.contactPhone ?? '')?.trim?.()) newErrors.contactPhone = req;
         break;
     }
 
@@ -149,18 +196,16 @@ export function RegisterPage() {
     if (!validateStep(step)) return;
     setSubmitting(true);
     try {
-      let fileCloudStoragePath: string | null = null;
-      let fileIsPublic = false;
-      let uploadedFileName: string | null = null;
+      const evidenceFiles: { cloudStoragePath: string; fileName: string; isPublic: boolean }[] = [];
 
-      // Upload file if present
-      if (file) {
+      // Upload files if present (max 3)
+      for (const f of files ?? []) {
         const presignRes = await fetch('/api/upload/presigned', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            fileName: file?.name ?? 'file',
-            contentType: file?.type ?? 'application/octet-stream',
+            fileName: f?.name ?? 'file',
+            contentType: f?.type ?? 'application/octet-stream',
             isPublic: false,
           }),
         });
@@ -174,7 +219,7 @@ export function RegisterPage() {
         const needsContentDisposition = signedHeaders?.includes?.('content-disposition');
 
         const uploadHeaders: Record<string, string> = {
-          'Content-Type': file?.type ?? 'application/octet-stream',
+          'Content-Type': f?.type ?? 'application/octet-stream',
         };
         if (needsContentDisposition) {
           uploadHeaders['Content-Disposition'] = 'attachment';
@@ -183,13 +228,15 @@ export function RegisterPage() {
         const uploadRes = await fetch(uploadUrl, {
           method: 'PUT',
           headers: uploadHeaders,
-          body: file,
+          body: f,
         });
         if (!uploadRes?.ok) throw new Error('File upload failed');
 
-        fileCloudStoragePath = presignData?.cloud_storage_path ?? null;
-        fileIsPublic = false;
-        uploadedFileName = file?.name ?? null;
+        evidenceFiles.push({
+          cloudStoragePath: presignData?.cloud_storage_path ?? '',
+          fileName: f?.name ?? '',
+          isPublic: false,
+        });
       }
 
       // Submit registration
@@ -198,15 +245,16 @@ export function RegisterPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...(formData ?? {}),
-          fileCloudStoragePath,
-          fileIsPublic,
-          fileName: uploadedFileName,
+          evidenceFiles,
         }),
       });
 
       const result = await res?.json?.();
       if (!res?.ok) throw new Error(result?.error ?? 'Submission failed');
 
+      if (typeof window !== 'undefined') {
+        try { window.sessionStorage.removeItem(DRAFT_KEY); } catch {}
+      }
       setSubmitted(true);
     } catch (err: any) {
       console.error('Submission error:', err);
@@ -274,18 +322,19 @@ export function RegisterPage() {
           <div className="flex items-center justify-center gap-2 mb-10">
             {Array.from({ length: totalSteps })?.map?.((_: any, i: number) => {
               const Icon = sectionIcons?.[i];
+              const reachable = i < step || i === step || stepHasData(i);
               return (
                 <button
                   key={i}
                   onClick={() => {
-                    if (i < step) setStep(i);
+                    if (reachable) setStep(i);
                   }}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                     i === step
                       ? 'bg-primary text-primary-foreground'
-                      : i < step
+                      : reachable
                       ? 'bg-primary/10 text-primary cursor-pointer hover:bg-primary/20'
-                      : 'bg-muted text-muted-foreground'
+                      : 'bg-muted text-muted-foreground cursor-not-allowed'
                   }`}
                 >
                   {Icon && <Icon className="h-3.5 w-3.5" />}
@@ -543,21 +592,37 @@ export function RegisterPage() {
                     {errors?.contactEmail && <p className="text-xs text-red-400 mt-1">{errors.contactEmail}</p>}
                   </div>
                   <div>
+                    <Label htmlFor="contactPhone">{t?.form?.contactPhone ?? 'Phone'} *</Label>
+                    <Input
+                      id="contactPhone"
+                      type="tel"
+                      value={formData?.contactPhone ?? ''}
+                      onChange={(e: any) => updateField('contactPhone', e?.target?.value ?? '')}
+                      placeholder={t?.form?.contactPhonePlaceholder ?? ''}
+                      className="mt-1.5"
+                      variant={errors?.contactPhone ? 'error' : 'default'}
+                    />
+                    {errors?.contactPhone && <p className="text-xs text-red-400 mt-1">{errors.contactPhone}</p>}
+                  </div>
+                  <div>
                     <Label>{t?.form?.fileUpload ?? 'File upload'}</Label>
                     <p className="text-xs text-muted-foreground mb-2">{t?.form?.fileUploadHint ?? ''}</p>
-                    {file ? (
-                      <div className="flex items-center gap-3 rounded-xl border border-border/50 bg-card/30 p-4">
-                        <Upload className="h-4 w-4 text-primary flex-shrink-0" />
-                        <span className="text-sm text-foreground truncate flex-1">{file?.name ?? 'File'}</span>
-                        <button
-                          type="button"
-                          onClick={() => setFile(null)}
-                          className="text-muted-foreground hover:text-foreground"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      </div>
-                    ) : (
+                    <div className="space-y-2 mb-2">
+                      {files?.map?.((f: File, i: number) => (
+                        <div key={`${f?.name ?? 'file'}-${i}`} className="flex items-center gap-3 rounded-xl border border-border/50 bg-card/30 p-4">
+                          <Upload className="h-4 w-4 text-primary flex-shrink-0" />
+                          <span className="text-sm text-foreground truncate flex-1">{f?.name ?? 'File'}</span>
+                          <button
+                            type="button"
+                            onClick={() => setFiles((prev: File[]) => prev?.filter?.((_, idx: number) => idx !== i) ?? [])}
+                            className="text-muted-foreground hover:text-foreground"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                      )) ?? []}
+                    </div>
+                    {(files?.length ?? 0) < 3 && (
                       <label className="flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border/50 bg-card/20 p-8 cursor-pointer hover:border-primary/30 hover:bg-card/40 transition-all">
                         <Upload className="h-5 w-5 text-muted-foreground" />
                         <span className="text-sm text-muted-foreground">
@@ -574,11 +639,15 @@ export function RegisterPage() {
                                 toast.error('File too large (max 50MB)');
                                 return;
                               }
-                              setFile(f);
+                              setFiles((prev: File[]) => (prev?.length ?? 0) >= 3 ? prev : [...(prev ?? []), f]);
                             }
+                            e.target.value = '';
                           }}
                         />
                       </label>
+                    )}
+                    {(files?.length ?? 0) >= 3 && (
+                      <p className="text-xs text-muted-foreground mt-1">{t?.form?.fileUploadMax ?? 'Maximum 3 documents.'}</p>
                     )}
                   </div>
                 </div>
