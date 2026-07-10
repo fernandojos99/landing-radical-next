@@ -33,7 +33,8 @@ export function HeroSection() {
       const logosRect = logosEl.getBoundingClientRect();
       const logosCenterY = logosRect.top + logosRect.height / 2 - sectionRect.top;
       const verticalOffset = 40; // nudge the video a bit lower than dead-center
-      setVideoTop(logosCenterY - videoEl.offsetHeight / 2 + verticalOffset);
+      const extraDrop = videoEl.offsetHeight * 0.3; // push it down another 30% of its own height
+      setVideoTop(logosCenterY - videoEl.offsetHeight / 2 + verticalOffset + extraDrop);
     }
 
     updateVideoPosition();
@@ -110,27 +111,47 @@ export function HeroSection() {
         </motion.div>
 
         {/* Title */}
+        {/*
+          Fixed size relationship between the two overlapping logos below
+          (frame_111.png behind, RIS-blanco.png in front), pinned via CSS
+          variables so they can never drift apart independently again.
+          RIS-blanco's scale (--ris-scale) is the baseline; frame_111's
+          mobile box height (--frame-h-mobile) and desktop scale
+          (--frame-scale-desktop) are both derived to match RIS-blanco's
+          rendered height at each breakpoint. To resize the pair together,
+          scale all three variables by the same factor — never change one
+          in isolation.
+        */}
         <motion.div
           ref={logosRef}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] h-[200px] mb-[15px] mx-auto sm:mx-0 sm:ml-8 mt-[15px]"
+          style={{
+            ['--ris-scale' as any]: 1.125,
+            ['--frame-h-mobile' as any]: '103px',
+            ['--frame-scale-desktop' as any]: 1.05264,
+          }}
+          className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] h-[200px] mb-[15px] mx-auto sm:mx-0 sm:ml-8 mt-[7.5px] sm:mt-[15px]"
         >
-          <Image
-            src="/assets/frame_111.png"
-            alt="Radical Innovation Summit 2026"
-            fill
-            className="object-contain z-0 scale-[0.32] sm:scale-[0.731]"
-            priority
-          />
-          <Image
-            src="/assets/RIS-blanco.png"
-            alt="RIS"
-            fill
-            className="object-contain z-10 scale-[1.125]"
-            priority
-          />
+          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[var(--frame-h-mobile)] sm:inset-0 sm:h-full sm:top-0 sm:translate-y-0 z-0">
+            <Image
+              src="/assets/frame_111.png"
+              alt="Radical Innovation Summit 2026"
+              fill
+              className="object-contain sm:scale-[var(--frame-scale-desktop)]"
+              priority
+            />
+          </div>
+          <div className="absolute inset-0 z-10">
+            <Image
+              src="/assets/RIS-blanco.png"
+              alt="RIS"
+              fill
+              className="object-contain scale-[var(--ris-scale)]"
+              priority
+            />
+          </div>
         </motion.div>
 
         {/* Subtitle */}

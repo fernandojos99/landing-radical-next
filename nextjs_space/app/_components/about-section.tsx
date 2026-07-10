@@ -48,10 +48,10 @@ export function AboutSection() {
               )}
             </p>
           </FadeIn>
-          <div id="incentives" className="scroll-mt-28">
+          <div id="benefits" className="scroll-mt-28">
             <FadeIn delay={0.2}>
               <span className="inline-block text-xs font-mono tracking-widest text-primary uppercase mb-4 mt-8">
-                INCENTIVOS
+                {t?.about?.benefitsTag ?? 'BENEFITS'}
               </span>
               <h3 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight text-primary">
                 {t?.about?.description ?? ''}

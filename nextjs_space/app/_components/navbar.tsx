@@ -28,7 +28,7 @@ export function Navbar() {
   const isHome = pathname === '/';
   const navLinks = [
     { href: '#about', label: t?.nav?.about ?? 'Events' },
-    { href: '#incentives', label: t?.nav?.incentives ?? 'Incentives' },
+    { href: '#benefits', label: t?.nav?.incentives ?? 'Benefits' },
     { href: '#profiles', label: t?.nav?.profiles ?? 'Profiles' },
     { href: '#requirements', label: t?.nav?.requirements ?? 'Requirements' },
     { href: '#criteria', label: t?.nav?.criteria ?? 'Criteria' },
@@ -62,6 +62,12 @@ export function Navbar() {
 
             {/* Actions */}
             <div className="flex items-center gap-2">
+              <Link href="/register">
+                <Button size="sm" className="font-semibold">
+                  {t?.nav?.register ?? 'Apply'}
+                </Button>
+              </Link>
+
               <button
                 onClick={toggleLocale}
                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border border-border/50 bg-accent/30 hover:bg-accent/60 transition-all text-muted-foreground hover:text-foreground"
@@ -70,12 +76,6 @@ export function Navbar() {
                 <Globe className="h-3.5 w-3.5 text-[#7bc860]" />
                 {locale === 'es' ? 'EN' : 'ES'}
               </button>
-
-              <Link href="/register">
-                <Button size="sm" className="font-semibold">
-                  {t?.nav?.register ?? 'Apply'}
-                </Button>
-              </Link>
 
               <button
                 onClick={() => setMobileOpen(true)}
