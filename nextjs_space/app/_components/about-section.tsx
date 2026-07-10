@@ -10,6 +10,8 @@ import { CountUp } from './count-up';
 
 export function AboutSection() {
   const { t } = useLocale();
+  const summitIntro = t?.about?.summitIntro ?? '';
+  const [summitIntroBefore, summitIntroAfter] = summitIntro?.split?.('{{builders}}') ?? [summitIntro, ''];
 
   const stats = [
     { icon: Rocket, label: t?.about?.stat1Label ?? '', value: t?.about?.stat1Value ?? '' },
@@ -38,7 +40,12 @@ export function AboutSection() {
           </FadeIn>
           <FadeIn delay={0.15}>
             <p className="text-white text-base sm:text-lg leading-relaxed whitespace-pre-line mb-8">
-              {t?.about?.summitIntro ?? ''}
+              {summitIntroBefore}
+              {summitIntroAfter && (
+                <>
+                  <em className="italic">builders</em> {summitIntroAfter}
+                </>
+              )}
             </p>
           </FadeIn>
           <div id="incentives" className="scroll-mt-28">

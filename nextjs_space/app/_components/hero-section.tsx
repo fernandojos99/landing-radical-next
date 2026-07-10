@@ -32,7 +32,8 @@ export function HeroSection() {
       const sectionRect = sectionEl.getBoundingClientRect();
       const logosRect = logosEl.getBoundingClientRect();
       const logosCenterY = logosRect.top + logosRect.height / 2 - sectionRect.top;
-      setVideoTop(logosCenterY - videoEl.offsetHeight / 2);
+      const verticalOffset = 40; // nudge the video a bit lower than dead-center
+      setVideoTop(logosCenterY - videoEl.offsetHeight / 2 + verticalOffset);
     }
 
     updateVideoPosition();
@@ -120,7 +121,7 @@ export function HeroSection() {
             src="/assets/frame_111.png"
             alt="Radical Innovation Summit 2026"
             fill
-            className="object-contain z-0 scale-[1.125]"
+            className="object-contain z-0 scale-[0.32] sm:scale-[0.731]"
             priority
           />
           <Image

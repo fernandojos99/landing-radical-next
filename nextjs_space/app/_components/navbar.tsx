@@ -71,7 +71,7 @@ export function Navbar() {
                 {locale === 'es' ? 'EN' : 'ES'}
               </button>
 
-              <Link href="/register" className="hidden sm:block">
+              <Link href="/register">
                 <Button size="sm" className="font-semibold">
                   {t?.nav?.register ?? 'Apply'}
                 </Button>
@@ -121,17 +121,6 @@ export function Navbar() {
                   {link?.label}
                 </motion.a>
               )) ?? []}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                <Link href="/register" onClick={() => setMobileOpen(false)}>
-                  <Button size="lg" className="font-semibold mt-4">
-                    {t?.nav?.register ?? 'Apply'}
-                  </Button>
-                </Link>
-              </motion.div>
             </div>
           </motion.div>
         )}
