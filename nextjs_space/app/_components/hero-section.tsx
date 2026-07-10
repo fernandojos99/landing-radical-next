@@ -41,10 +41,10 @@ export function HeroSection() {
       const newVideoTop = topLogoRect.top - sectionRect.top;
       setVideoTop(newVideoTop);
 
-      // Push the overlapping logo group down so it sits exactly 10px below
-      // the video's bottom edge, without moving the video. Everything below
-      // it (the subtitle) is a normal in-flow sibling, so it shifts down by
-      // the same amount automatically, keeping its existing gap intact.
+      // Move the overlapping logo group up/down so its own vertical center
+      // lands exactly on the video's bottom edge, without moving the video.
+      // Everything below it (the subtitle) is a normal in-flow sibling, so
+      // it shifts along automatically, keeping its existing gap intact.
       const videoBottom = newVideoTop + videoEl.offsetHeight;
       const currentLogoGroupTop = logoGroupRect.top - sectionRect.top;
       // Back out whatever margin-top is currently applied (CSS default the
@@ -52,7 +52,8 @@ export function HeroSection() {
       // e.g. window resizes) to get a stable zero-margin baseline.
       const currentAppliedMarginTop = parseFloat(getComputedStyle(logoGroupEl).marginTop) || 0;
       const naturalTopWithZeroMargin = currentLogoGroupTop - currentAppliedMarginTop;
-      setLogoGroupMarginTop(videoBottom + 10 - naturalTopWithZeroMargin);
+      const targetTop = videoBottom - logoGroupRect.height / 2;
+      setLogoGroupMarginTop(targetTop - naturalTopWithZeroMargin);
     }
 
     updatePositions();
