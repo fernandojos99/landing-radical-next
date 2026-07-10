@@ -14,32 +14,50 @@ export function HeroSection() {
   const [subtitleLead, ...subtitleRest] = subtitle.split('\n\n');
 
   const sectionRef = useRef<HTMLElement>(null);
-  const logosRef = useRef<HTMLDivElement>(null);
+  const topLogoRef = useRef<HTMLDivElement>(null);
   const videoContainerRef = useRef<HTMLDivElement>(null);
+  const logoGroupRef = useRef<HTMLDivElement>(null);
   const [videoTop, setVideoTop] = useState<number | null>(null);
+  const [logoGroupMarginTop, setLogoGroupMarginTop] = useState<number | null>(null);
 
   useEffect(() => {
-    function updateVideoPosition() {
+    function updatePositions() {
       if (window.innerWidth >= 1024) {
         setVideoTop(null);
+        setLogoGroupMarginTop(null);
         return;
       }
       const sectionEl = sectionRef.current;
-      const logosEl = logosRef.current;
+      const topLogoEl = topLogoRef.current;
       const videoEl = videoContainerRef.current;
-      if (!sectionEl || !logosEl || !videoEl) return;
+      const logoGroupEl = logoGroupRef.current;
+      if (!sectionEl || !topLogoEl || !videoEl || !logoGroupEl) return;
 
       const sectionRect = sectionEl.getBoundingClientRect();
-      const logosRect = logosEl.getBoundingClientRect();
-      const logosCenterY = logosRect.top + logosRect.height / 2 - sectionRect.top;
-      const verticalOffset = 40; // nudge the video a bit lower than dead-center
-      const extraDrop = videoEl.offsetHeight * 0.3; // push it down another 30% of its own height
-      setVideoTop(logosCenterY - videoEl.offsetHeight / 2 + verticalOffset + extraDrop);
+      const topLogoRect = topLogoEl.getBoundingClientRect();
+      const logoGroupRect = logoGroupEl.getBoundingClientRect();
+
+      // Align the video's top edge with the top logo's (Logosjuntos_2x.png) top edge.
+      const newVideoTop = topLogoRect.top - sectionRect.top;
+      setVideoTop(newVideoTop);
+
+      // Push the overlapping logo group down so it sits exactly 10px below
+      // the video's bottom edge, without moving the video. Everything below
+      // it (the subtitle) is a normal in-flow sibling, so it shifts down by
+      // the same amount automatically, keeping its existing gap intact.
+      const videoBottom = newVideoTop + videoEl.offsetHeight;
+      const currentLogoGroupTop = logoGroupRect.top - sectionRect.top;
+      // Back out whatever margin-top is currently applied (CSS default the
+      // first time this runs, or our own previous override on later runs,
+      // e.g. window resizes) to get a stable zero-margin baseline.
+      const currentAppliedMarginTop = parseFloat(getComputedStyle(logoGroupEl).marginTop) || 0;
+      const naturalTopWithZeroMargin = currentLogoGroupTop - currentAppliedMarginTop;
+      setLogoGroupMarginTop(videoBottom + 10 - naturalTopWithZeroMargin);
     }
 
-    updateVideoPosition();
-    window.addEventListener('resize', updateVideoPosition);
-    return () => window.removeEventListener('resize', updateVideoPosition);
+    updatePositions();
+    window.addEventListener('resize', updatePositions);
+    return () => window.removeEventListener('resize', updatePositions);
   }, []);
 
   return (
@@ -78,9 +96,10 @@ export function HeroSection() {
         }}
       />
 
-      <div className="relative z-10 w-full mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-24 pb-16 text-left">
+      <div className="relative z-10 w-full mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-[30px] lg:pt-24 pb-16 text-left">
         {/* Logos */}
         <motion.div
+          ref={topLogoRef}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -123,7 +142,7 @@ export function HeroSection() {
           in isolation.
         */}
         <motion.div
-          ref={logosRef}
+          ref={logoGroupRef}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
@@ -131,6 +150,7 @@ export function HeroSection() {
             ['--ris-scale' as any]: 1.125,
             ['--frame-h-mobile' as any]: '103px',
             ['--frame-scale-desktop' as any]: 1.05264,
+            ...(logoGroupMarginTop !== null ? { marginTop: `${logoGroupMarginTop}px` } : {}),
           }}
           className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] h-[200px] mb-[15px] mx-auto sm:mx-0 sm:ml-8 mt-[7.5px] sm:mt-[15px]"
         >
