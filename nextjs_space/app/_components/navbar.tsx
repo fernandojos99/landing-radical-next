@@ -16,6 +16,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showNavRegister, setShowNavRegister] = useState(true);
   const heroButtonIntersecting = useRef(false);
+  const finalButtonIntersecting = useRef(false);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -23,8 +24,9 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handler);
   }, []);
 
-  // On mobile, hide the navbar's "Registra tu proyecto" button until the
-  // hero's own copy of that same button scrolls out of view. Desktop always
+  // On mobile, hide the navbar's "Registra tu proyecto" button while either
+  // of the page's own copies of that same button (the hero one, or the final
+  // one in the closing CTA section) is visible on screen. Desktop always
   // shows it (matches existing behavior). Never show it on /register itself
   // — you're already there.
   useEffect(() => {
@@ -34,7 +36,8 @@ export function Navbar() {
     }
 
     const heroBtn = document.getElementById('hero-register-cta');
-    if (!heroBtn) {
+    const finalBtn = document.getElementById('final-register-cta');
+    if (!heroBtn && !finalBtn) {
       setShowNavRegister(true);
       return;
     }
@@ -43,19 +46,33 @@ export function Navbar() {
       if (window.innerWidth >= 1024) {
         setShowNavRegister(true);
       } else {
-        setShowNavRegister(!heroButtonIntersecting.current);
+        setShowNavRegister(!heroButtonIntersecting.current && !finalButtonIntersecting.current);
       }
     }
 
-    const observer = new IntersectionObserver(([entry]) => {
-      heroButtonIntersecting.current = entry.isIntersecting;
-      recompute();
-    }, { threshold: 0 });
-    observer.observe(heroBtn);
+    const observers: IntersectionObserver[] = [];
+
+    if (heroBtn) {
+      const heroObserver = new IntersectionObserver(([entry]) => {
+        heroButtonIntersecting.current = entry.isIntersecting;
+        recompute();
+      }, { threshold: 0 });
+      heroObserver.observe(heroBtn);
+      observers.push(heroObserver);
+    }
+
+    if (finalBtn) {
+      const finalObserver = new IntersectionObserver(([entry]) => {
+        finalButtonIntersecting.current = entry.isIntersecting;
+        recompute();
+      }, { threshold: 0 });
+      finalObserver.observe(finalBtn);
+      observers.push(finalObserver);
+    }
 
     window.addEventListener('resize', recompute);
     return () => {
-      observer.disconnect();
+      observers.forEach((o) => o.disconnect());
       window.removeEventListener('resize', recompute);
     };
   }, [pathname]);

@@ -33,7 +33,7 @@ export function CtaSection() {
           <p className="text-base sm:text-lg text-white max-w-xl mx-auto mb-10 whitespace-pre-line">
             {t?.cta?.subtitle ?? ''}
           </p>
-          <Link href="/register">
+          <Link href="/register" id="final-register-cta">
             <Button size="lg" className="text-base font-semibold px-10 gap-2">
               {t?.cta?.button ?? 'Register'}
               <ArrowRight className="h-4 w-4" />
