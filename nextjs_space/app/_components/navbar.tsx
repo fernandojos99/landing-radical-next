@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { useLocale } from '@/lib/locale-context';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,12 +14,51 @@ export function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [showNavRegister, setShowNavRegister] = useState(true);
+  const heroButtonIntersecting = useRef(false);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handler, { passive: true });
     return () => window.removeEventListener('scroll', handler);
   }, []);
+
+  // On mobile, hide the navbar's "Registra tu proyecto" button until the
+  // hero's own copy of that same button scrolls out of view. Desktop always
+  // shows it (matches existing behavior). Never show it on /register itself
+  // — you're already there.
+  useEffect(() => {
+    if (pathname === '/register') {
+      setShowNavRegister(false);
+      return;
+    }
+
+    const heroBtn = document.getElementById('hero-register-cta');
+    if (!heroBtn) {
+      setShowNavRegister(true);
+      return;
+    }
+
+    function recompute() {
+      if (window.innerWidth >= 1024) {
+        setShowNavRegister(true);
+      } else {
+        setShowNavRegister(!heroButtonIntersecting.current);
+      }
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      heroButtonIntersecting.current = entry.isIntersecting;
+      recompute();
+    }, { threshold: 0 });
+    observer.observe(heroBtn);
+
+    window.addEventListener('resize', recompute);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', recompute);
+    };
+  }, [pathname]);
 
   // Section anchors only exist on the landing page ("/"). From any other
   // route (e.g. /register), prefix with "/" so the browser navigates home
@@ -62,11 +101,13 @@ export function Navbar() {
 
             {/* Actions */}
             <div className="flex items-center gap-2">
-              <Link href="/register">
-                <Button size="sm" className="font-semibold">
-                  {t?.nav?.register ?? 'Apply'}
-                </Button>
-              </Link>
+              {showNavRegister && (
+                <Link href="/register">
+                  <Button size="sm" className="font-semibold">
+                    {t?.nav?.register ?? 'Apply'}
+                  </Button>
+                </Link>
+              )}
 
               <button
                 onClick={toggleLocale}

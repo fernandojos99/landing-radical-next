@@ -193,7 +193,7 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="flex flex-col sm:flex-row items-start justify-start gap-4"
         >
-          <Link href="/register">
+          <Link href="/register" id="hero-register-cta">
             <Button size="lg" className="text-base font-semibold px-8 gap-2">
               {t?.hero?.cta ?? 'Apply now'}
               <ArrowRight className="h-4 w-4" />
