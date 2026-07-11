@@ -17,20 +17,8 @@ export function HeroSection() {
   const topLogoRef = useRef<HTMLDivElement>(null);
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const logoGroupRef = useRef<HTMLDivElement>(null);
-  const ctaGroupRef = useRef<HTMLDivElement>(null);
   const [videoTop, setVideoTop] = useState<number | null>(null);
   const [logoGroupMarginTop, setLogoGroupMarginTop] = useState<number | null>(null);
-
-  // On mobile, nudge the initial scroll position down by the height of the
-  // CTA button group (the buttons right below the "La mayoría consume..."
-  // subtitle), so the page doesn't load sitting at the exact very top.
-  useEffect(() => {
-    if (window.innerWidth >= 1024) return;
-    if (window.scrollY > 0) return; // don't fight a restored scroll position
-    const ctaEl = ctaGroupRef.current;
-    if (!ctaEl) return;
-    window.scrollTo(0, ctaEl.offsetHeight);
-  }, []);
 
   useEffect(() => {
     function updatePositions() {
@@ -188,36 +176,39 @@ export function HeroSection() {
         </motion.div>
 
         {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="max-w-2xl mx-0 text-base sm:text-lg md:text-xl text-white leading-relaxed mb-10 whitespace-pre-line"
-        >
-          <span className="font-bold text-lg sm:text-xl md:text-2xl">{subtitleLead}</span>
-          {subtitleRest.length > 0 && '\n\n' + subtitleRest.join('\n\n')}
-        </motion.p>
+        <div className="-translate-y-[29px] sm:translate-y-0">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="max-w-2xl mx-0 text-base sm:text-lg md:text-xl text-white leading-relaxed mb-10 whitespace-pre-line"
+          >
+            <span className="font-bold text-lg sm:text-xl md:text-2xl">{subtitleLead}</span>
+            {subtitleRest.length > 0 && '\n\n' + subtitleRest.join('\n\n')}
+          </motion.p>
+        </div>
 
         {/* CTAs */}
-        <motion.div
-          ref={ctaGroupRef}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="flex flex-col sm:flex-row items-start justify-start gap-4"
-        >
-          <Link href="/register" id="hero-register-cta">
-            <Button size="lg" className="text-base font-semibold px-8 gap-2">
-              {t?.hero?.cta ?? 'Apply now'}
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
-          <a href="#about">
-            <Button variant="outline" size="lg" className="text-base px-8">
-              {t?.hero?.ctaSecondary ?? 'Learn more'}
-            </Button>
-          </a>
-        </motion.div>
+        <div className="-translate-y-[29px] sm:translate-y-0">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="flex flex-col sm:flex-row items-start justify-start gap-4"
+          >
+            <Link href="/register" id="hero-register-cta">
+              <Button size="lg" className="text-base font-semibold px-8 gap-2">
+                {t?.hero?.cta ?? 'Apply now'}
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+            <a href="#about">
+              <Button variant="outline" size="lg" className="text-base px-8">
+                {t?.hero?.ctaSecondary ?? 'Learn more'}
+              </Button>
+            </a>
+          </motion.div>
+        </div>
       </div>
 
       {/* Bottom fade */}
