@@ -17,8 +17,20 @@ export function HeroSection() {
   const topLogoRef = useRef<HTMLDivElement>(null);
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const logoGroupRef = useRef<HTMLDivElement>(null);
+  const ctaGroupRef = useRef<HTMLDivElement>(null);
   const [videoTop, setVideoTop] = useState<number | null>(null);
   const [logoGroupMarginTop, setLogoGroupMarginTop] = useState<number | null>(null);
+
+  // On mobile, nudge the initial scroll position down by the height of the
+  // CTA button group (the buttons right below the "La mayoría consume..."
+  // subtitle), so the page doesn't load sitting at the exact very top.
+  useEffect(() => {
+    if (window.innerWidth >= 1024) return;
+    if (window.scrollY > 0) return; // don't fight a restored scroll position
+    const ctaEl = ctaGroupRef.current;
+    if (!ctaEl) return;
+    window.scrollTo(0, ctaEl.offsetHeight);
+  }, []);
 
   useEffect(() => {
     function updatePositions() {
@@ -188,6 +200,7 @@ export function HeroSection() {
 
         {/* CTAs */}
         <motion.div
+          ref={ctaGroupRef}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
