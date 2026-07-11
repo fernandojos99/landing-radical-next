@@ -127,7 +127,7 @@ export const translations = {
     cta: {
       title: 'En una era de espectadores,',
       titleAccent: 'elige construir.',
-      subtitle: 'BUILD IS RADICAL',
+      subtitle: 'Building is Radical',
       button: 'Registra tu proyecto',
     },
     footer: {
@@ -325,7 +325,7 @@ export const translations = {
     cta: {
       title: 'In an age of spectators,',
       titleAccent: 'choose to build.',
-      subtitle: 'BUILD IS RADICAL',
+      subtitle: 'Building is Radical',
       button: 'Apply now',
     },
     footer: {
