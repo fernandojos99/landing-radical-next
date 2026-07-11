@@ -85,29 +85,48 @@ export function Navbar() {
         )}
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-end lg:justify-between">
-            {/* Desktop Nav */}
-            <div className="hidden lg:flex items-center gap-1">
-              {navLinks?.map?.((link: any) => (
-                <a
-                  key={link?.href}
-                  href={link?.href}
-                  className="px-3 py-2 text-sm text-primary hover:text-primary/80 transition-colors rounded-md hover:bg-accent/50"
-                >
-                  {link?.label}
-                </a>
-              )) ?? []}
-            </div>
+          <div className="flex h-16 items-center justify-between">
+            {/* Left side: Desktop Nav links, or (on mobile) the Register button
+                so its left edge lines up with the rest of the page content. */}
+            <div className="flex items-center gap-1">
+              <div className="hidden lg:flex items-center gap-1">
+                {navLinks?.map?.((link: any) => (
+                  <a
+                    key={link?.href}
+                    href={link?.href}
+                    className="px-3 py-2 text-sm text-primary hover:text-primary/80 transition-colors rounded-md hover:bg-accent/50"
+                  >
+                    {link?.label}
+                  </a>
+                )) ?? []}
+              </div>
 
-            {/* Actions */}
-            <div className="flex items-center gap-2">
               {showNavRegister && (
-                <Link href="/register">
+                <Link href="/register" className="lg:hidden">
                   <Button size="sm" className="font-semibold">
                     {t?.nav?.register ?? 'Apply'}
                   </Button>
                 </Link>
               )}
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center gap-2">
+              {showNavRegister && (
+                <Link href="/register" className="hidden lg:block">
+                  <Button size="sm" className="font-semibold">
+                    {t?.nav?.register ?? 'Apply'}
+                  </Button>
+                </Link>
+              )}
+
+              <button
+                onClick={() => setMobileOpen(true)}
+                className="lg:hidden p-2 text-muted-foreground hover:text-foreground"
+                aria-label="Open menu"
+              >
+                <Menu className="h-5 w-5 text-[#7bc860]" />
+              </button>
 
               <button
                 onClick={toggleLocale}
@@ -116,14 +135,6 @@ export function Navbar() {
               >
                 <Globe className="h-3.5 w-3.5 text-[#7bc860]" />
                 {locale === 'es' ? 'EN' : 'ES'}
-              </button>
-
-              <button
-                onClick={() => setMobileOpen(true)}
-                className="lg:hidden p-2 text-muted-foreground hover:text-foreground"
-                aria-label="Open menu"
-              >
-                <Menu className="h-5 w-5 text-[#7bc860]" />
               </button>
             </div>
           </div>
