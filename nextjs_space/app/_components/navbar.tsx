@@ -27,14 +27,13 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handler);
   }, []);
 
-  // On mobile, hide the navbar's "Registra tu proyecto" button while either
-  // of the page's own copies of that same button (the hero one, or the final
-  // one in the closing CTA section) is visible on screen — which naturally
-  // covers "don't show it while at the top of the page", since the hero
-  // button lives right there. Desktop always shows it (matches existing
-  // behavior). Never show it on /register itself — you're already there.
-  // The whole check is deferred until the page has fully loaded (the `load`
-  // event), so it doesn't show/flash before layout has settled.
+  // Hide the navbar's "Registra tu proyecto" button — at any screen width —
+  // while either of the page's own copies of that same button (the hero one,
+  // or the final one in the closing CTA section) is visible on screen. This
+  // naturally covers "don't show it while at the top of the page", since the
+  // hero button lives right there. Never show it on /register itself — you're
+  // already there. The whole check is deferred until the page has fully
+  // loaded (the `load` event), so it doesn't show/flash before layout settles.
   useEffect(() => {
     if (pathname === '/register') {
       setShowNavRegister(false);
@@ -52,11 +51,7 @@ export function Navbar() {
       }
 
       function recompute() {
-        if (window.innerWidth >= 1024) {
-          setShowNavRegister(true);
-        } else {
-          setShowNavRegister(!heroButtonIntersecting.current && !finalButtonIntersecting.current);
-        }
+        setShowNavRegister(!heroButtonIntersecting.current && !finalButtonIntersecting.current);
       }
 
       const observers: IntersectionObserver[] = [];
