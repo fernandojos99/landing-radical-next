@@ -112,7 +112,7 @@ export function AboutSection() {
 
         <FadeIn delay={0.3}>
           <div className="flex justify-center mt-8">
-            <a href="/documents/Bases_RIS2026.pdf" target="_blank" rel="noopener noreferrer">
+            <a href="/documents/Bases_RIS_2026.pdf" target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="text-base font-semibold px-8 gap-2">
                 {t?.about?.viewBases ?? 'View contest rules'}
                 <FileText className="h-4 w-4" />
