@@ -14,7 +14,10 @@ export function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [showNavRegister, setShowNavRegister] = useState(true);
+  // Starts hidden — it only turns on once we've actually determined it should
+  // show (after the page finishes loading), instead of flashing visible
+  // immediately and then correcting itself.
+  const [showNavRegister, setShowNavRegister] = useState(false);
   const heroButtonIntersecting = useRef(false);
   const finalButtonIntersecting = useRef(false);
 
@@ -26,55 +29,71 @@ export function Navbar() {
 
   // On mobile, hide the navbar's "Registra tu proyecto" button while either
   // of the page's own copies of that same button (the hero one, or the final
-  // one in the closing CTA section) is visible on screen. Desktop always
-  // shows it (matches existing behavior). Never show it on /register itself
-  // — you're already there.
+  // one in the closing CTA section) is visible on screen — which naturally
+  // covers "don't show it while at the top of the page", since the hero
+  // button lives right there. Desktop always shows it (matches existing
+  // behavior). Never show it on /register itself — you're already there.
+  // The whole check is deferred until the page has fully loaded (the `load`
+  // event), so it doesn't show/flash before layout has settled.
   useEffect(() => {
     if (pathname === '/register') {
       setShowNavRegister(false);
       return;
     }
 
-    const heroBtn = document.getElementById('hero-register-cta');
-    const finalBtn = document.getElementById('final-register-cta');
-    if (!heroBtn && !finalBtn) {
-      setShowNavRegister(true);
-      return;
-    }
+    let cleanup = () => {};
 
-    function recompute() {
-      if (window.innerWidth >= 1024) {
+    function setup() {
+      const heroBtn = document.getElementById('hero-register-cta');
+      const finalBtn = document.getElementById('final-register-cta');
+      if (!heroBtn && !finalBtn) {
         setShowNavRegister(true);
-      } else {
-        setShowNavRegister(!heroButtonIntersecting.current && !finalButtonIntersecting.current);
+        return;
       }
+
+      function recompute() {
+        if (window.innerWidth >= 1024) {
+          setShowNavRegister(true);
+        } else {
+          setShowNavRegister(!heroButtonIntersecting.current && !finalButtonIntersecting.current);
+        }
+      }
+
+      const observers: IntersectionObserver[] = [];
+
+      if (heroBtn) {
+        const heroObserver = new IntersectionObserver(([entry]) => {
+          heroButtonIntersecting.current = entry.isIntersecting;
+          recompute();
+        }, { threshold: 0 });
+        heroObserver.observe(heroBtn);
+        observers.push(heroObserver);
+      }
+
+      if (finalBtn) {
+        const finalObserver = new IntersectionObserver(([entry]) => {
+          finalButtonIntersecting.current = entry.isIntersecting;
+          recompute();
+        }, { threshold: 0 });
+        finalObserver.observe(finalBtn);
+        observers.push(finalObserver);
+      }
+
+      window.addEventListener('resize', recompute);
+      cleanup = () => {
+        observers.forEach((o) => o.disconnect());
+        window.removeEventListener('resize', recompute);
+      };
     }
 
-    const observers: IntersectionObserver[] = [];
-
-    if (heroBtn) {
-      const heroObserver = new IntersectionObserver(([entry]) => {
-        heroButtonIntersecting.current = entry.isIntersecting;
-        recompute();
-      }, { threshold: 0 });
-      heroObserver.observe(heroBtn);
-      observers.push(heroObserver);
+    if (document.readyState === 'complete') {
+      setup();
+    } else {
+      window.addEventListener('load', setup);
+      cleanup = () => window.removeEventListener('load', setup);
     }
 
-    if (finalBtn) {
-      const finalObserver = new IntersectionObserver(([entry]) => {
-        finalButtonIntersecting.current = entry.isIntersecting;
-        recompute();
-      }, { threshold: 0 });
-      finalObserver.observe(finalBtn);
-      observers.push(finalObserver);
-    }
-
-    window.addEventListener('resize', recompute);
-    return () => {
-      observers.forEach((o) => o.disconnect());
-      window.removeEventListener('resize', recompute);
-    };
+    return () => cleanup();
   }, [pathname]);
 
   // Section anchors only exist on the landing page ("/"). From any other

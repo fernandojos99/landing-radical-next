@@ -13,13 +13,16 @@ export function AboutSection() {
   const summitIntro = t?.about?.summitIntro ?? '';
   const [summitIntroBefore, summitIntroAfter] = summitIntro?.split?.('{{builders}}') ?? [summitIntro, ''];
 
-  const stats = [
+  const semifinalistStats = [
     { icon: Rocket, label: t?.about?.stat1Label ?? '', value: t?.about?.stat1Value ?? '' },
-    { icon: DollarSign, label: t?.about?.stat2Label ?? '', value: t?.about?.stat2Value ?? '' },
-    { icon: Handshake, label: t?.about?.stat3Label ?? '', value: t?.about?.stat3Value ?? '' },
     { icon: Target, label: t?.about?.stat4Label ?? '', value: t?.about?.stat4Value ?? '' },
-    { icon: Trophy, label: t?.about?.stat5Label ?? '', value: t?.about?.stat5Value ?? '' },
     { icon: Building2, label: t?.about?.stat6Label ?? '', value: t?.about?.stat6Value ?? '' },
+  ];
+
+  const finalistStats = [
+    { icon: Trophy, label: t?.about?.stat5Label ?? '', value: t?.about?.stat5Value ?? '', breakdown: t?.about?.stat5Breakdown ?? '' },
+    { icon: Handshake, label: t?.about?.stat3Label ?? '', value: t?.about?.stat3Value ?? '' },
+    { icon: DollarSign, label: t?.about?.stat2Label ?? '', value: t?.about?.stat2Value ?? '' },
   ];
 
   return (
@@ -43,7 +46,7 @@ export function AboutSection() {
               {summitIntroBefore}
               {summitIntroAfter && (
                 <>
-                  <em className="italic">builders</em> {summitIntroAfter}
+                  <em className="italic">builders</em>, {summitIntroAfter}
                 </>
               )}
             </p>
@@ -60,8 +63,13 @@ export function AboutSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 items-stretch">
-          {stats?.map?.((stat: any, i: number) => {
+        <FadeIn delay={0.15}>
+          <span className="inline-block text-xs font-mono tracking-widest text-primary mb-4">
+            {t?.about?.semifinalistsTag ?? 'Semifinalists'}
+          </span>
+        </FadeIn>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 items-stretch mb-10">
+          {semifinalistStats?.map?.((stat: any, i: number) => {
             const Icon = stat?.icon;
             return (
               <SlideIn key={i} from="bottom" delay={0.1 + i * 0.1} className="h-full">
@@ -71,6 +79,31 @@ export function AboutSection() {
                     <CountUp value={stat?.value ?? ''} />
                   </div>
                   <p className="text-xs sm:text-sm text-white">{stat?.label ?? ''}</p>
+                </div>
+              </SlideIn>
+            );
+          }) ?? []}
+        </div>
+
+        <FadeIn delay={0.2}>
+          <span className="inline-block text-xs font-mono tracking-widest text-primary mb-4">
+            {t?.about?.finalistsTag ?? 'Finalists'}
+          </span>
+        </FadeIn>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 items-stretch">
+          {finalistStats?.map?.((stat: any, i: number) => {
+            const Icon = stat?.icon;
+            return (
+              <SlideIn key={i} from="bottom" delay={0.1 + i * 0.1} className="h-full">
+                <div className="h-full rounded-xl border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-6 text-center glow-border-hover transition-all duration-500 hover:scale-[1.02] flex flex-col items-center justify-center">
+                  {Icon && <Icon className="h-5 w-5 text-[#7bc860] mx-auto mb-3" />}
+                  <div className="font-display text-xs sm:text-sm font-bold tracking-tight text-white mb-1">
+                    <CountUp value={stat?.value ?? ''} />
+                  </div>
+                  <p className="text-xs sm:text-sm text-white">{stat?.label ?? ''}</p>
+                  {stat?.breakdown && (
+                    <p className="text-[10px] text-white/70 mt-1">{stat.breakdown}</p>
+                  )}
                 </div>
               </SlideIn>
             );

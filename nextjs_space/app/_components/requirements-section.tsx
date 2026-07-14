@@ -4,7 +4,7 @@ import { useLocale } from '@/lib/locale-context';
 import { Container } from '@/components/layouts/container';
 import { Section } from '@/components/layouts/section';
 import { FadeIn, SlideIn } from '@/components/ui/animate';
-import { Check, AlertTriangle } from 'lucide-react';
+import { Check, CircleHelp } from 'lucide-react';
 
 export function RequirementsSection() {
   const { t } = useLocale();
@@ -52,9 +52,9 @@ export function RequirementsSection() {
           <SlideIn from="right" delay={0.2}>
             <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-8 h-full flex flex-col justify-center glow-border-hover transition-all duration-500 hover:scale-[1.02]">
               <div className="flex items-center gap-3 mb-4">
-                <AlertTriangle className="h-5 w-5 text-[#7bc860]" />
+                <CircleHelp className="h-5 w-5 text-[#7bc860]" />
                 <span className="font-display text-lg font-bold text-white tracking-tight">
-                  {t?.requirements?.sectionTag ?? ''}
+                  {t?.requirements?.noteTitle ?? ''}
                 </span>
               </div>
               <p className="text-sm sm:text-base text-white leading-relaxed">
