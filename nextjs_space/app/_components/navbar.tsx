@@ -20,6 +20,7 @@ export function Navbar() {
   const [showNavRegister, setShowNavRegister] = useState(false);
   const heroButtonIntersecting = useRef(false);
   const finalButtonIntersecting = useRef(false);
+  const topLogoIntersecting = useRef(false);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -28,12 +29,13 @@ export function Navbar() {
   }, []);
 
   // Hide the navbar's "Registra tu proyecto" button — at any screen width —
-  // while either of the page's own copies of that same button (the hero one,
-  // or the final one in the closing CTA section) is visible on screen. This
-  // naturally covers "don't show it while at the top of the page", since the
-  // hero button lives right there. Never show it on /register itself — you're
-  // already there. The whole check is deferred until the page has fully
-  // loaded (the `load` event), so it doesn't show/flash before layout settles.
+  // while ANY of these is visible on screen: the hero's own copy of that same
+  // button, the final one in the closing CTA section, or the very first logo
+  // at the top of the hero (Logosjuntos_2x.png). This naturally covers "don't
+  // show it while at the top of the page", since that logo lives right there.
+  // Never show it on /register itself — you're already there. The whole check
+  // is deferred until the page has fully loaded (the `load` event), so it
+  // doesn't show/flash before layout settles.
   useEffect(() => {
     if (pathname === '/register') {
       setShowNavRegister(false);
@@ -45,13 +47,18 @@ export function Navbar() {
     function setup() {
       const heroBtn = document.getElementById('hero-register-cta');
       const finalBtn = document.getElementById('final-register-cta');
-      if (!heroBtn && !finalBtn) {
+      const topLogoEl = document.getElementById('hero-top-logo');
+      if (!heroBtn && !finalBtn && !topLogoEl) {
         setShowNavRegister(true);
         return;
       }
 
       function recompute() {
-        setShowNavRegister(!heroButtonIntersecting.current && !finalButtonIntersecting.current);
+        setShowNavRegister(
+          !heroButtonIntersecting.current &&
+          !finalButtonIntersecting.current &&
+          !topLogoIntersecting.current
+        );
       }
 
       const observers: IntersectionObserver[] = [];
@@ -72,6 +79,15 @@ export function Navbar() {
         }, { threshold: 0 });
         finalObserver.observe(finalBtn);
         observers.push(finalObserver);
+      }
+
+      if (topLogoEl) {
+        const topLogoObserver = new IntersectionObserver(([entry]) => {
+          topLogoIntersecting.current = entry.isIntersecting;
+          recompute();
+        }, { threshold: 0 });
+        topLogoObserver.observe(topLogoEl);
+        observers.push(topLogoObserver);
       }
 
       window.addEventListener('resize', recompute);

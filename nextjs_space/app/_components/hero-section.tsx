@@ -101,6 +101,7 @@ export function HeroSection() {
         {/* Logos */}
         <motion.div
           ref={topLogoRef}
+          id="hero-top-logo"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
