@@ -31,7 +31,7 @@ export function AlliesSection() {
           </span>
         </FadeIn>
 
-        <div className="max-w-3xl mb-12">
+        <div className="max-w-3xl">
           <FadeIn delay={0.1}>
             <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight text-primary mb-6">
               {t?.allies?.title ?? 'Organizaciones y aliados estratégicos'}
@@ -40,7 +40,7 @@ export function AlliesSection() {
         </div>
 
         <FadeIn delay={0.15}>
-          <span className="inline-block text-xs font-mono tracking-widest mb-4 text-white">
+          <span className="inline-block text-[14.4px] font-mono tracking-widest mb-4 text-white">
             {t?.allies?.communityPartnersTag ?? 'Community Partners'}
           </span>
         </FadeIn>
@@ -64,7 +64,7 @@ export function AlliesSection() {
         </div>
 
         <FadeIn delay={0.2}>
-          <span className="inline-block text-xs font-mono tracking-widest mb-4 text-white">
+          <span className="inline-block text-[14.4px] font-mono tracking-widest mb-4 text-white">
             {t?.allies?.supportingOrganizationsTag ?? 'Supporting Organizations'}
           </span>
         </FadeIn>

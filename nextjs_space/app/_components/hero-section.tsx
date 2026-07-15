@@ -8,6 +8,16 @@ import { useLocale } from '@/lib/locale-context';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
 
+// Renders "{{br}}" markers in translated text as a mobile-only manual line
+// break, so text can be pre-wrapped at a natural point instead of being cut
+// awkwardly by the browser on narrow screens.
+function renderWithBreaks(text: string, keyPrefix: string) {
+  const parts = text.split('{{br}}');
+  return parts.flatMap((part, i) =>
+    i < parts.length - 1 ? [part, <br key={`${keyPrefix}-${i}`} className="lg:hidden" />] : [part]
+  );
+}
+
 export function HeroSection() {
   const { t } = useLocale();
   const subtitle = t?.hero?.subtitle ?? '';
@@ -39,8 +49,21 @@ export function HeroSection() {
       reveal();
     } else {
       window.addEventListener('load', reveal);
-      return () => window.removeEventListener('load', reveal);
     }
+
+    // The hero's elements (logo, images, date, subtitle) run entry
+    // animations via Framer Motion (up to ~1.1s with the longest delay).
+    // The position effect below measures them on mount, while they may
+    // still be mid-animation — force one more recompute once they've all
+    // settled, instead of relying on the user triggering some other resize.
+    const settleTimer = setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 1200);
+
+    return () => {
+      window.removeEventListener('load', reveal);
+      clearTimeout(settleTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -59,6 +82,13 @@ export function HeroSection() {
         const sectionEl = sectionRef.current;
         const logoGroupEl = logoGroupRef.current;
         if (!sectionEl || !logoGroupEl) return;
+
+        // Clear any leftover mobile margin-top synchronously on the actual
+        // DOM node before measuring — setLogoGroupMarginTop(null) above is
+        // async and won't be reflected here until the next render, which
+        // would otherwise make this read a stale (mobile) position when
+        // coming back from a narrow window to a wide one.
+        logoGroupEl.style.marginTop = '';
 
         const sectionRect = sectionEl.getBoundingClientRect();
         const logoGroupRect = logoGroupEl.getBoundingClientRect();
@@ -115,7 +145,7 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-start">
+    <section ref={sectionRef} className="relative flex items-start">
       {/* Video background - right half */}
       <div
         ref={videoContainerRef}
@@ -132,7 +162,7 @@ export function HeroSection() {
               }
             : undefined
         }
-        className="absolute left-1/2 -translate-x-[calc(70%-34px)] top-0 w-[77%] aspect-video h-auto overflow-hidden lg:inset-y-0 lg:top-auto lg:h-full lg:aspect-auto lg:w-1/2 lg:overflow-visible lg:left-auto lg:translate-x-0 z-0"
+        className="absolute left-1/2 -translate-x-[calc(70%-44px)] top-0 w-[77%] aspect-video h-auto overflow-hidden lg:inset-y-0 lg:top-auto lg:h-full lg:aspect-auto lg:w-1/2 lg:overflow-visible lg:left-auto lg:translate-x-0 z-0"
       >
         {showVideo && (
           <video
@@ -156,7 +186,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="flex items-center justify-center lg:justify-start gap-6 sm:gap-8 mb-0 lg:mb-8"
+          className="flex items-center justify-start gap-6 sm:gap-8 mb-0 lg:mb-8"
         >
           <div className="relative h-[4.5rem] sm:h-24 w-auto aspect-[4/1]">
             <Image
@@ -178,7 +208,7 @@ export function HeroSection() {
           style={{
             ...(logoGroupMarginTop !== null ? { marginTop: `${logoGroupMarginTop}px` } : {}),
           }}
-          className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] h-[100px] lg:h-[200px] mb-[22px] mx-0 sm:ml-8 lg:ml-0 left-[-12px] lg:left-[-8px] mt-0 sm:mt-[15px]"
+          className="relative w-[clamp(280px,_36.5vw_+_143px,_517px)] aspect-[800/318] mb-[22px] mx-0 lg:ml-0 left-[-12px] lg:left-[-8px] mt-0 lg:mt-[15px]"
         >
           <div className="absolute inset-0 z-10">
             <Image
@@ -192,18 +222,20 @@ export function HeroSection() {
         </motion.div>
 
         {/* Date badge — now sits directly above the subtitle lead line */}
-        <motion.div
-          ref={dateBadgeRef}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#7bc860]/30 bg-[#7bc860]/5 mt-[20px] lg:mt-[35px] mb-[40px]"
-        >
-          <Sparkles className="h-3.5 w-3.5 text-[#7bc860]" />
-          <span className="text-xs sm:text-sm font-mono text-primary font-medium">
-            {t?.hero?.date ?? '10 Sep 2026'}
-          </span>
-        </motion.div>
+        <div className="scale-110 lg:scale-100 origin-left">
+          <motion.div
+            ref={dateBadgeRef}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#7bc860]/30 bg-[#7bc860]/5 mt-[20px] lg:mt-[35px] mb-[40px]"
+          >
+            <Sparkles className="h-3.5 w-3.5 text-[#7bc860]" />
+            <span className="text-xs sm:text-sm font-mono text-primary font-medium">
+              {t?.hero?.date ?? '10 Sep 2026'}
+            </span>
+          </motion.div>
+        </div>
 
         {/* Subtitle */}
         <div className="-translate-y-[29px] sm:translate-y-0">
@@ -211,15 +243,15 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="max-w-2xl mx-0 text-base sm:text-lg md:text-xl text-white leading-relaxed mt-[30px] mb-[10px] lg:mt-0 lg:mb-10 whitespace-pre-line"
+            className="max-w-2xl mx-0 text-base sm:text-lg md:text-xl text-white leading-relaxed mt-[30px] mb-[8px] lg:mt-0 lg:mb-10 whitespace-pre-line"
           >
-            <span ref={subtitleLeadRef} className="block font-bold text-lg sm:text-xl md:text-2xl" style={{ color: '#e5c900' }}>{subtitleLead}</span>
-            {subtitleRest.length > 0 && '\n' + subtitleRest.join('\n\n')}
+            <span ref={subtitleLeadRef} className="block font-bold text-lg sm:text-xl md:text-2xl" style={{ color: '#e5c900' }}>{renderWithBreaks(subtitleLead, 'lead')}</span>
+            {subtitleRest.length > 0 && renderWithBreaks('\n' + subtitleRest.join('\n\n'), 'rest')}
           </motion.p>
         </div>
 
         {/* CTAs */}
-        <div id="hero-cta-wrapper" className="-translate-y-[29px] sm:translate-y-0 mt-[80px]">
+        <div id="hero-cta-wrapper" className="-translate-y-[29px] sm:translate-y-0 mt-[64px] lg:mt-[80px]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -232,7 +264,11 @@ export function HeroSection() {
               </Button>
             </Link>
             <a href="#about">
-              <Button variant="outline" size="lg" className="text-base px-8 w-[240px] justify-center">
+              <Button
+                variant="outline"
+                size="lg"
+                className="text-base px-8 w-[240px] justify-center rounded-xl border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 shadow-none hover:bg-gradient-to-br hover:from-primary/10 hover:to-primary/5 hover:border-primary/20 glow-border-hover transition-all duration-500 hover:scale-[1.02]"
+              >
                 {t?.hero?.ctaSecondary ?? 'Learn more'}
               </Button>
             </a>

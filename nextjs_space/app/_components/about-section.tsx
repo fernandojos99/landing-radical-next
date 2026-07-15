@@ -89,20 +89,21 @@ export function AboutSection() {
               )}
             </p>
           </FadeIn>
-          <div id="benefits" className="scroll-mt-28">
-            <FadeIn delay={0.2}>
-              <span className="inline-block text-xs font-mono tracking-widest text-primary uppercase mb-4 mt-8">
-                {t?.about?.benefitsTag ?? 'BENEFITS'}
-              </span>
-              <h3 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight text-primary">
-                {t?.about?.description ?? ''}
-              </h3>
-            </FadeIn>
-          </div>
+        </div>
+
+        <div id="benefits" className="max-w-3xl scroll-mt-28">
+          <FadeIn delay={0.2}>
+            <span className="inline-block text-xs font-mono tracking-widest text-primary uppercase mb-4 mt-8">
+              {t?.about?.benefitsTag ?? 'BENEFITS'}
+            </span>
+            <h3 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight text-primary mb-6">
+              {t?.about?.description ?? ''}
+            </h3>
+          </FadeIn>
         </div>
 
         <FadeIn delay={0.15}>
-          <span className="inline-block text-xs font-mono font-bold tracking-widest mb-4" style={{ color: '#00CC00' }}>
+          <span className="inline-block text-[14.4px] font-mono tracking-widest mb-4 text-white">
             {t?.about?.semifinalistsTag ?? 'Semifinalists'}
           </span>
         </FadeIn>
@@ -124,7 +125,7 @@ export function AboutSection() {
         </div>
 
         <FadeIn delay={0.2}>
-          <span className="inline-block text-xs font-mono font-bold tracking-widest mb-4" style={{ color: '#00CC00' }}>
+          <span className="inline-block text-[14.4px] font-mono tracking-widest mb-4 text-white">
             {t?.about?.finalistsTag ?? 'Finalists'}
           </span>
         </FadeIn>

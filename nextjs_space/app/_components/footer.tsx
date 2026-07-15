@@ -9,63 +9,54 @@ export function Footer() {
 
   return (
     <footer className="border-t border-border/30 py-10">
-      <Container size="lg">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <p className="text-xs text-white">{t?.footer?.organized ?? ''}</p>
-            <div className="flex items-center gap-4">
-              <div className="relative h-8 w-8">
-                <Image
-                  src="/assets/iris-logo.png"
-                  alt="IRIS StartUp Lab"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <div className="relative h-8 w-20">
-                <Image
-                  src="/assets/ul-logo.png"
-                  alt="Universidad de la Libertad"
-                  fill
-                  className="object-contain brightness-0 invert"
-                />
-              </div>
-            </div>
-          </div>
+      <Container size="md" className="text-center">
+        <p className="text-xs text-white mb-8">{t?.footer?.organized ?? 'Organized by'}</p>
 
-          <div className="flex items-center gap-4">
+        <div className="flex justify-center gap-20 items-start">
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative h-10 w-[68px]">
+              <Image src="/assets/iris-logo-white.png" alt="IRIS StartUp Lab" fill className="object-contain" />
+            </div>
             <a
-              href="https://mx.linkedin.com/company/iris-startup-lab"
+              href="https://www.linkedin.com/company/iris-startup-lab/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn de IRIS StartUp Lab"
-              className="relative h-5 w-5 opacity-80 hover:opacity-100 transition-opacity"
+              className="relative h-6 w-6 opacity-80 hover:opacity-100 transition-opacity"
             >
-              <Image src="/assets/social/linkedin.png" alt="LinkedIn" fill className="object-contain brightness-0 invert" />
-            </a>
-            <a
-              href="https://www.instagram.com/udelalibertad/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram de Universidad de la Libertad"
-              className="relative h-5 w-5 opacity-80 hover:opacity-100 transition-opacity"
-            >
-              <Image src="/assets/social/instagram.png" alt="Instagram" fill className="object-contain brightness-0 invert" />
-            </a>
-            <a
-              href="https://mx.linkedin.com/school/udelalibertad/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn de Universidad de la Libertad"
-              className="relative h-5 w-5 opacity-80 hover:opacity-100 transition-opacity"
-            >
-              <Image src="/assets/social/linkedin.png" alt="LinkedIn" fill className="object-contain brightness-0 invert" />
+              <Image src="/assets/social/linkedin-white.png" alt="LinkedIn" fill className="object-contain" />
             </a>
           </div>
 
-          <p className="text-xs text-white">
-            {t?.footer?.rights ?? ''}
-          </p>
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative h-10 w-[101px]">
+              <Image src="/assets/udela-logo-white.png" alt="Universidad de la Libertad" fill className="object-contain" />
+            </div>
+            <div className="flex items-center gap-4">
+              <a
+                href="https://www.linkedin.com/school/udelalibertad/?originalSubdomain=mx"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn de Universidad de la Libertad"
+                className="relative h-6 w-6 opacity-80 hover:opacity-100 transition-opacity"
+              >
+                <Image src="/assets/social/linkedin-white.png" alt="LinkedIn" fill className="object-contain" />
+              </a>
+              <a
+                href="https://www.instagram.com/udelalibertad/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram de Universidad de la Libertad"
+                className="relative h-6 w-6 opacity-80 hover:opacity-100 transition-opacity"
+              >
+                <Image src="/assets/social/instagram-white.png" alt="Instagram" fill className="object-contain" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-[40px]">
+          <p className="text-xs text-white">{t?.footer?.rights ?? ''}</p>
         </div>
       </Container>
     </footer>
