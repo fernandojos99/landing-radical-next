@@ -67,14 +67,17 @@ export function HeroSection() {
       const topLogoRect = topLogoEl.getBoundingClientRect();
       const logoGroupRect = logoGroupEl.getBoundingClientRect();
 
-      // Align the video's top edge with the top logo's (Logosjuntos_2x.png) top edge.
-      const newVideoTop = topLogoRect.top - sectionRect.top;
+      // Place the video's top edge exactly at the top logo's (Logosjuntos_2x.png)
+      // bottom edge — element-to-element, ignoring the top logo's own margin —
+      // so the logo stays fully above the video, touching, never overlapping it.
+      const newVideoTop = topLogoRect.bottom - sectionRect.top;
       setVideoTop(newVideoTop);
 
-      // Move the overlapping logo group up/down so its own vertical center
-      // lands exactly on the video's bottom edge, without moving the video.
-      // Everything below it (the subtitle) is a normal in-flow sibling, so
-      // it shifts along automatically, keeping its existing gap intact.
+      // Move the overlapping logo group down so its own top edge starts
+      // exactly at the video's bottom edge — fully below it, not straddling
+      // it — without moving the video. Everything below it (the subtitle)
+      // is a normal in-flow sibling, so it shifts along automatically,
+      // keeping its existing gap intact.
       const videoBottom = newVideoTop + videoEl.offsetHeight;
       const currentLogoGroupTop = logoGroupRect.top - sectionRect.top;
       // Back out whatever margin-top is currently applied (CSS default the
@@ -82,7 +85,7 @@ export function HeroSection() {
       // e.g. window resizes) to get a stable zero-margin baseline.
       const currentAppliedMarginTop = parseFloat(getComputedStyle(logoGroupEl).marginTop) || 0;
       const naturalTopWithZeroMargin = currentLogoGroupTop - currentAppliedMarginTop;
-      const targetTop = videoBottom - logoGroupRect.height / 2;
+      const targetTop = videoBottom;
       setLogoGroupMarginTop(targetTop - naturalTopWithZeroMargin);
     }
 
@@ -109,14 +112,14 @@ export function HeroSection() {
               }
             : undefined
         }
-        className="absolute right-0 top-0 w-[150%] aspect-video h-auto overflow-hidden lg:inset-y-0 lg:top-auto lg:h-full lg:aspect-auto lg:w-1/2 lg:overflow-visible z-0"
+        className="absolute left-1/2 -translate-x-[calc(70%-16px)] top-0 w-[77%] aspect-video h-auto overflow-hidden lg:inset-y-0 lg:top-auto lg:h-full lg:aspect-auto lg:w-1/2 lg:overflow-visible lg:left-auto lg:translate-x-0 z-0"
       >
         <video
           autoPlay
           muted
           loop
           playsInline
-          className="absolute inset-0 h-full w-full object-contain translate-x-[20%] lg:translate-x-0 lg:object-cover"
+          className="absolute inset-0 h-full w-full object-contain lg:translate-x-0 lg:object-cover"
         >
           <source src="/videos/VisualB_720p_blur.mp4" type="video/mp4" />
         </video>
@@ -181,7 +184,7 @@ export function HeroSection() {
             ['--frame-scale-desktop' as any]: 1.05264,
             ...(logoGroupMarginTop !== null ? { marginTop: `${logoGroupMarginTop}px` } : {}),
           }}
-          className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] h-[200px] mb-[22px] mx-0 sm:ml-8 mt-[7.5px] sm:mt-[15px]"
+          className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] h-[200px] mb-[22px] mx-0 sm:ml-8 mt-0 sm:mt-[15px]"
         >
           <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[var(--frame-h-mobile)] sm:inset-0 sm:h-full sm:top-0 sm:translate-y-0 z-0">
             <Image
