@@ -208,7 +208,7 @@ export function HeroSection() {
           style={{
             ...(logoGroupMarginTop !== null ? { marginTop: `${logoGroupMarginTop}px` } : {}),
           }}
-          className="relative w-[clamp(280px,_36.5vw_+_143px,_517px)] aspect-[800/318] mb-[22px] mx-0 lg:ml-0 left-[-12px] lg:left-[-8px] mt-0 lg:mt-[15px]"
+          className="relative w-[clamp(280px,_36.5vw_+_143px,_517px)] aspect-[800/318] mb-[22px] mx-0 lg:ml-0 left-0 mt-0 lg:mt-[15px]"
         >
           <div className="absolute inset-0 z-10">
             <Image
