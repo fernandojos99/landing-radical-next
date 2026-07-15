@@ -132,7 +132,7 @@ export function Navbar() {
             : 'bg-transparent'
         )}
       >
-        <div className="mx-auto max-w-6xl px-[25px] sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl px-[35px] sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* Left side: Desktop Nav links, or (on mobile) the Register button
                 so its left edge lines up with the rest of the page content. */}

@@ -102,7 +102,7 @@ export function AboutSection() {
         </div>
 
         <FadeIn delay={0.15}>
-          <span className="inline-block text-xs font-mono tracking-widest mb-4" style={{ color: '#00CC00' }}>
+          <span className="inline-block text-xs font-mono font-bold tracking-widest mb-4" style={{ color: '#00CC00' }}>
             {t?.about?.semifinalistsTag ?? 'Semifinalists'}
           </span>
         </FadeIn>

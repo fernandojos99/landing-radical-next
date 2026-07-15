@@ -132,7 +132,7 @@ export function HeroSection() {
               }
             : undefined
         }
-        className="absolute left-1/2 -translate-x-[calc(70%-16px)] top-0 w-[77%] aspect-video h-auto overflow-hidden lg:inset-y-0 lg:top-auto lg:h-full lg:aspect-auto lg:w-1/2 lg:overflow-visible lg:left-auto lg:translate-x-0 z-0"
+        className="absolute left-1/2 -translate-x-[calc(70%-34px)] top-0 w-[77%] aspect-video h-auto overflow-hidden lg:inset-y-0 lg:top-auto lg:h-full lg:aspect-auto lg:w-1/2 lg:overflow-visible lg:left-auto lg:translate-x-0 z-0"
       >
         {showVideo && (
           <video
@@ -148,12 +148,7 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-background/35 lg:hidden" />
       </div>
 
-      {/* Background effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-      </div>
-      <div className="relative z-10 w-full mx-auto max-w-6xl px-[25px] sm:px-6 lg:px-8 pt-[50px] lg:pt-[100px] pb-16 text-left lg:origin-top-left lg:scale-110 lg:min-h-[800px]">
+      <div className="relative z-10 w-full mx-auto max-w-6xl px-0 sm:px-6 lg:px-8 pt-[50px] lg:pt-[100px] pb-16 text-left lg:origin-top-left lg:scale-110 lg:min-h-[800px]">
         {/* Logos */}
         <motion.div
           ref={topLogoRef}
@@ -161,7 +156,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="flex items-center justify-start gap-6 sm:gap-8 mb-0 lg:mb-8"
+          className="flex items-center justify-center lg:justify-start gap-6 sm:gap-8 mb-0 lg:mb-8"
         >
           <div className="relative h-[4.5rem] sm:h-24 w-auto aspect-[4/1]">
             <Image
@@ -175,45 +170,22 @@ export function HeroSection() {
         </motion.div>
 
         {/* Title */}
-        {/*
-          Fixed size relationship between the two overlapping logos below
-          (frame_111.png behind, RIS-blanco.png in front), pinned via CSS
-          variables so they can never drift apart independently again.
-          RIS-blanco's scale (--ris-scale) is the baseline; frame_111's
-          mobile box height (--frame-h-mobile) and desktop scale
-          (--frame-scale-desktop) are both derived to match RIS-blanco's
-          rendered height at each breakpoint. To resize the pair together,
-          scale all three variables by the same factor — never change one
-          in isolation.
-        */}
         <motion.div
           ref={logoGroupRef}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
           style={{
-            ['--ris-scale' as any]: 1.125,
-            ['--frame-h-mobile' as any]: '103px',
-            ['--frame-scale-desktop' as any]: 1.05264,
             ...(logoGroupMarginTop !== null ? { marginTop: `${logoGroupMarginTop}px` } : {}),
           }}
-          className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] h-[100px] lg:h-[200px] mb-[22px] mx-0 sm:ml-8 mt-0 sm:mt-[15px]"
+          className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] h-[100px] lg:h-[200px] mb-[22px] mx-0 sm:ml-8 lg:ml-0 left-[-12px] lg:left-[-8px] mt-0 sm:mt-[15px]"
         >
-          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[var(--frame-h-mobile)] sm:inset-0 sm:h-full sm:top-0 sm:translate-y-0 z-0">
-            <Image
-              src="/assets/frame_111.png"
-              alt="Radical Innovation Summit 2026"
-              fill
-              className="object-contain origin-left sm:origin-center sm:scale-[var(--frame-scale-desktop)]"
-              priority
-            />
-          </div>
           <div className="absolute inset-0 z-10">
             <Image
-              src="/assets/RIS-blanco.png"
-              alt="RIS"
+              src="/assets/4555978c-32dd-4c02-934e-807dd30eca27x800.png"
+              alt="Radical Innovation Summit 2026"
               fill
-              className="object-contain origin-left sm:origin-center scale-[var(--ris-scale)]"
+              className="object-contain origin-left sm:origin-center"
               priority
             />
           </div>
