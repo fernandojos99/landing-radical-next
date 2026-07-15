@@ -30,6 +30,10 @@ export function HeroSection() {
   useEffect(() => {
     function reveal() {
       setShowVideo(true);
+      // Force the position effect below to recompute now that everything
+      // (fonts, images) has actually settled, instead of waiting for the
+      // browser's own next resize to fix a late layout shift.
+      window.dispatchEvent(new Event('resize'));
     }
     if (document.readyState === 'complete') {
       reveal();

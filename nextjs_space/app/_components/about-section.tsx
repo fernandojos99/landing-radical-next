@@ -37,7 +37,24 @@ export function AboutSection() {
 
     adjust();
     window.addEventListener('resize', adjust);
-    return () => window.removeEventListener('resize', adjust);
+    window.addEventListener('load', adjust);
+
+    // Also react to the hero's own size changing for reasons that don't
+    // fire a window resize (fonts swapping in, the deferred video mounting,
+    // images finishing loading) — this is what was causing the overlap to
+    // only get fixed a few seconds late, or not at all.
+    let resizeObserver: ResizeObserver | undefined;
+    const heroSectionEl = document.getElementById('hero-cta-wrapper')?.closest('section');
+    if (heroSectionEl && typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(adjust);
+      resizeObserver.observe(heroSectionEl);
+    }
+
+    return () => {
+      window.removeEventListener('resize', adjust);
+      window.removeEventListener('load', adjust);
+      resizeObserver?.disconnect();
+    };
   }, []);
 
   const semifinalistStats = [
