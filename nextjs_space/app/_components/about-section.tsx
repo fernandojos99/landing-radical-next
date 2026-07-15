@@ -14,21 +14,15 @@ export function AboutSection() {
   const summitIntro = t?.about?.summitIntro ?? '';
   const [summitIntroBefore, summitIntroAfter] = summitIntro?.split?.('{{builders}}') ?? [summitIntro, ''];
 
-  // Mobile only: if the hero's CTA button wrapper grows taller than usual
-  // (e.g. buttons wrapping to two lines) and overlaps this section's start,
-  // push this section down by exactly that overlap so it never gets covered.
+  // If the hero's CTA button wrapper ends up lower than expected (buttons
+  // wrapping to two lines, browser zoom, fonts loading, etc. — mobile and
+  // desktop) and overlaps this section's start, push this section down by
+  // exactly that overlap so it never gets covered/hidden behind the hero.
   useEffect(() => {
     function adjust() {
       const aboutEl = document.getElementById('about');
-      if (!aboutEl) return;
-
-      if (window.innerWidth >= 1024) {
-        aboutEl.style.marginTop = '';
-        return;
-      }
-
       const ctaEl = document.getElementById('hero-cta-wrapper');
-      if (!ctaEl) return;
+      if (!aboutEl || !ctaEl) return;
 
       aboutEl.style.marginTop = '0px';
       const overlap = ctaEl.getBoundingClientRect().bottom - aboutEl.getBoundingClientRect().top;

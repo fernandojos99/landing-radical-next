@@ -115,7 +115,7 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-start overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-screen flex items-start">
       {/* Video background - right half */}
       <div
         ref={videoContainerRef}
@@ -153,16 +153,7 @@ export function HeroSection() {
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
-      {/* Grid overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: 'linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-        }}
-      />
-
-      <div className="relative z-10 w-full mx-auto max-w-6xl px-[25px] sm:px-6 lg:px-8 pt-[50px] lg:pt-[100px] pb-16 text-left lg:origin-top-left lg:scale-110 lg:h-[800px]">
+      <div className="relative z-10 w-full mx-auto max-w-6xl px-[25px] sm:px-6 lg:px-8 pt-[50px] lg:pt-[100px] pb-16 text-left lg:origin-top-left lg:scale-110 lg:min-h-[800px]">
         {/* Logos */}
         <motion.div
           ref={topLogoRef}
