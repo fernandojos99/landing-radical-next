@@ -140,7 +140,7 @@ export function HeroSection() {
         }}
       />
 
-      <div className="relative z-10 w-full mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-[100px] pb-16 text-left lg:origin-top-left lg:scale-110 lg:h-[800px]">
+      <div className="relative z-10 w-full mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-[50px] lg:pt-[100px] pb-16 text-left lg:origin-top-left lg:scale-110 lg:h-[800px]">
         {/* Logos */}
         <motion.div
           ref={topLogoRef}
@@ -148,7 +148,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="flex items-center justify-start gap-6 sm:gap-8 mb-8"
+          className="flex items-center justify-start gap-6 sm:gap-8 mb-0 lg:mb-8"
         >
           <div className="relative h-[4.5rem] sm:h-24 w-auto aspect-[4/1]">
             <Image
@@ -184,7 +184,7 @@ export function HeroSection() {
             ['--frame-scale-desktop' as any]: 1.05264,
             ...(logoGroupMarginTop !== null ? { marginTop: `${logoGroupMarginTop}px` } : {}),
           }}
-          className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] h-[200px] mb-[22px] mx-0 sm:ml-8 mt-0 sm:mt-[15px]"
+          className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] h-[100px] lg:h-[200px] mb-[22px] mx-0 sm:ml-8 mt-0 sm:mt-[15px]"
         >
           <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[var(--frame-h-mobile)] sm:inset-0 sm:h-full sm:top-0 sm:translate-y-0 z-0">
             <Image
