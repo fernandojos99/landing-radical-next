@@ -22,6 +22,22 @@ export function HeroSection() {
   const [videoTop, setVideoTop] = useState<number | null>(null);
   const [logoGroupMarginTop, setLogoGroupMarginTop] = useState<number | null>(null);
   const [desktopVideoBox, setDesktopVideoBox] = useState<{ top: number; left: number; height: number; width: number } | null>(null);
+  // The video's container/position is calculated normally from the start
+  // (so its spot is already reserved), but the <video> itself only mounts
+  // once the rest of the page has finished loading — mobile and desktop.
+  const [showVideo, setShowVideo] = useState(false);
+
+  useEffect(() => {
+    function reveal() {
+      setShowVideo(true);
+    }
+    if (document.readyState === 'complete') {
+      reveal();
+    } else {
+      window.addEventListener('load', reveal);
+      return () => window.removeEventListener('load', reveal);
+    }
+  }, []);
 
   useEffect(() => {
     function updatePositions() {
@@ -114,15 +130,17 @@ export function HeroSection() {
         }
         className="absolute left-1/2 -translate-x-[calc(70%-16px)] top-0 w-[77%] aspect-video h-auto overflow-hidden lg:inset-y-0 lg:top-auto lg:h-full lg:aspect-auto lg:w-1/2 lg:overflow-visible lg:left-auto lg:translate-x-0 z-0"
       >
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 h-full w-full object-contain lg:translate-x-0 lg:object-cover"
-        >
-          <source src="/videos/VisualB_720p_blur.mp4" type="video/mp4" />
-        </video>
+        {showVideo && (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 h-full w-full object-contain lg:translate-x-0 lg:object-cover"
+          >
+            <source src="/videos/VisualB_720p_blur.mp4" type="video/mp4" />
+          </video>
+        )}
         <div className="absolute inset-0 bg-background/35 lg:hidden" />
       </div>
 
@@ -140,7 +158,7 @@ export function HeroSection() {
         }}
       />
 
-      <div className="relative z-10 w-full mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-[50px] lg:pt-[100px] pb-16 text-left lg:origin-top-left lg:scale-110 lg:h-[800px]">
+      <div className="relative z-10 w-full mx-auto max-w-6xl px-[25px] sm:px-6 lg:px-8 pt-[50px] lg:pt-[100px] pb-16 text-left lg:origin-top-left lg:scale-110 lg:h-[800px]">
         {/* Logos */}
         <motion.div
           ref={topLogoRef}
@@ -212,7 +230,7 @@ export function HeroSection() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#7bc860]/30 bg-[#7bc860]/5 mt-[35px] mb-[40px]"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#7bc860]/30 bg-[#7bc860]/5 mt-[20px] lg:mt-[35px] mb-[40px]"
         >
           <Sparkles className="h-3.5 w-3.5 text-[#7bc860]" />
           <span className="text-xs sm:text-sm font-mono text-primary font-medium">
@@ -226,7 +244,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="max-w-2xl mx-0 text-base sm:text-lg md:text-xl text-white leading-relaxed mb-10 whitespace-pre-line"
+            className="max-w-2xl mx-0 text-base sm:text-lg md:text-xl text-white leading-relaxed mt-[30px] mb-[10px] lg:mt-0 lg:mb-10 whitespace-pre-line"
           >
             <span ref={subtitleLeadRef} className="block font-bold text-lg sm:text-xl md:text-2xl" style={{ color: '#e5c900' }}>{subtitleLead}</span>
             {subtitleRest.length > 0 && '\n' + subtitleRest.join('\n\n')}
