@@ -132,8 +132,8 @@ export function Navbar() {
             : 'bg-transparent'
         )}
       >
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
+        <div className="mx-auto max-w-6xl px-[35px] sm:px-6 lg:px-8">
+          <div className="flex h-[58px] lg:h-16 items-center justify-between">
             {/* Left side: Desktop Nav links, or (on mobile) the Register button
                 so its left edge lines up with the rest of the page content. */}
             <div className="flex items-center gap-1">
@@ -182,7 +182,7 @@ export function Navbar() {
                 aria-label="Toggle language"
               >
                 <Globe className="h-3.5 w-3.5 text-[#7bc860]" />
-                {locale === 'es' ? 'EN' : 'ES'}
+                <span style={{ color: '#00CC00' }}>{locale === 'es' ? 'EN' : 'ES'}</span>
               </button>
             </div>
           </div>

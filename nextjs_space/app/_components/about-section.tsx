@@ -14,21 +14,15 @@ export function AboutSection() {
   const summitIntro = t?.about?.summitIntro ?? '';
   const [summitIntroBefore, summitIntroAfter] = summitIntro?.split?.('{{builders}}') ?? [summitIntro, ''];
 
-  // Mobile only: if the hero's CTA button wrapper grows taller than usual
-  // (e.g. buttons wrapping to two lines) and overlaps this section's start,
-  // push this section down by exactly that overlap so it never gets covered.
+  // If the hero's CTA button wrapper ends up lower than expected (buttons
+  // wrapping to two lines, browser zoom, fonts loading, etc. — mobile and
+  // desktop) and overlaps this section's start, push this section down by
+  // exactly that overlap so it never gets covered/hidden behind the hero.
   useEffect(() => {
     function adjust() {
       const aboutEl = document.getElementById('about');
-      if (!aboutEl) return;
-
-      if (window.innerWidth >= 1024) {
-        aboutEl.style.marginTop = '';
-        return;
-      }
-
       const ctaEl = document.getElementById('hero-cta-wrapper');
-      if (!ctaEl) return;
+      if (!aboutEl || !ctaEl) return;
 
       aboutEl.style.marginTop = '0px';
       const overlap = ctaEl.getBoundingClientRect().bottom - aboutEl.getBoundingClientRect().top;
@@ -37,7 +31,24 @@ export function AboutSection() {
 
     adjust();
     window.addEventListener('resize', adjust);
-    return () => window.removeEventListener('resize', adjust);
+    window.addEventListener('load', adjust);
+
+    // Also react to the hero's own size changing for reasons that don't
+    // fire a window resize (fonts swapping in, the deferred video mounting,
+    // images finishing loading) — this is what was causing the overlap to
+    // only get fixed a few seconds late, or not at all.
+    let resizeObserver: ResizeObserver | undefined;
+    const heroSectionEl = document.getElementById('hero-cta-wrapper')?.closest('section');
+    if (heroSectionEl && typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(adjust);
+      resizeObserver.observe(heroSectionEl);
+    }
+
+    return () => {
+      window.removeEventListener('resize', adjust);
+      window.removeEventListener('load', adjust);
+      resizeObserver?.disconnect();
+    };
   }, []);
 
   const semifinalistStats = [
@@ -78,20 +89,21 @@ export function AboutSection() {
               )}
             </p>
           </FadeIn>
-          <div id="benefits" className="scroll-mt-28">
-            <FadeIn delay={0.2}>
-              <span className="inline-block text-xs font-mono tracking-widest text-primary uppercase mb-4 mt-8">
-                {t?.about?.benefitsTag ?? 'BENEFITS'}
-              </span>
-              <h3 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight text-primary">
-                {t?.about?.description ?? ''}
-              </h3>
-            </FadeIn>
-          </div>
+        </div>
+
+        <div id="benefits" className="max-w-3xl scroll-mt-28">
+          <FadeIn delay={0.2}>
+            <span className="inline-block text-xs font-mono tracking-widest text-primary uppercase mb-4 mt-8">
+              {t?.about?.benefitsTag ?? 'BENEFITS'}
+            </span>
+            <h3 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight text-primary mb-6">
+              {t?.about?.description ?? ''}
+            </h3>
+          </FadeIn>
         </div>
 
         <FadeIn delay={0.15}>
-          <span className="inline-block text-xs font-mono tracking-widest mb-4" style={{ color: '#00CC00' }}>
+          <span className="inline-block text-[14.4px] font-mono tracking-widest mb-4 text-white">
             {t?.about?.semifinalistsTag ?? 'Semifinalists'}
           </span>
         </FadeIn>
@@ -113,7 +125,7 @@ export function AboutSection() {
         </div>
 
         <FadeIn delay={0.2}>
-          <span className="inline-block text-xs font-mono font-bold tracking-widest mb-4" style={{ color: '#00CC00' }}>
+          <span className="inline-block text-[14.4px] font-mono tracking-widest mb-4 text-white">
             {t?.about?.finalistsTag ?? 'Finalists'}
           </span>
         </FadeIn>

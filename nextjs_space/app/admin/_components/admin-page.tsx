@@ -211,7 +211,7 @@ export function AdminPage() {
   }
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen px-[35px] lg:px-0">
       <div className="border-b border-border/50 bg-card/30">
         <Container size="xl">
           <div className="flex items-center justify-between py-4">

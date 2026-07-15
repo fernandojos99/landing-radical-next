@@ -24,7 +24,7 @@ export function CriteriaSection() {
           <span className="inline-block text-xs font-mono tracking-widest text-primary uppercase mb-4">
             {t?.criteria?.sectionTag ?? ''}
           </span>
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight text-primary mb-4">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight text-primary mb-6">
             {t?.criteria?.title ?? ''}{' '}
             <span className="gradient-text">{t?.criteria?.titleAccent ?? ''}</span>
           </h2>
