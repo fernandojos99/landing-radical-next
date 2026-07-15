@@ -3,6 +3,7 @@
 import { Navbar } from './navbar';
 import { HeroSection } from './hero-section';
 import { AboutSection } from './about-section';
+import { AlliesSection } from './allies-section';
 import { ProfilesSection } from './profiles-section';
 import { RequirementsSection } from './requirements-section';
 // import { ProcessSection } from './process-section';
@@ -17,6 +18,7 @@ export function LandingPage() {
       <Navbar />
       <HeroSection />
       <AboutSection />
+      <AlliesSection />
       <ProfilesSection />
       <RequirementsSection />
       {/* <ProcessSection /> */}

@@ -115,6 +115,7 @@ export function Navbar() {
   const navLinks = [
     { href: '#about', label: t?.nav?.about ?? 'Events' },
     { href: '#benefits', label: t?.nav?.incentives ?? 'Benefits' },
+    { href: '#aliados', label: t?.nav?.allies ?? 'Allies' },
     { href: '#profiles', label: t?.nav?.profiles ?? 'Profiles' },
     { href: '#requirements', label: t?.nav?.requirements ?? 'Requirements' },
     { href: '#criteria', label: t?.nav?.criteria ?? 'Criteria' },

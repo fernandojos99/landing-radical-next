@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale } from '@/lib/locale-context';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export function HeroSection() {
   const { t } = useLocale();
@@ -17,16 +17,46 @@ export function HeroSection() {
   const topLogoRef = useRef<HTMLDivElement>(null);
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const logoGroupRef = useRef<HTMLDivElement>(null);
+  const dateBadgeRef = useRef<HTMLDivElement>(null);
+  const subtitleLeadRef = useRef<HTMLSpanElement>(null);
   const [videoTop, setVideoTop] = useState<number | null>(null);
   const [logoGroupMarginTop, setLogoGroupMarginTop] = useState<number | null>(null);
+  const [desktopVideoBox, setDesktopVideoBox] = useState<{ top: number; left: number; height: number; width: number } | null>(null);
 
   useEffect(() => {
     function updatePositions() {
       if (window.innerWidth >= 1024) {
         setVideoTop(null);
         setLogoGroupMarginTop(null);
+
+        // Desktop: top and left anchored to the overlapping logos
+        // (frame_111.png / RIS-blanco.png) so their relationship never
+        // drifts — the logo group is now rendered at lg:scale-110, so
+        // reading its live rect (post-transform) keeps the video's size/
+        // position matching automatically. Offset tuned to reproduce the
+        // confirmed 125px gap on top of that block; height/width tuned to
+        // reproduce the confirmed size, scaled 10% to match.
+        const sectionEl = sectionRef.current;
+        const logoGroupEl = logoGroupRef.current;
+        if (!sectionEl || !logoGroupEl) return;
+
+        const sectionRect = sectionEl.getBoundingClientRect();
+        const logoGroupRect = logoGroupEl.getBoundingClientRect();
+
+        const blockTop = logoGroupRect.top - sectionRect.top - 118 * 1.1;
+        const blockHeight = 471.9 * 0.9 * 0.9 * 1.1;
+        const left = logoGroupRect.right - sectionRect.left - 146.1; // confirmed gap at innerWidth 1366 (left:600)
+
+        setDesktopVideoBox({
+          top: blockTop,
+          left,
+          height: blockHeight,
+          width: blockHeight * (16 / 9),
+        });
         return;
       }
+      setDesktopVideoBox(null);
+
       const sectionEl = sectionRef.current;
       const topLogoEl = topLogoRef.current;
       const videoEl = videoContainerRef.current;
@@ -62,11 +92,23 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-screen flex items-start overflow-hidden">
       {/* Video background - right half */}
       <div
         ref={videoContainerRef}
-        style={videoTop !== null ? { top: `${videoTop}px` } : undefined}
+        style={
+          videoTop !== null
+            ? { top: `${videoTop}px` }
+            : desktopVideoBox !== null
+            ? {
+                top: `${desktopVideoBox.top}px`,
+                left: `${desktopVideoBox.left}px`,
+                right: 'auto',
+                height: `${desktopVideoBox.height}px`,
+                width: `${desktopVideoBox.width}px`,
+              }
+            : undefined
+        }
         className="absolute right-0 top-0 w-[150%] aspect-video h-auto overflow-hidden lg:inset-y-0 lg:top-auto lg:h-full lg:aspect-auto lg:w-1/2 lg:overflow-visible z-0"
       >
         <video
@@ -79,11 +121,9 @@ export function HeroSection() {
           <source src="/videos/VisualB_720p_blur.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-background/35 lg:hidden" />
-        <div className="absolute inset-0 hidden lg:block bg-gradient-to-r from-background via-background/15 to-transparent" />
       </div>
 
       {/* Background effects */}
-      <div className="absolute inset-0 hero-gradient" />
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
@@ -97,7 +137,7 @@ export function HeroSection() {
         }}
       />
 
-      <div className="relative z-10 w-full mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-[30px] lg:pt-24 pb-16 text-left">
+      <div className="relative z-10 w-full mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-[100px] pb-16 text-left lg:origin-top-left lg:scale-110 lg:h-[800px]">
         {/* Logos */}
         <motion.div
           ref={topLogoRef}
@@ -116,19 +156,6 @@ export function HeroSection() {
               priority
             />
           </div>
-        </motion.div>
-
-        {/* Date badge */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#7bc860]/30 bg-[#7bc860]/5 mb-0"
-        >
-          <Sparkles className="h-3.5 w-3.5 text-[#7bc860]" />
-          <span className="text-xs sm:text-sm font-mono text-primary font-medium">
-            {t?.hero?.date ?? '10 Sep 2026'}
-          </span>
         </motion.div>
 
         {/* Title */}
@@ -154,7 +181,7 @@ export function HeroSection() {
             ['--frame-scale-desktop' as any]: 1.05264,
             ...(logoGroupMarginTop !== null ? { marginTop: `${logoGroupMarginTop}px` } : {}),
           }}
-          className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] h-[200px] mb-[15px] mx-0 sm:ml-8 mt-[7.5px] sm:mt-[15px]"
+          className="relative w-full max-w-[280px] sm:max-w-[400px] md:max-w-[517px] h-[200px] mb-[22px] mx-0 sm:ml-8 mt-[7.5px] sm:mt-[15px]"
         >
           <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[var(--frame-h-mobile)] sm:inset-0 sm:h-full sm:top-0 sm:translate-y-0 z-0">
             <Image
@@ -176,6 +203,20 @@ export function HeroSection() {
           </div>
         </motion.div>
 
+        {/* Date badge — now sits directly above the subtitle lead line */}
+        <motion.div
+          ref={dateBadgeRef}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#7bc860]/30 bg-[#7bc860]/5 mt-[35px] mb-[40px]"
+        >
+          <Sparkles className="h-3.5 w-3.5 text-[#7bc860]" />
+          <span className="text-xs sm:text-sm font-mono text-primary font-medium">
+            {t?.hero?.date ?? '10 Sep 2026'}
+          </span>
+        </motion.div>
+
         {/* Subtitle */}
         <div className="-translate-y-[29px] sm:translate-y-0">
           <motion.p
@@ -184,13 +225,13 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="max-w-2xl mx-0 text-base sm:text-lg md:text-xl text-white leading-relaxed mb-10 whitespace-pre-line"
           >
-            <span className="font-bold text-lg sm:text-xl md:text-2xl">{subtitleLead}</span>
-            {subtitleRest.length > 0 && '\n\n' + subtitleRest.join('\n\n')}
+            <span ref={subtitleLeadRef} className="block font-bold text-lg sm:text-xl md:text-2xl" style={{ color: '#e5c900' }}>{subtitleLead}</span>
+            {subtitleRest.length > 0 && '\n' + subtitleRest.join('\n\n')}
           </motion.p>
         </div>
 
         {/* CTAs */}
-        <div className="-translate-y-[29px] sm:translate-y-0">
+        <div id="hero-cta-wrapper" className="-translate-y-[29px] sm:translate-y-0 mt-[80px]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -198,13 +239,12 @@ export function HeroSection() {
             className="flex flex-col sm:flex-row items-start justify-start gap-4"
           >
             <Link href="/register" id="hero-register-cta">
-              <Button size="lg" className="text-base font-semibold px-8 gap-2">
+              <Button size="lg" className="text-base px-8 w-[240px] justify-center">
                 {t?.hero?.cta ?? 'Apply now'}
-                <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
             <a href="#about">
-              <Button variant="outline" size="lg" className="text-base px-8">
+              <Button variant="outline" size="lg" className="text-base px-8 w-[240px] justify-center">
                 {t?.hero?.ctaSecondary ?? 'Learn more'}
               </Button>
             </a>

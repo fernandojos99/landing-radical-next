@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useLocale } from '@/lib/locale-context';
 import { Container } from '@/components/layouts/container';
 import { Section } from '@/components/layouts/section';
@@ -12,6 +13,32 @@ export function AboutSection() {
   const { t } = useLocale();
   const summitIntro = t?.about?.summitIntro ?? '';
   const [summitIntroBefore, summitIntroAfter] = summitIntro?.split?.('{{builders}}') ?? [summitIntro, ''];
+
+  // Mobile only: if the hero's CTA button wrapper grows taller than usual
+  // (e.g. buttons wrapping to two lines) and overlaps this section's start,
+  // push this section down by exactly that overlap so it never gets covered.
+  useEffect(() => {
+    function adjust() {
+      const aboutEl = document.getElementById('about');
+      if (!aboutEl) return;
+
+      if (window.innerWidth >= 1024) {
+        aboutEl.style.marginTop = '';
+        return;
+      }
+
+      const ctaEl = document.getElementById('hero-cta-wrapper');
+      if (!ctaEl) return;
+
+      aboutEl.style.marginTop = '0px';
+      const overlap = ctaEl.getBoundingClientRect().bottom - aboutEl.getBoundingClientRect().top;
+      aboutEl.style.marginTop = overlap > 0 ? `${overlap}px` : '0px';
+    }
+
+    adjust();
+    window.addEventListener('resize', adjust);
+    return () => window.removeEventListener('resize', adjust);
+  }, []);
 
   const semifinalistStats = [
     { icon: Rocket, label: t?.about?.stat1Label ?? '', value: t?.about?.stat1Value ?? '' },
@@ -64,7 +91,7 @@ export function AboutSection() {
         </div>
 
         <FadeIn delay={0.15}>
-          <span className="inline-block text-xs font-mono tracking-widest text-primary mb-4">
+          <span className="inline-block text-xs font-mono tracking-widest mb-4" style={{ color: '#00CC00' }}>
             {t?.about?.semifinalistsTag ?? 'Semifinalists'}
           </span>
         </FadeIn>
@@ -86,7 +113,7 @@ export function AboutSection() {
         </div>
 
         <FadeIn delay={0.2}>
-          <span className="inline-block text-xs font-mono tracking-widest text-primary mb-4">
+          <span className="inline-block text-xs font-mono font-bold tracking-widest mb-4" style={{ color: '#00CC00' }}>
             {t?.about?.finalistsTag ?? 'Finalists'}
           </span>
         </FadeIn>
