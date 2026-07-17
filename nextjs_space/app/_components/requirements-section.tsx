@@ -6,8 +6,12 @@ import { Section } from '@/components/layouts/section';
 import { FadeIn, SlideIn } from '@/components/ui/animate';
 import { Check, CircleHelp } from 'lucide-react';
 
+const CONTACT_EMAIL = 'irisstartuplab@elektra.com.mx';
+
 export function RequirementsSection() {
   const { t } = useLocale();
+  const note = t?.requirements?.note ?? '';
+  const [noteBefore, noteAfter] = note?.split?.('{{email}}') ?? [note, ''];
 
   const reqs = [
     t?.requirements?.req1 ?? '',
@@ -58,7 +62,15 @@ export function RequirementsSection() {
                 </span>
               </div>
               <p className="text-sm sm:text-base text-white leading-relaxed">
-                {t?.requirements?.note ?? ''}
+                {noteBefore}
+                {noteAfter && (
+                  <>
+                    <a href={`mailto:${CONTACT_EMAIL}`} className="text-primary underline hover:text-primary/80">
+                      {CONTACT_EMAIL}
+                    </a>
+                    {noteAfter}
+                  </>
+                )}
               </p>
             </div>
           </SlideIn>

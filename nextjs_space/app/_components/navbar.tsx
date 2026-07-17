@@ -184,8 +184,8 @@ export function Navbar() {
                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border border-border/50 bg-accent/30 hover:bg-accent/60 transition-all text-muted-foreground hover:text-foreground"
                 aria-label="Toggle language"
               >
-                <Globe className="h-3.5 w-3.5 text-[#7bc860]" />
-                <span style={{ color: '#00CC00' }}>{locale === 'es' ? 'EN' : 'ES'}</span>
+                <Globe className="h-3.5 w-3.5 text-[#7bc860] flex-shrink-0" />
+                <span className="leading-none" style={{ color: '#00CC00' }}>{locale === 'es' ? 'EN' : 'ES'}</span>
               </button>
             </div>
           </div>
