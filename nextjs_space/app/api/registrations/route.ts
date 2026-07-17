@@ -20,6 +20,24 @@ export async function POST(request: Request) {
       }
     }
 
+    const contactEmail = (body?.contactEmail ?? '')?.toString?.()?.trim?.() ?? '';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+      return NextResponse.json({ error: 'Invalid field: contactEmail' }, { status: 400 });
+    }
+
+    const contactPhone = (body?.contactPhone ?? '')?.toString?.()?.trim?.() ?? '';
+    if (!/^[0-9+\s]+$/.test(contactPhone)) {
+      return NextResponse.json({ error: 'Invalid field: contactPhone' }, { status: 400 });
+    }
+
+    const howDidYouHear = Array.isArray(body?.howDidYouHear) ? body.howDidYouHear.filter((v: any) => typeof v === 'string') : [];
+    if (howDidYouHear.length === 0) {
+      return NextResponse.json({ error: 'Missing field: howDidYouHear' }, { status: 400 });
+    }
+    if (howDidYouHear.includes('other') && !(body?.howDidYouHearOther ?? '')?.toString?.()?.trim?.()) {
+      return NextResponse.json({ error: 'Missing field: howDidYouHearOther' }, { status: 400 });
+    }
+
     const evidenceFiles = Array.isArray(body?.evidenceFiles) ? body.evidenceFiles.slice(0, 3) : [];
 
     if (!evidenceFiles?.some?.((f: any) => f?.docType === 'onePager')) {
@@ -50,8 +68,10 @@ export async function POST(request: Request) {
         demoLink: (body?.demoLink ?? '')?.trim?.() ?? '',
         frontierQuestion: (body?.frontierQuestion ?? '')?.trim?.() ?? '',
         eventFit: (body?.eventFit ?? '')?.trim?.() ?? '',
-        contactEmail: (body?.contactEmail ?? '')?.trim?.()?.toLowerCase?.() ?? '',
-        contactPhone: (body?.contactPhone ?? '')?.trim?.() ?? '',
+        howDidYouHear,
+        howDidYouHearOther: (body?.howDidYouHearOther ?? '')?.trim?.() ?? '',
+        contactEmail: contactEmail.toLowerCase(),
+        contactPhone,
         evidenceFiles,
       },
     });

@@ -28,7 +28,7 @@ export function CriteriaSection() {
             {t?.criteria?.title ?? ''}{' '}
             <span className="gradient-text">{t?.criteria?.titleAccent ?? ''}</span>
           </h2>
-          <p className="text-sm font-mono text-white mb-12 whitespace-pre-line">
+          <p className="text-base sm:text-lg font-mono text-white mb-12 whitespace-pre-line">
             {t?.criteria?.formula ?? ''}
           </p>
         </FadeIn>

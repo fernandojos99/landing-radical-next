@@ -43,6 +43,10 @@ model Registration {
   // Section 6 - Fit
   eventFit          String   @db.Text
 
+  // How they heard about the event - values: socialMedia | email | website | university | recommendation | other
+  howDidYouHear      String[] @default([])
+  howDidYouHearOther String   @default("")
+
   // Contact
   contactEmail      String
   contactPhone      String   @default("")

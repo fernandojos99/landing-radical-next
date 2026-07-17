@@ -106,6 +106,9 @@ export function AboutSection() {
           <span className="inline-block text-[14.4px] font-mono tracking-widest mb-4 text-white">
             {t?.about?.semifinalistsTag ?? 'Semifinalists'}
           </span>
+          {t?.about?.semifinalistsIntro && (
+            <p className="text-sm sm:text-base text-white mb-4">{t.about.semifinalistsIntro}</p>
+          )}
         </FadeIn>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 items-stretch mb-10">
           {semifinalistStats?.map?.((stat: any, i: number) => {
@@ -128,6 +131,9 @@ export function AboutSection() {
           <span className="inline-block text-[14.4px] font-mono tracking-widest mb-4 text-white">
             {t?.about?.finalistsTag ?? 'Finalists'}
           </span>
+          {t?.about?.finalistsIntro && (
+            <p className="text-sm sm:text-base text-white mb-4">{t.about.finalistsIntro}</p>
+          )}
         </FadeIn>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 items-stretch">
           {finalistStats?.map?.((stat: any, i: number) => {

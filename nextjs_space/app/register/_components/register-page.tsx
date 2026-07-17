@@ -48,6 +48,8 @@ interface FormData {
   demoLink: string;
   frontierQuestion: string;
   eventFit: string;
+  howDidYouHear: string[];
+  howDidYouHearOther: string;
   contactEmail: string;
   contactPhone: string;
 }
@@ -71,6 +73,8 @@ const initialFormData: FormData = {
   demoLink: '',
   frontierQuestion: '',
   eventFit: '',
+  howDidYouHear: [],
+  howDidYouHearOther: '',
   contactEmail: '',
   contactPhone: '',
 };
@@ -135,7 +139,7 @@ export function RegisterPage() {
       case 4:
         return !!formData?.frontierQuestion?.trim?.();
       case 5:
-        return !!(formData?.eventFit?.trim?.() || formData?.contactEmail?.trim?.() || formData?.contactPhone?.trim?.() || onePagerFile || pitchDeckFile || tractionFile);
+        return !!(formData?.eventFit?.trim?.() || (formData?.howDidYouHear?.length ?? 0) > 0 || formData?.howDidYouHearOther?.trim?.() || formData?.contactEmail?.trim?.() || formData?.contactPhone?.trim?.() || onePagerFile || pitchDeckFile || tractionFile);
       default:
         return false;
     }
@@ -175,11 +179,19 @@ export function RegisterPage() {
         break;
       case 5:
         if (!(formData?.eventFit ?? '')?.trim?.()) newErrors.eventFit = req;
+        if ((formData?.howDidYouHear?.length ?? 0) === 0) {
+          newErrors.howDidYouHear = t?.form?.selectHowDidYouHear ?? 'Select at least one';
+        } else if (formData?.howDidYouHear?.includes?.('other') && !(formData?.howDidYouHearOther ?? '')?.trim?.()) {
+          newErrors.howDidYouHearOther = req;
+        }
         if (!(formData?.contactEmail ?? '')?.trim?.()) newErrors.contactEmail = req;
         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData?.contactEmail ?? '')) {
           newErrors.contactEmail = t?.form?.invalidEmail ?? 'Invalid email';
         }
         if (!(formData?.contactPhone ?? '')?.trim?.()) newErrors.contactPhone = req;
+        else if (!/^[0-9+\s]+$/.test(formData?.contactPhone ?? '')) {
+          newErrors.contactPhone = t?.form?.invalidPhone ?? 'Invalid phone';
+        }
         if (!onePagerFile) newErrors.onePagerFile = req;
         if (!pitchDeckFile) newErrors.pitchDeckFile = req;
         break;
@@ -196,6 +208,21 @@ export function RegisterPage() {
   };
 
   const prevStep = () => setStep((s: number) => Math.max(s - 1, 0));
+
+  const toggleHowDidYouHear = (value: string) => {
+    setFormData((prev: FormData) => {
+      const current = prev?.howDidYouHear ?? [];
+      const next = current?.includes?.(value)
+        ? current.filter((v: string) => v !== value)
+        : [...current, value];
+      return { ...prev, howDidYouHear: next };
+    });
+    setErrors((prev: Record<string, string>) => {
+      const next = { ...(prev ?? {}) };
+      delete next.howDidYouHear;
+      return next;
+    });
+  };
 
   const handleSubmit = async () => {
     if (!validateStep(step)) return;
@@ -595,6 +622,48 @@ export function RegisterPage() {
                       variant={errors?.eventFit ? 'error' : 'default'}
                     />
                     {errors?.eventFit && <p className="text-xs text-red-400 mt-1">{errors.eventFit}</p>}
+                  </div>
+                  <div>
+                    <Label>{t?.form?.howDidYouHear ?? ''} *</Label>
+                    <p className="text-xs text-muted-foreground mb-2">{t?.form?.howDidYouHearHint ?? ''}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {[
+                        { value: 'socialMedia', label: t?.form?.howDidYouHearSocialMedia ?? '' },
+                        { value: 'email', label: t?.form?.howDidYouHearEmail ?? '' },
+                        { value: 'website', label: t?.form?.howDidYouHearWebsite ?? '' },
+                        { value: 'university', label: t?.form?.howDidYouHearUniversity ?? '' },
+                        { value: 'recommendation', label: t?.form?.howDidYouHearRecommendation ?? '' },
+                        { value: 'other', label: t?.form?.howDidYouHearOther ?? '' },
+                      ]?.map?.((opt: any) => (
+                        <label
+                          key={opt?.value}
+                          className={`flex items-center gap-2 rounded-xl border p-3 cursor-pointer transition-all text-sm ${
+                            formData?.howDidYouHear?.includes?.(opt?.value)
+                              ? 'border-primary bg-primary/5 text-foreground'
+                              : 'border-border/50 bg-card/30 text-muted-foreground hover:border-primary/30'
+                          }`}
+                        >
+                          <Checkbox
+                            checked={!!formData?.howDidYouHear?.includes?.(opt?.value)}
+                            onCheckedChange={() => toggleHowDidYouHear(opt?.value)}
+                          />
+                          {opt?.label ?? ''}
+                        </label>
+                      )) ?? []}
+                    </div>
+                    {errors?.howDidYouHear && <p className="text-xs text-red-400 mt-1">{errors.howDidYouHear}</p>}
+                    {formData?.howDidYouHear?.includes?.('other') && (
+                      <div className="mt-3">
+                        <Input
+                          id="howDidYouHearOther"
+                          value={formData?.howDidYouHearOther ?? ''}
+                          onChange={(e: any) => updateField('howDidYouHearOther', e?.target?.value ?? '')}
+                          placeholder={t?.form?.howDidYouHearOtherPlaceholder ?? ''}
+                          variant={errors?.howDidYouHearOther ? 'error' : 'default'}
+                        />
+                        {errors?.howDidYouHearOther && <p className="text-xs text-red-400 mt-1">{errors.howDidYouHearOther}</p>}
+                      </div>
+                    )}
                   </div>
                   <div>
                     <Label htmlFor="contactEmail">{t?.form?.contactEmail ?? 'Email'} *</Label>
