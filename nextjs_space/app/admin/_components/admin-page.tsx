@@ -48,6 +48,8 @@ interface Registration {
   demoLink: string;
   frontierQuestion: string;
   eventFit: string;
+  howDidYouHear: string[];
+  howDidYouHearOther: string;
   contactEmail: string;
   contactPhone: string;
   evidenceFiles: { cloudStoragePath: string; fileName: string; isPublic: boolean; docType?: string }[];
@@ -145,6 +147,15 @@ export function AdminPage() {
     onePager: 'One pager',
     pitchDeck: 'Pitch deck',
     traction: 'Tracción/ventas',
+  };
+
+  const howDidYouHearLabels: Record<string, string> = {
+    socialMedia: 'Redes sociales (LinkedIn, Instagram)',
+    email: 'Correo electrónico',
+    website: 'Sitio web',
+    university: 'Publicidad en mi universidad',
+    recommendation: 'Recomendación',
+    other: 'Otro',
   };
 
   const typeBadgeColor = (type: string) => {
@@ -395,6 +406,13 @@ export function AdminPage() {
                               <div>
                                 <h4 className="font-bold text-primary text-xs uppercase tracking-wider mb-2">Fit con el evento</h4>
                                 <p className="text-muted-foreground whitespace-pre-line">{reg?.eventFit ?? ''}</p>
+                              </div>
+                              <div>
+                                <h4 className="font-bold text-primary text-xs uppercase tracking-wider mb-2">¿Cómo se enteró?</h4>
+                                <p className="text-muted-foreground whitespace-pre-line">
+                                  {(reg?.howDidYouHear ?? [])?.map?.((v: string) => howDidYouHearLabels?.[v] ?? v)?.join?.(', ') ?? ''}
+                                  {reg?.howDidYouHear?.includes?.('other') && reg?.howDidYouHearOther ? ` (${reg.howDidYouHearOther})` : ''}
+                                </p>
                               </div>
                             </div>
                           </TableCell>

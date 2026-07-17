@@ -39,6 +39,11 @@ export function AlliesSection() {
               {t?.allies?.title ?? 'Organizaciones y aliados estratégicos'}
             </h2>
           </FadeIn>
+          {t?.allies?.description && (
+            <FadeIn delay={0.12}>
+              <p className="text-base sm:text-lg text-white mb-6">{t.allies.description}</p>
+            </FadeIn>
+          )}
         </div>
 
         <FadeIn delay={0.15}>
