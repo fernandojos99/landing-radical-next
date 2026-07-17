@@ -37,6 +37,9 @@ export async function POST(request: Request) {
     if (howDidYouHear.includes('other') && !(body?.howDidYouHearOther ?? '')?.toString?.()?.trim?.()) {
       return NextResponse.json({ error: 'Missing field: howDidYouHearOther' }, { status: 400 });
     }
+    if (howDidYouHear.includes('recommendation') && !(body?.howDidYouHearRecommendationDetail ?? '')?.toString?.()?.trim?.()) {
+      return NextResponse.json({ error: 'Missing field: howDidYouHearRecommendationDetail' }, { status: 400 });
+    }
 
     const evidenceFiles = Array.isArray(body?.evidenceFiles) ? body.evidenceFiles.slice(0, 3) : [];
 
@@ -70,6 +73,7 @@ export async function POST(request: Request) {
         eventFit: (body?.eventFit ?? '')?.trim?.() ?? '',
         howDidYouHear,
         howDidYouHearOther: (body?.howDidYouHearOther ?? '')?.trim?.() ?? '',
+        howDidYouHearRecommendationDetail: (body?.howDidYouHearRecommendationDetail ?? '')?.trim?.() ?? '',
         contactEmail: contactEmail.toLowerCase(),
         contactPhone,
         evidenceFiles,
