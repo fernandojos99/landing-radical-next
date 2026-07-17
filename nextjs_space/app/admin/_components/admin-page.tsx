@@ -50,6 +50,7 @@ interface Registration {
   eventFit: string;
   howDidYouHear: string[];
   howDidYouHearOther: string;
+  howDidYouHearRecommendationDetail: string;
   contactEmail: string;
   contactPhone: string;
   evidenceFiles: { cloudStoragePath: string; fileName: string; isPublic: boolean; docType?: string }[];
@@ -412,6 +413,7 @@ export function AdminPage() {
                                 <p className="text-muted-foreground whitespace-pre-line">
                                   {(reg?.howDidYouHear ?? [])?.map?.((v: string) => howDidYouHearLabels?.[v] ?? v)?.join?.(', ') ?? ''}
                                   {reg?.howDidYouHear?.includes?.('other') && reg?.howDidYouHearOther ? ` (${reg.howDidYouHearOther})` : ''}
+                                  {reg?.howDidYouHear?.includes?.('recommendation') && reg?.howDidYouHearRecommendationDetail ? ` (${reg.howDidYouHearRecommendationDetail})` : ''}
                                 </p>
                               </div>
                             </div>

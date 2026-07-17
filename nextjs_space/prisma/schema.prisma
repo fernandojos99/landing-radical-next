@@ -46,6 +46,7 @@ model Registration {
   // How they heard about the event - values: socialMedia | email | website | university | recommendation | other
   howDidYouHear      String[] @default([])
   howDidYouHearOther String   @default("")
+  howDidYouHearRecommendationDetail String @default("")
 
   // Contact
   contactEmail      String

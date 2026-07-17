@@ -138,11 +138,14 @@ export function Navbar() {
                 so its left edge lines up with the rest of the page content. */}
             <div className="flex items-center gap-1">
               <div className="hidden lg:flex items-center gap-1">
-                {navLinks?.map?.((link: any) => (
+                {navLinks?.map?.((link: any, i: number) => (
                   <a
                     key={link?.href}
                     href={link?.href}
-                    className="px-3 py-2 text-sm text-primary hover:text-primary/80 transition-colors rounded-md hover:bg-accent/50"
+                    className={cn(
+                      'px-3 py-2 text-sm text-primary hover:text-primary/80 transition-colors rounded-md hover:bg-accent/50',
+                      i === 0 && 'pl-0'
+                    )}
                   >
                     {link?.label}
                   </a>

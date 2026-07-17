@@ -50,6 +50,7 @@ interface FormData {
   eventFit: string;
   howDidYouHear: string[];
   howDidYouHearOther: string;
+  howDidYouHearRecommendationDetail: string;
   contactEmail: string;
   contactPhone: string;
 }
@@ -75,6 +76,7 @@ const initialFormData: FormData = {
   eventFit: '',
   howDidYouHear: [],
   howDidYouHearOther: '',
+  howDidYouHearRecommendationDetail: '',
   contactEmail: '',
   contactPhone: '',
 };
@@ -139,7 +141,7 @@ export function RegisterPage() {
       case 4:
         return !!formData?.frontierQuestion?.trim?.();
       case 5:
-        return !!(formData?.eventFit?.trim?.() || (formData?.howDidYouHear?.length ?? 0) > 0 || formData?.howDidYouHearOther?.trim?.() || formData?.contactEmail?.trim?.() || formData?.contactPhone?.trim?.() || onePagerFile || pitchDeckFile || tractionFile);
+        return !!(formData?.eventFit?.trim?.() || (formData?.howDidYouHear?.length ?? 0) > 0 || formData?.howDidYouHearOther?.trim?.() || formData?.howDidYouHearRecommendationDetail?.trim?.() || formData?.contactEmail?.trim?.() || formData?.contactPhone?.trim?.() || onePagerFile || pitchDeckFile || tractionFile);
       default:
         return false;
     }
@@ -181,8 +183,13 @@ export function RegisterPage() {
         if (!(formData?.eventFit ?? '')?.trim?.()) newErrors.eventFit = req;
         if ((formData?.howDidYouHear?.length ?? 0) === 0) {
           newErrors.howDidYouHear = t?.form?.selectHowDidYouHear ?? 'Select at least one';
-        } else if (formData?.howDidYouHear?.includes?.('other') && !(formData?.howDidYouHearOther ?? '')?.trim?.()) {
-          newErrors.howDidYouHearOther = req;
+        } else {
+          if (formData?.howDidYouHear?.includes?.('other') && !(formData?.howDidYouHearOther ?? '')?.trim?.()) {
+            newErrors.howDidYouHearOther = req;
+          }
+          if (formData?.howDidYouHear?.includes?.('recommendation') && !(formData?.howDidYouHearRecommendationDetail ?? '')?.trim?.()) {
+            newErrors.howDidYouHearRecommendationDetail = req;
+          }
         }
         if (!(formData?.contactEmail ?? '')?.trim?.()) newErrors.contactEmail = req;
         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData?.contactEmail ?? '')) {
@@ -662,6 +669,18 @@ export function RegisterPage() {
                           variant={errors?.howDidYouHearOther ? 'error' : 'default'}
                         />
                         {errors?.howDidYouHearOther && <p className="text-xs text-red-400 mt-1">{errors.howDidYouHearOther}</p>}
+                      </div>
+                    )}
+                    {formData?.howDidYouHear?.includes?.('recommendation') && (
+                      <div className="mt-3">
+                        <Input
+                          id="howDidYouHearRecommendationDetail"
+                          value={formData?.howDidYouHearRecommendationDetail ?? ''}
+                          onChange={(e: any) => updateField('howDidYouHearRecommendationDetail', e?.target?.value ?? '')}
+                          placeholder={t?.form?.howDidYouHearRecommendationPlaceholder ?? ''}
+                          variant={errors?.howDidYouHearRecommendationDetail ? 'error' : 'default'}
+                        />
+                        {errors?.howDidYouHearRecommendationDetail && <p className="text-xs text-red-400 mt-1">{errors.howDidYouHearRecommendationDetail}</p>}
                       </div>
                     )}
                   </div>
