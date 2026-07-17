@@ -94,7 +94,7 @@ export const translations = {
       req3: 'Señales claras de adopción o interés real.',
       req4: 'Potencial de crear una nueva categoría o redefinir una existente.',
       noteTitle: '¿Aún no tienes algo construido?',
-      note: 'Buscamos builders del futuro. Si tu proyecto todavía vive solo en una presentación, no te preocupes: aún puedes llegar. Escríbenos y te ayudamos a llevarlo al siguiente nivel.',
+      note: 'Buscamos builders del futuro. Si tu proyecto todavía vive solo en una presentación, no te preocupes: aún puedes llegar. Escríbenos a {{email}} y te ayudamos a llevarlo al siguiente nivel.',
     },
     process: {
       sectionTag: 'PROCESO DE SELECCIÓN',
@@ -324,7 +324,7 @@ export const translations = {
       req3: 'Clear evidence of customer adoption or market demand.',
       req4: 'The potential to create an entirely new category—or redefine an existing one.',
       noteTitle: "Don't have a product yet?",
-      note: "We're looking for tomorrow's builders. If your project still exists only as a presentation or concept, don't let that stop you. Every extraordinary company started with someone willing to build before they felt ready. Reach out to us—we'll help you take your project to the next level.",
+      note: "We're looking for tomorrow's builders. If your project still exists only as a presentation or concept, don't let that stop you. Every extraordinary company started with someone willing to build before they felt ready. Reach out to us at {{email}}—we'll help you take your project to the next level.",
     },
     process: {
       sectionTag: 'SELECTION PROCESS',
