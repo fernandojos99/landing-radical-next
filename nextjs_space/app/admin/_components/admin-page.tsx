@@ -51,6 +51,10 @@ interface Registration {
   howDidYouHear: string[];
   howDidYouHearOther: string;
   howDidYouHearRecommendationDetail: string;
+  howDidYouHearSocialMediaDetail: string;
+  howDidYouHearEmailDetail: string;
+  howDidYouHearWebsiteDetail: string;
+  howDidYouHearUniversityDetail: string;
   contactEmail: string;
   contactPhone: string;
   evidenceFiles: { cloudStoragePath: string; fileName: string; isPublic: boolean; docType?: string }[];
@@ -151,12 +155,21 @@ export function AdminPage() {
   };
 
   const howDidYouHearLabels: Record<string, string> = {
-    socialMedia: 'Redes sociales (LinkedIn, Instagram)',
+    socialMedia: 'Redes sociales (LinkedIn, Instagram, Facebook, ...)',
     email: 'Correo electrónico',
     website: 'Sitio web',
     university: 'Publicidad en mi universidad',
     recommendation: 'Recomendación',
     other: 'Otro',
+  };
+
+  const howDidYouHearDetailFields: Record<string, keyof Registration> = {
+    socialMedia: 'howDidYouHearSocialMediaDetail',
+    email: 'howDidYouHearEmailDetail',
+    website: 'howDidYouHearWebsiteDetail',
+    university: 'howDidYouHearUniversityDetail',
+    recommendation: 'howDidYouHearRecommendationDetail',
+    other: 'howDidYouHearOther',
   };
 
   const typeBadgeColor = (type: string) => {
@@ -411,9 +424,12 @@ export function AdminPage() {
                               <div>
                                 <h4 className="font-bold text-primary text-xs uppercase tracking-wider mb-2">¿Cómo se enteró?</h4>
                                 <p className="text-muted-foreground whitespace-pre-line">
-                                  {(reg?.howDidYouHear ?? [])?.map?.((v: string) => howDidYouHearLabels?.[v] ?? v)?.join?.(', ') ?? ''}
-                                  {reg?.howDidYouHear?.includes?.('other') && reg?.howDidYouHearOther ? ` (${reg.howDidYouHearOther})` : ''}
-                                  {reg?.howDidYouHear?.includes?.('recommendation') && reg?.howDidYouHearRecommendationDetail ? ` (${reg.howDidYouHearRecommendationDetail})` : ''}
+                                  {(reg?.howDidYouHear ?? [])?.map?.((v: string) => {
+                                    const detailField = howDidYouHearDetailFields?.[v];
+                                    const detailValue = detailField ? (reg?.[detailField] as string) : '';
+                                    const label = howDidYouHearLabels?.[v] ?? v;
+                                    return detailValue ? `${label} (${detailValue})` : label;
+                                  })?.join?.(', ') ?? ''}
                                 </p>
                               </div>
                             </div>

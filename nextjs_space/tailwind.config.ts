@@ -91,6 +91,10 @@ const config: Config = {
           from: { opacity: '1' },
           to: { opacity: '0' },
         },
+        'attention-pulse': {
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(123, 200, 96, 0)', borderColor: 'hsl(var(--input))' },
+          '50%': { boxShadow: '0 0 0 4px rgba(123, 200, 96, 0.45)', borderColor: 'rgba(123, 200, 96, 0.8)' },
+        },
       },
       transitionDuration: {
         fast: 'var(--duration-fast)',
@@ -102,6 +106,7 @@ const config: Config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
         'fade-in': 'fade-in 0.4s ease-out',
         'fade-out': 'fade-out 0.2s ease-out',
+        'attention-pulse': 'attention-pulse 0.5s ease-in-out 3',
       },
     },
   },
