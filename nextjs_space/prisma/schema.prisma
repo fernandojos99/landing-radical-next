@@ -47,6 +47,10 @@ model Registration {
   howDidYouHear      String[] @default([])
   howDidYouHearOther String   @default("")
   howDidYouHearRecommendationDetail String @default("")
+  howDidYouHearSocialMediaDetail    String @default("")
+  howDidYouHearEmailDetail          String @default("")
+  howDidYouHearWebsiteDetail        String @default("")
+  howDidYouHearUniversityDetail     String @default("")
 
   // Contact
   contactEmail      String

@@ -11,6 +11,9 @@ export function AlliesSection() {
 
   const communityPartners = [
     { label: t?.allies?.card1 ?? '', image: '/assets/ally-community-partner-1.png' },
+    { label: 'Kybernus', image: '/assets/ally-kybernus.png' },
+    { label: 'CDO LATAM', image: '/assets/ally-cdo-latam.png' },
+    { label: 'ICARO', image: '/assets/ally-icaro.png' },
   ];
 
   const supportingOrganizations = [

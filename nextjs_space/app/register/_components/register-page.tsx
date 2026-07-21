@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocale } from '@/lib/locale-context';
 import { Navbar } from '@/app/_components/navbar';
 import { Footer } from '@/app/_components/footer';
@@ -51,9 +51,25 @@ interface FormData {
   howDidYouHear: string[];
   howDidYouHearOther: string;
   howDidYouHearRecommendationDetail: string;
+  howDidYouHearSocialMediaDetail: string;
+  howDidYouHearEmailDetail: string;
+  howDidYouHearWebsiteDetail: string;
+  howDidYouHearUniversityDetail: string;
   contactEmail: string;
   contactPhone: string;
 }
+
+// Maps each "how did you hear" checkbox value to the field/placeholder for its follow-up detail input.
+const HOW_DID_YOU_HEAR_DETAIL_FIELDS: Record<string, { field: keyof FormData; placeholderKey: string }> = {
+  socialMedia: { field: 'howDidYouHearSocialMediaDetail', placeholderKey: 'howDidYouHearSocialMediaPlaceholder' },
+  email: { field: 'howDidYouHearEmailDetail', placeholderKey: 'howDidYouHearEmailPlaceholder' },
+  website: { field: 'howDidYouHearWebsiteDetail', placeholderKey: 'howDidYouHearWebsitePlaceholder' },
+  university: { field: 'howDidYouHearUniversityDetail', placeholderKey: 'howDidYouHearUniversityPlaceholder' },
+  recommendation: { field: 'howDidYouHearRecommendationDetail', placeholderKey: 'howDidYouHearRecommendationPlaceholder' },
+  other: { field: 'howDidYouHearOther', placeholderKey: 'howDidYouHearOtherPlaceholder' },
+};
+
+const HOW_DID_YOU_HEAR_OPTION_VALUES = ['socialMedia', 'email', 'website', 'university', 'recommendation', 'other'];
 
 const initialFormData: FormData = {
   projectName: '',
@@ -77,6 +93,10 @@ const initialFormData: FormData = {
   howDidYouHear: [],
   howDidYouHearOther: '',
   howDidYouHearRecommendationDetail: '',
+  howDidYouHearSocialMediaDetail: '',
+  howDidYouHearEmailDetail: '',
+  howDidYouHearWebsiteDetail: '',
+  howDidYouHearUniversityDetail: '',
   contactEmail: '',
   contactPhone: '',
 };
@@ -140,8 +160,10 @@ export function RegisterPage() {
         return !!(formData?.hasMvp || formData?.hasUsers || formData?.hasPilot || formData?.hasRevenue || formData?.hasCommunity || formData?.hasResearch || formData?.keyMetric?.trim?.() || formData?.demoLink?.trim?.());
       case 4:
         return !!formData?.frontierQuestion?.trim?.();
-      case 5:
-        return !!(formData?.eventFit?.trim?.() || (formData?.howDidYouHear?.length ?? 0) > 0 || formData?.howDidYouHearOther?.trim?.() || formData?.howDidYouHearRecommendationDetail?.trim?.() || formData?.contactEmail?.trim?.() || formData?.contactPhone?.trim?.() || onePagerFile || pitchDeckFile || tractionFile);
+      case 5: {
+        const anyDetailFilled = Object.values(HOW_DID_YOU_HEAR_DETAIL_FIELDS)?.some?.(({ field }) => (formData?.[field] as string)?.trim?.());
+        return !!(formData?.eventFit?.trim?.() || (formData?.howDidYouHear?.length ?? 0) > 0 || anyDetailFilled || formData?.contactEmail?.trim?.() || formData?.contactPhone?.trim?.() || onePagerFile || pitchDeckFile || tractionFile);
+      }
       default:
         return false;
     }
@@ -184,12 +206,12 @@ export function RegisterPage() {
         if ((formData?.howDidYouHear?.length ?? 0) === 0) {
           newErrors.howDidYouHear = t?.form?.selectHowDidYouHear ?? 'Select at least one';
         } else {
-          if (formData?.howDidYouHear?.includes?.('other') && !(formData?.howDidYouHearOther ?? '')?.trim?.()) {
-            newErrors.howDidYouHearOther = req;
-          }
-          if (formData?.howDidYouHear?.includes?.('recommendation') && !(formData?.howDidYouHearRecommendationDetail ?? '')?.trim?.()) {
-            newErrors.howDidYouHearRecommendationDetail = req;
-          }
+          formData?.howDidYouHear?.forEach?.((value: string) => {
+            const detail = HOW_DID_YOU_HEAR_DETAIL_FIELDS[value];
+            if (detail && !(formData?.[detail.field] as string ?? '')?.trim?.()) {
+              newErrors[detail.field] = req;
+            }
+          });
         }
         if (!(formData?.contactEmail ?? '')?.trim?.()) newErrors.contactEmail = req;
         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData?.contactEmail ?? '')) {
@@ -216,12 +238,17 @@ export function RegisterPage() {
 
   const prevStep = () => setStep((s: number) => Math.max(s - 1, 0));
 
+  const [justOpenedDetail, setJustOpenedDetail] = useState<string | null>(null);
+  const detailInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
+
   const toggleHowDidYouHear = (value: string) => {
     setFormData((prev: FormData) => {
       const current = prev?.howDidYouHear ?? [];
-      const next = current?.includes?.(value)
+      const wasSelected = current?.includes?.(value);
+      const next = wasSelected
         ? current.filter((v: string) => v !== value)
         : [...current, value];
+      if (!wasSelected) setJustOpenedDetail(value);
       return { ...prev, howDidYouHear: next };
     });
     setErrors((prev: Record<string, string>) => {
@@ -230,6 +257,20 @@ export function RegisterPage() {
       return next;
     });
   };
+
+  // When a "how did you hear" detail input first appears, focus it and pulse
+  // it a few times (like a hover highlight) so it's obvious where to type.
+  useEffect(() => {
+    if (!justOpenedDetail) return;
+    const frame = requestAnimationFrame(() => {
+      detailInputRefs.current[justOpenedDetail]?.focus();
+    });
+    const timeout = setTimeout(() => setJustOpenedDetail(null), 1600);
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(timeout);
+    };
+  }, [justOpenedDetail]);
 
   const handleSubmit = async () => {
     if (!validateStep(step)) return;
@@ -659,30 +700,26 @@ export function RegisterPage() {
                       )) ?? []}
                     </div>
                     {errors?.howDidYouHear && <p className="text-xs text-red-400 mt-1">{errors.howDidYouHear}</p>}
-                    {formData?.howDidYouHear?.includes?.('other') && (
-                      <div className="mt-3">
-                        <Input
-                          id="howDidYouHearOther"
-                          value={formData?.howDidYouHearOther ?? ''}
-                          onChange={(e: any) => updateField('howDidYouHearOther', e?.target?.value ?? '')}
-                          placeholder={t?.form?.howDidYouHearOtherPlaceholder ?? ''}
-                          variant={errors?.howDidYouHearOther ? 'error' : 'default'}
-                        />
-                        {errors?.howDidYouHearOther && <p className="text-xs text-red-400 mt-1">{errors.howDidYouHearOther}</p>}
-                      </div>
-                    )}
-                    {formData?.howDidYouHear?.includes?.('recommendation') && (
-                      <div className="mt-3">
-                        <Input
-                          id="howDidYouHearRecommendationDetail"
-                          value={formData?.howDidYouHearRecommendationDetail ?? ''}
-                          onChange={(e: any) => updateField('howDidYouHearRecommendationDetail', e?.target?.value ?? '')}
-                          placeholder={t?.form?.howDidYouHearRecommendationPlaceholder ?? ''}
-                          variant={errors?.howDidYouHearRecommendationDetail ? 'error' : 'default'}
-                        />
-                        {errors?.howDidYouHearRecommendationDetail && <p className="text-xs text-red-400 mt-1">{errors.howDidYouHearRecommendationDetail}</p>}
-                      </div>
-                    )}
+                    {HOW_DID_YOU_HEAR_OPTION_VALUES?.filter?.((value: string) => formData?.howDidYouHear?.includes?.(value))?.map?.((value: string) => {
+                      const detail = HOW_DID_YOU_HEAR_DETAIL_FIELDS[value];
+                      if (!detail) return null;
+                      const fieldValue = (formData?.[detail.field] as string) ?? '';
+                      const fieldError = errors?.[detail.field];
+                      return (
+                        <div key={value} className="mt-3">
+                          <Input
+                            id={detail.field}
+                            ref={(el) => { detailInputRefs.current[value] = el; }}
+                            value={fieldValue}
+                            onChange={(e: any) => updateField(detail.field, e?.target?.value ?? '')}
+                            placeholder={(t?.form as any)?.[detail.placeholderKey] ?? ''}
+                            variant={fieldError ? 'error' : 'default'}
+                            className={justOpenedDetail === value ? 'animate-attention-pulse' : ''}
+                          />
+                          {fieldError && <p className="text-xs text-red-400 mt-1">{fieldError}</p>}
+                        </div>
+                      );
+                    }) ?? []}
                   </div>
                   <div>
                     <Label htmlFor="contactEmail">{t?.form?.contactEmail ?? 'Email'} *</Label>

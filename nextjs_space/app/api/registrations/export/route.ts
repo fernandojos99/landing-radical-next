@@ -20,7 +20,10 @@ export async function GET(request: Request) {
       'ID', 'Created At', 'Project Name', 'Country', 'Participation Category', 'Founders',
       'North Star', 'Status Quo Challenge', 'What Building', 'What Makes Radical',
       'Has MVP', 'Has Users', 'Has Pilot', 'Has Revenue', 'Has Community', 'Has Research',
-      'Key Metric', 'Demo Link', 'Frontier Question', 'Event Fit', 'How Did You Hear', 'How Did You Hear (Other)', 'How Did You Hear (Recommendation)', 'Contact Email', 'Contact Phone', 'File Names'
+      'Key Metric', 'Demo Link', 'Frontier Question', 'Event Fit', 'How Did You Hear',
+      'How Did You Hear (Social Media)', 'How Did You Hear (Email)', 'How Did You Hear (Website)',
+      'How Did You Hear (University)', 'How Did You Hear (Recommendation)', 'How Did You Hear (Other)',
+      'Contact Email', 'Contact Phone', 'File Names'
     ];
 
     const escapeCsv = (val: any): string => {
@@ -53,8 +56,12 @@ export async function GET(request: Request) {
       r?.frontierQuestion ?? '',
       r?.eventFit ?? '',
       Array.isArray(r?.howDidYouHear) ? r.howDidYouHear.join('; ') : '',
-      r?.howDidYouHearOther ?? '',
+      r?.howDidYouHearSocialMediaDetail ?? '',
+      r?.howDidYouHearEmailDetail ?? '',
+      r?.howDidYouHearWebsiteDetail ?? '',
+      r?.howDidYouHearUniversityDetail ?? '',
       r?.howDidYouHearRecommendationDetail ?? '',
+      r?.howDidYouHearOther ?? '',
       r?.contactEmail ?? '',
       r?.contactPhone ?? '',
       Array.isArray(r?.evidenceFiles) ? r.evidenceFiles.map((f: any) => `${f?.docType ?? ''}: ${f?.fileName ?? ''}`).join('; ') : '',

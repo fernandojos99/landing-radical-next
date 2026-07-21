@@ -3,6 +3,16 @@ export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+// Maps each "how did you hear" checkbox value to the DB field holding its follow-up detail.
+const HOW_DID_YOU_HEAR_DETAIL_FIELDS: Record<string, string> = {
+  socialMedia: 'howDidYouHearSocialMediaDetail',
+  email: 'howDidYouHearEmailDetail',
+  website: 'howDidYouHearWebsiteDetail',
+  university: 'howDidYouHearUniversityDetail',
+  recommendation: 'howDidYouHearRecommendationDetail',
+  other: 'howDidYouHearOther',
+};
+
 export async function POST(request: Request) {
   try {
     const body = await request?.json?.();
@@ -34,11 +44,11 @@ export async function POST(request: Request) {
     if (howDidYouHear.length === 0) {
       return NextResponse.json({ error: 'Missing field: howDidYouHear' }, { status: 400 });
     }
-    if (howDidYouHear.includes('other') && !(body?.howDidYouHearOther ?? '')?.toString?.()?.trim?.()) {
-      return NextResponse.json({ error: 'Missing field: howDidYouHearOther' }, { status: 400 });
-    }
-    if (howDidYouHear.includes('recommendation') && !(body?.howDidYouHearRecommendationDetail ?? '')?.toString?.()?.trim?.()) {
-      return NextResponse.json({ error: 'Missing field: howDidYouHearRecommendationDetail' }, { status: 400 });
+    for (const value of howDidYouHear) {
+      const detailField = HOW_DID_YOU_HEAR_DETAIL_FIELDS[value];
+      if (detailField && !(body?.[detailField] ?? '')?.toString?.()?.trim?.()) {
+        return NextResponse.json({ error: `Missing field: ${detailField}` }, { status: 400 });
+      }
     }
 
     const evidenceFiles = Array.isArray(body?.evidenceFiles) ? body.evidenceFiles.slice(0, 3) : [];
@@ -74,6 +84,10 @@ export async function POST(request: Request) {
         howDidYouHear,
         howDidYouHearOther: (body?.howDidYouHearOther ?? '')?.trim?.() ?? '',
         howDidYouHearRecommendationDetail: (body?.howDidYouHearRecommendationDetail ?? '')?.trim?.() ?? '',
+        howDidYouHearSocialMediaDetail: (body?.howDidYouHearSocialMediaDetail ?? '')?.trim?.() ?? '',
+        howDidYouHearEmailDetail: (body?.howDidYouHearEmailDetail ?? '')?.trim?.() ?? '',
+        howDidYouHearWebsiteDetail: (body?.howDidYouHearWebsiteDetail ?? '')?.trim?.() ?? '',
+        howDidYouHearUniversityDetail: (body?.howDidYouHearUniversityDetail ?? '')?.trim?.() ?? '',
         contactEmail: contactEmail.toLowerCase(),
         contactPhone,
         evidenceFiles,
